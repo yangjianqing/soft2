@@ -1,0 +1,2 @@
+Application Version: ${lanqiao.version}
+Spring Boot Version: ${spring-boot.version}
