@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: '蓝桥管理系统',
+      title: '绿源鲜选超市管理系统',
       logo: logoImg
     }
   }
