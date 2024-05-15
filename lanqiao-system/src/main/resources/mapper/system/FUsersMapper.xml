@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.system.mapper.FUsersMapper">
+
+    <resultMap type="FUsers" id="FUsersResult">
+        <result property="usersId"    column="users_id"    />
+        <result property="usersName"    column="users_name"    />
+        <result property="usersSex"    column="users_sex"    />
+        <result property="usersPhone"    column="users_phone"    />
+        <result property="usersPassword"    column="users_password"    />
+        <result property="usersAvatar"    column="users_avatar"    />
+        <result property="userAddress"    column="user_address"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectFUsersVo">
+        select users_id, users_name, users_sex, users_phone, users_password, users_avatar, user_address, create_time from f_users
+    </sql>
+
+    <select id="selectFUsersList" parameterType="FUsers" resultMap="FUsersResult">
+        <include refid="selectFUsersVo"/>
+        <where>
+            <if test="usersName != null  and usersName != ''"> and users_name like concat('%', #{usersName}, '%')</if>
+            <if test="usersPhone != null  and usersPhone != ''"> and users_phone = #{usersPhone}</if>
+            <if test="userAddress != null  and userAddress != ''"> and user_address like concat('%', #{userAddress}, '%')</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+
+    <select id="selectFUsersByUsersId" parameterType="Long" resultMap="FUsersResult">
+        <include refid="selectFUsersVo"/>
+        where users_id = #{usersId}
+    </select>
+
+    <insert id="insertFUsers" parameterType="FUsers" useGeneratedKeys="true" keyProperty="usersId">
+        insert into f_users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="usersName != null">users_name,</if>
+            <if test="usersSex != null">users_sex,</if>
+            <if test="usersPhone != null">users_phone,</if>
+            <if test="usersPassword != null">users_password,</if>
+            <if test="usersAvatar != null">users_avatar,</if>
+            <if test="userAddress != null">user_address,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="usersName != null">#{usersName},</if>
+            <if test="usersSex != null">#{usersSex},</if>
+            <if test="usersPhone != null">#{usersPhone},</if>
+            <if test="usersPassword != null">#{usersPassword},</if>
+            <if test="usersAvatar != null">#{usersAvatar},</if>
+            <if test="userAddress != null">#{userAddress},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFUsers" parameterType="FUsers">
+        update f_users
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="usersName != null">users_name = #{usersName},</if>
+            <if test="usersSex != null">users_sex = #{usersSex},</if>
+            <if test="usersPhone != null">users_phone = #{usersPhone},</if>
+            <if test="usersPassword != null">users_password = #{usersPassword},</if>
+            <if test="usersAvatar != null">users_avatar = #{usersAvatar},</if>
+            <if test="userAddress != null">user_address = #{userAddress},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where users_id = #{usersId}
+    </update>
+
+    <delete id="deleteFUsersByUsersId" parameterType="Long">
+        delete from f_users where users_id = #{usersId}
+    </delete>
+
+    <delete id="deleteFUsersByUsersIds" parameterType="String">
+        delete from f_users where users_id in
+        <foreach item="usersId" collection="array" open="(" separator="," close=")">
+            #{usersId}
+        </foreach>
+    </delete>
+</mapper>
