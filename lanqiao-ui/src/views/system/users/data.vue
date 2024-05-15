@@ -145,7 +145,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="addressList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="addressIdList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="地址id" align="center" prop="addressId" />
       <el-table-column label="地址排序" align="center" prop="addressSort" />
@@ -283,6 +283,8 @@ export default {
       total: 0,
       // 地址管理表格数据
       addressList: [],
+      // 根据id查询地址详情数据
+      addressIdList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -312,23 +314,22 @@ export default {
     };
   },
   created() {
-    // 使用 params 传参
+    // 使用 query 传参
     const usersId = this.$route.query.usersId;
-    console.log(usersId);
-    getType(usersId);
-    console.log(getType(usersId));
+    // 根据 usersId 查询地址详情
+    this.getType(usersId);
+    // console.log(this.getType(usersId));
+    // 获取地址列表
     this.getList();
   },
   methods: {
     /** 根据usersId查询地址详情 */
     getType(usersId) {
       getType(usersId).then(response => {
-        const usersList = response.data;
-        console.log(usersList)
+        this.addressIdList = response.data;
+        console.log(response.data[0]);
       });
     },
-
-
     /** 查询地址管理列表 */
     getList() {
       this.loading = true;
