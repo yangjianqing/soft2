@@ -2,7 +2,10 @@ package cn.lanqiao.common.core.domain;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
+
+import cn.lanqiao.common.core.domain.entity.Category;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import cn.lanqiao.common.core.domain.entity.SysDept;
 import cn.lanqiao.common.core.domain.entity.SysMenu;
@@ -44,6 +47,16 @@ public class TreeSelect implements Serializable
         this.label = menu.getMenuName();
         this.children = menu.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
     }
+
+    public TreeSelect(Category category)
+    {
+        this.id = category.getDeptId();
+        this.label = category.getDeptName();
+        this.children = category.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
+    }
+
+
+
 
     public Long getId()
     {

@@ -1,36 +1,24 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="类型 " prop="type">
-        <el-select v-model="queryParams.type" placeholder="请选择类型 " clearable>
-          <el-option
-            v-for="dict in dict.type.category_type"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="分类" prop="name">
+      <el-form-item label="分类名称" prop="deptName">
         <el-input
-          v-model="queryParams.name"
-          placeholder="请输入分类"
+          v-model="queryParams.deptName"
+          placeholder="请输入分类名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="分类状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择分类状态" clearable>
-          <el-option
-            v-for="dict in dict.type.disconut_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
+      <el-form-item label="显示顺序" prop="orderNum">
+        <el-input
+          v-model="queryParams.orderNum"
+          placeholder="请输入显示顺序"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+	    <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -48,56 +36,28 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="success"
+          type="info"
           plain
-          icon="el-icon-edit"
+          icon="el-icon-sort"
           size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:category:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:category:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:category:export']"
-        >导出</el-button>
+          @click="toggleExpandAll"
+        >展开/折叠</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="categoryList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="id" />
-      <el-table-column label="类型 " align="center" prop="type">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.category_type" :value="scope.row.type"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="分类" align="center" prop="name" />
-      <el-table-column label="顺序" align="center" prop="sort" />
-      <el-table-column label="分类状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.disconut_status" :value="scope.row.status"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建人" align="center" prop="createUser" />
-      <el-table-column label="修改人" align="center" prop="updateUser" />
+    <el-table
+      v-if="refreshTable"
+      v-loading="loading"
+      :data="categoryList"
+      row-key="deptId"
+      :default-expand-all="isExpandAll"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+    >
+      <el-table-column label="分类名称" align="center" prop="deptName" />
+      <el-table-column label="父级id" prop="parentId" />
+      <el-table-column label="祖级列表" align="center" prop="ancestors" />
+      <el-table-column label="显示顺序" align="center" prop="orderNum" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -110,6 +70,13 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-plus"
+            @click="handleAdd(scope.row)"
+            v-hasPermi="['system:category:add']"
+          >新增</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:category:remove']"
@@ -117,48 +84,18 @@
         </template>
       </el-table-column>
     </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
 
-    <!-- 添加或修改分类对话框 -->
+    <!-- 添加或修改商品分类对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="类型 " prop="type">
-          <el-select v-model="form.type" placeholder="请选择类型 ">
-            <el-option
-              v-for="dict in dict.type.category_type"
-              :key="dict.value"
-              :label="dict.label"
-:value="parseInt(dict.value)"
-            ></el-option>
-          </el-select>
+        <el-form-item label="父级id" prop="parentId">
+          <treeselect v-model="form.parentId" :options="categoryOptions" :normalizer="normalizer" placeholder="请选择父级id" />
         </el-form-item>
-        <el-form-item label="分类" prop="name">
-          <el-input v-model="form.name" placeholder="请输入分类" />
+        <el-form-item label="分类名称" prop="deptName">
+          <el-input v-model="form.deptName" placeholder="请输入分类名称" />
         </el-form-item>
-        <el-form-item label="顺序" prop="sort">
-          <el-input v-model="form.sort" placeholder="请输入顺序" />
-        </el-form-item>
-        <el-form-item label="分类状态">
-          <el-radio-group v-model="form.status">
-            <el-radio
-              v-for="dict in dict.type.disconut_status"
-              :key="dict.value"
-:label="parseInt(dict.value)"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="创建人" prop="createUser">
-          <el-input v-model="form.createUser" placeholder="请输入创建人" />
-        </el-form-item>
-        <el-form-item label="修改人" prop="updateUser">
-          <el-input v-model="form.updateUser" placeholder="请输入修改人" />
+        <el-form-item label="显示顺序" prop="orderNum">
+          <el-input v-model="form.orderNum" placeholder="请输入显示顺序" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -171,48 +108,42 @@
 
 <script>
 import { listCategory, getCategory, delCategory, addCategory, updateCategory } from "@/api/system/category";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "Category",
-  dicts: ['disconut_status', 'category_type'],
+  components: {
+    Treeselect
+  },
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
       // 显示搜索条件
       showSearch: true,
-      // 总条数
-      total: 0,
-      // 分类表格数据
+      // 商品分类表格数据
       categoryList: [],
+      // 商品分类树选项
+      categoryOptions: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否展开，默认全部展开
+      isExpandAll: true,
+      // 重新渲染表格状态
+      refreshTable: true,
       // 查询参数
       queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        type: null,
-        name: null,
-        status: null,
+        parentId: null,
+        deptName: null,
+        orderNum: null,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        name: [
-          { required: true, message: "分类不能为空", trigger: "blur" }
-        ],
-        sort: [
-          { required: true, message: "顺序不能为空", trigger: "blur" }
-        ],
       }
     };
   },
@@ -220,13 +151,32 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询分类列表 */
+    /** 查询商品分类列表 */
     getList() {
       this.loading = true;
       listCategory(this.queryParams).then(response => {
-        this.categoryList = response.rows;
-        this.total = response.total;
+        this.categoryList = this.handleTree(response.data, "deptId", "parentId");
         this.loading = false;
+      });
+    },
+    /** 转换商品分类数据结构 */
+    normalizer(node) {
+      if (node.children && !node.children.length) {
+        delete node.children;
+      }
+      return {
+        id: node.deptId,
+        label: node.deptName,
+        children: node.children
+      };
+    },
+	/** 查询商品分类下拉树结构 */
+    getTreeselect() {
+      listCategory().then(response => {
+        this.categoryOptions = [];
+        const data = { deptId: 0, deptName: '顶级节点', children: [] };
+        data.children = this.handleTree(response.data, "deptId", "parentId");
+        this.categoryOptions.push(data);
       });
     },
     // 取消按钮
@@ -237,21 +187,20 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        id: null,
-        type: null,
-        name: null,
-        sort: null,
-        status: 0,
+        deptId: null,
+        parentId: null,
+        ancestors: null,
+        deptName: null,
+        orderNum: null,
+        cFlag: null,
         createTime: null,
-        updateTime: null,
-        createUser: null,
-        updateUser: null
+        updateBy: null,
+        updateTime: null
       };
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
@@ -259,33 +208,44 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
-    },
     /** 新增按钮操作 */
-    handleAdd() {
+    handleAdd(row) {
       this.reset();
+      this.getTreeselect();
+      if (row != null && row.deptId) {
+        this.form.parentId = row.deptId;
+      } else {
+        this.form.parentId = 0;
+      }
       this.open = true;
-      this.title = "添加分类";
+      this.title = "添加商品分类";
+    },
+    /** 展开/折叠操作 */
+    toggleExpandAll() {
+      this.refreshTable = false;
+      this.isExpandAll = !this.isExpandAll;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const id = row.id || this.ids
-      getCategory(id).then(response => {
+      this.getTreeselect();
+      if (row != null) {
+        this.form.parentId = row.deptId;
+      }
+      getCategory(row.deptId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改分类";
+        this.title = "修改商品分类";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.id != null) {
+          if (this.form.deptId != null) {
             updateCategory(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -303,19 +263,12 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除分类编号为"' + ids + '"的数据项？').then(function() {
-        return delCategory(ids);
+      this.$modal.confirm('是否确认删除商品分类编号为"' + row.deptId + '"的数据项？').then(function() {
+        return delCategory(row.deptId);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download('system/category/export', {
-        ...this.queryParams
-      }, `category_${new Date().getTime()}.xlsx`)
     }
   }
 };

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询分类列表
+// 查询商品分类列表
 export function listCategory(query) {
   return request({
     url: '/system/category/list',
@@ -9,15 +9,15 @@ export function listCategory(query) {
   })
 }
 
-// 查询分类详细
-export function getCategory(id) {
+// 查询商品分类详细
+export function getCategory(deptId) {
   return request({
-    url: '/system/category/' + id,
+    url: '/system/category/' + deptId,
     method: 'get'
   })
 }
 
-// 新增分类
+// 新增商品分类
 export function addCategory(data) {
   return request({
     url: '/system/category',
@@ -26,7 +26,7 @@ export function addCategory(data) {
   })
 }
 
-// 修改分类
+// 修改商品分类
 export function updateCategory(data) {
   return request({
     url: '/system/category',
@@ -35,10 +35,10 @@ export function updateCategory(data) {
   })
 }
 
-// 删除分类
-export function delCategory(id) {
+// 删除商品分类
+export function delCategory(deptId) {
   return request({
-    url: '/system/category/' + id,
+    url: '/system/category/' + deptId,
     method: 'delete'
   })
 }
