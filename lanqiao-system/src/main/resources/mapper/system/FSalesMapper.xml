@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.system.mapper.FSalesMapper">
+    
+    <resultMap type="FSales" id="FSalesResult">
+        <result property="salesId"    column="sales_id"    />
+        <result property="usersId"    column="users_id"    />
+        <result property="salesAllamount"    column="sales_allamount"    />
+        <result property="salesWay"    column="sales_way"    />
+        <result property="salesStatus"    column="sales_status"    />
+        <result property="salesCreationtime"    column="sales_creationtime"    />
+    </resultMap>
+
+    <sql id="selectFSalesVo">
+        select sales_id, users_id, sales_allamount, sales_way, sales_status, sales_creationtime from f_sales
+    </sql>
+
+    <select id="selectFSalesList" parameterType="FSales" resultMap="FSalesResult">
+        <include refid="selectFSalesVo"/>
+        <where>  
+            <if test="usersId != null "> and users_id = #{usersId}</if>
+            <if test="salesWay != null "> and sales_way = #{salesWay}</if>
+            <if test="salesStatus != null "> and sales_status = #{salesStatus}</if>
+            <if test="salesCreationtime != null "> and sales_creationtime = #{salesCreationtime}</if>
+        </where>
+    </select>
+    
+    <select id="selectFSalesBySalesId" parameterType="Long" resultMap="FSalesResult">
+        <include refid="selectFSalesVo"/>
+        where sales_id = #{salesId}
+    </select>
+        
+    <insert id="insertFSales" parameterType="FSales" useGeneratedKeys="true" keyProperty="salesId">
+        insert into f_sales
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="usersId != null">users_id,</if>
+            <if test="salesAllamount != null">sales_allamount,</if>
+            <if test="salesWay != null">sales_way,</if>
+            <if test="salesStatus != null">sales_status,</if>
+            <if test="salesCreationtime != null">sales_creationtime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="usersId != null">#{usersId},</if>
+            <if test="salesAllamount != null">#{salesAllamount},</if>
+            <if test="salesWay != null">#{salesWay},</if>
+            <if test="salesStatus != null">#{salesStatus},</if>
+            <if test="salesCreationtime != null">#{salesCreationtime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFSales" parameterType="FSales">
+        update f_sales
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="usersId != null">users_id = #{usersId},</if>
+            <if test="salesAllamount != null">sales_allamount = #{salesAllamount},</if>
+            <if test="salesWay != null">sales_way = #{salesWay},</if>
+            <if test="salesStatus != null">sales_status = #{salesStatus},</if>
+            <if test="salesCreationtime != null">sales_creationtime = #{salesCreationtime},</if>
+        </trim>
+        where sales_id = #{salesId}
+    </update>
+
+    <delete id="deleteFSalesBySalesId" parameterType="Long">
+        delete from f_sales where sales_id = #{salesId}
+    </delete>
+
+    <delete id="deleteFSalesBySalesIds" parameterType="String">
+        delete from f_sales where sales_id in 
+        <foreach item="salesId" collection="array" open="(" separator="," close=")">
+            #{salesId}
+        </foreach>
+    </delete>
+</mapper>

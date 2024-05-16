@@ -92,4 +92,14 @@ public class FUsersServiceImpl implements IFUsersService
     {
         return fUsersMapper.deleteFUsersByUsersId(usersId);
     }
+
+    @Override
+    public List<FUsers> selectUsersListCIds(List<Long> UsersId) {
+        return fUsersMapper.selectUsersListCIds(UsersId);
+    }
+
+    @Override
+    public List<FUsers> selectUsersAll() {
+        return fUsersMapper.selectUsersAll();
+    }
 }

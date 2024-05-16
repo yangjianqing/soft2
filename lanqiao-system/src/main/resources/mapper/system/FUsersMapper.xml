@@ -80,4 +80,16 @@
             #{usersId}
         </foreach>
     </delete>
+
+    <select id="selectUsersListCIds" parameterType="Long" resultMap="FUsersResult">
+        <include refid="selectFUsersVo"/>
+        where users_id in
+        <foreach item="UsersId" collection="list" open="(" separator="," close=")">
+            #{UsersId}
+        </foreach>
+    </select>
+
+    <select id="selectUsersAll" resultMap="FUsersResult">
+        <include refid="selectFUsersVo"/>
+    </select>
 </mapper>

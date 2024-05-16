@@ -115,6 +115,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectUsersIdByType" parameterType="FAddress" resultMap="FAddressResult">
         <include refid="selectFAddressVo"/>
-        where adderss_users_id = #{usersId}
+        where adderss_users_id = #{usersId} ORDER BY address_sort ASC
     </select>
 </mapper>

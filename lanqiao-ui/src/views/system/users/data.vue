@@ -155,7 +155,7 @@
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.addressSex"/>
         </template>
       </el-table-column>
-      <el-table-column label="联系方式" align="center" prop="addressPhone" />
+      <el-table-column label="联系方式" align="center" prop="addressPhone" width="110" />
       <el-table-column label="地址标签" align="center" prop="addressLabel">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.f_address_label" :value="scope.row.addressLabel"/>
@@ -167,7 +167,13 @@
       <el-table-column label="市级名称" align="center" prop="addressCityName" />
       <el-table-column label="区级编号" align="center" prop="addressDistrictCode" />
       <el-table-column label="区级名称" align="center" prop="addressDistrictName" />
-      <el-table-column label="详细地址" align="center" prop="addressDetail" />
+
+      <el-table-column label="详细地址" align="center" prop="addressDetail" class-name="address-column" :show-overflow-tooltip="true" >
+        <template slot-scope="scope">
+            <div class="address-cell">{{ scope.row.addressDetail }}</div>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -261,6 +267,14 @@
   </div>
 </template>
 
+<style scoped>
+.address-cell {
+  white-space: nowrap; /* 文本不换行 */
+  overflow: hidden; /* 溢出部分隐藏 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+}
+</style>
+
 <script>
 import { listAddress, getAddress, delAddress, addAddress, updateAddress, getType} from "@/api/system/users/data";
 
@@ -318,16 +332,16 @@ export default {
     const usersId = this.$route.query.usersId;
     // 根据 usersId 查询地址详情
     this.getType(usersId);
-    // console.log(this.getType(usersId));
-    // 获取地址列表
-    this.getList();
+    // // 获取地址列表
+    // this.getList();
   },
   methods: {
     /** 根据usersId查询地址详情 */
     getType(usersId) {
+      this.loading = true;
       getType(usersId).then(response => {
         this.addressIdList = response.data;
-        console.log(response.data[0]);
+        this.loading = false;
       });
     },
     /** 查询地址管理列表 */
