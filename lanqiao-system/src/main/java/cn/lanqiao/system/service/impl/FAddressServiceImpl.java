@@ -94,7 +94,9 @@ public class FAddressServiceImpl implements IFAddressService
     }
 
     @Override
-    public List<SysDictData> selectUsersIdByType(String usersId) {
+    public List<FAddress> selectUsersIdByType(String usersId) {
         return fAddressMapper.selectUsersIdByType(usersId);
     }
+
+
 }

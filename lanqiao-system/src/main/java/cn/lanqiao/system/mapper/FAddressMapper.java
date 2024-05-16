@@ -67,5 +67,5 @@ public interface FAddressMapper
      * @param usersId 字典类型
      * @return 字典数据集合信息
      */
-    public List<SysDictData> selectUsersIdByType(String usersId);
+    public List<FAddress> selectUsersIdByType(String usersId);
 }

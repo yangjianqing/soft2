@@ -112,7 +112,7 @@ public class FAddressController extends BaseController
     @GetMapping(value = "/type/{usersId}")
     public AjaxResult dictType(@PathVariable String usersId)
     {
-        List<SysDictData> data = fAddressService.selectUsersIdByType(usersId);
-        return AjaxResult.success(data);
+        List<FAddress> fAddresses = fAddressService.selectUsersIdByType(usersId);
+        return AjaxResult.success().put("data", fAddresses);
     }
 }

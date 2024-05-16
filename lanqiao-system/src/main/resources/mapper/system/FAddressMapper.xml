@@ -113,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectUsersIdByType" resultType="cn.lanqiao.common.core.domain.entity.SysDictData">
+    <select id="selectUsersIdByType" parameterType="FAddress" resultMap="FAddressResult">
         <include refid="selectFAddressVo"/>
         where adderss_users_id = #{usersId}
     </select>
