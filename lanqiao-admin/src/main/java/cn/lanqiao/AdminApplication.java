@@ -17,6 +17,5 @@ public class AdminApplication
         // System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(AdminApplication.class, args);
         System.out.println("后台接口启动成功");
-        System.out.println("韦春测试");
     }
 }

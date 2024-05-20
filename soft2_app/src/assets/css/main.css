@@ -1,0 +1,23 @@
+#app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    height: 100%;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+ul li{
+    list-style: none;
+}
+a {
+    color: inherit; /* 继承父元素的文本颜色 */
+    text-decoration: none; /* 取消下划线 */
+}
+
+a:hover {
+    text-decoration: none; /* 取消鼠标悬停时的下划线 */
+}
