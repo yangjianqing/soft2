@@ -1,4 +1,4 @@
-package cn.lanqiao.system.controller;
+package cn.lanqiao.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -100,5 +100,15 @@ public class FUsersController extends BaseController
     public AjaxResult remove(@PathVariable Long[] usersIds)
     {
         return toAjax(fUsersService.deleteFUsersByUsersIds(usersIds));
+    }
+
+    /**
+     * 获取用户管理详细信息
+     */
+    @GetMapping(value = "/type/{usersId}")
+    public AjaxResult getUsers(@PathVariable("usersId") Long usersId)
+    {
+        FUsers fUsers = fUsersService.selectFUsersByUsersId(usersId);
+        return AjaxResult.success().put("usersList",fUsers);
     }
 }

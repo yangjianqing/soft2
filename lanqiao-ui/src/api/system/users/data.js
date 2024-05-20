@@ -51,3 +51,11 @@ export function getType(usersId) {
     method: 'get'
   })
 }
+
+// 查询用户管理详细
+export function getUsers(usersId) {
+  return request({
+    url: '/system/users/type/' + usersId,
+    method: 'get'
+  })
+}

@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-<!--      <el-form-item label="地址排序" prop="addressSort">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.addressSort"-->
-<!--          placeholder="请输入地址排序"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
       <el-form-item label="收货人" prop="addressConsigneeName">
         <el-input
           v-model="queryParams.addressConsigneeName"
@@ -27,14 +19,6 @@
           />
         </el-select>
       </el-form-item>
-<!--      <el-form-item label="联系方式" prop="addressPhone">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.addressPhone"-->
-<!--          placeholder="请输入联系方式"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
       <el-form-item label="地址标签" prop="addressLabel">
         <el-select v-model="queryParams.addressLabel" placeholder="请选择地址标签" clearable>
           <el-option
@@ -45,54 +29,6 @@
           />
         </el-select>
       </el-form-item>
-<!--      <el-form-item label="省级编号" prop="addressProvinceCode">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.addressProvinceCode"-->
-<!--          placeholder="请输入省级编号"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="省级名称" prop="addressProvinceName">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.addressProvinceName"-->
-<!--          placeholder="请输入省级名称"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="市级编号" prop="addressCityCode">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.addressCityCode"-->
-<!--          placeholder="请输入市级编号"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="市级名称" prop="addressCityName">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.addressCityName"-->
-<!--          placeholder="请输入市级名称"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="区级编号" prop="addressDistrictCode">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.addressDistrictCode"-->
-<!--          placeholder="请输入区级编号"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="区级名称" prop="addressDistrictName">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.addressDistrictName"-->
-<!--          placeholder="请输入区级名称"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -205,8 +141,8 @@
     <!-- 添加或修改地址管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户id" prop="adderssUsersId">
-          <el-input v-model="form.adderssUsersId" placeholder="请输入用户id" />
+        <el-form-item label="用户id" prop="addressUsersId">
+          <el-input v-model="usersName" disabled/>
         </el-form-item>
         <el-form-item label="地址排序" prop="addressSort">
           <el-input-number v-model="form.addressSort" controls-position="right" :min="0" />
@@ -276,7 +212,7 @@
 </style>
 
 <script>
-import { listAddress, getAddress, delAddress, addAddress, updateAddress, getType} from "@/api/system/users/data";
+import { listAddress, getAddress, delAddress, addAddress, updateAddress, getType, getUsers } from "@/api/system/users/data";
 
 export default {
   name: "Address",
@@ -295,6 +231,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      //当前页面的用户名称
+      usersName: '',
       // 地址管理表格数据
       addressList: [],
       // 根据id查询地址详情数据
@@ -324,6 +262,18 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        adderssUsersId: [
+          { required: true, message: "用户id不能为空", trigger: "blur" }
+        ],
+        addressConsigneeName: [
+          { required: true, message: "收货人不能为空", trigger: "blur" }
+        ],
+        addressPhone: [
+          { required: true, message: "联系方式不能为空", trigger: "blur" }
+        ],
+        addressDetail: [
+          { required: true, message: "详细地址不能为空", trigger: "blur" }
+        ]
       }
     };
   },
@@ -332,6 +282,7 @@ export default {
     const usersId = this.$route.query.usersId;
     // 根据 usersId 查询地址详情
     this.getType(usersId);
+    this.getUsers(usersId);
     // // 获取地址列表
     // this.getList();
   },
@@ -342,6 +293,12 @@ export default {
       getType(usersId).then(response => {
         this.addressIdList = response.data;
         this.loading = false;
+      });
+    },
+    /** 获取当前用户名称 */
+    getUsers(usersId) {
+      getUsers(usersId).then(response => {
+        this.usersName = response.usersList.usersName;
       });
     },
     /** 查询地址管理列表 */
