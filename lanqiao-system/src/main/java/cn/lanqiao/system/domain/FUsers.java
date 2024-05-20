@@ -9,7 +9,7 @@ import cn.lanqiao.common.core.domain.BaseEntity;
  * 用户管理对象 f_users
  *
  * @author chuan
- * @date 2024-05-14
+ * @date 2024-05-20
  */
 public class FUsers extends BaseEntity
 {
@@ -42,6 +42,14 @@ public class FUsers extends BaseEntity
     /** 用户地址 */
     @Excel(name = "用户地址")
     private String userAddress;
+
+    /** 会员级别 */
+    @Excel(name = "会员级别")
+    private Long memberGrade;
+
+    /** 会员积分 */
+    @Excel(name = "会员积分")
+    private Long memberTotal;
 
     public void setUsersId(Long usersId)
     {
@@ -106,6 +114,24 @@ public class FUsers extends BaseEntity
     {
         return userAddress;
     }
+    public void setMemberGrade(Long memberGrade)
+    {
+        this.memberGrade = memberGrade;
+    }
+
+    public Long getMemberGrade()
+    {
+        return memberGrade;
+    }
+    public void setMemberTotal(Long memberTotal)
+    {
+        this.memberTotal = memberTotal;
+    }
+
+    public Long getMemberTotal()
+    {
+        return memberTotal;
+    }
 
     @Override
     public String toString() {
@@ -117,6 +143,8 @@ public class FUsers extends BaseEntity
                 .append("usersPassword", getUsersPassword())
                 .append("usersAvatar", getUsersAvatar())
                 .append("userAddress", getUserAddress())
+                .append("memberGrade", getMemberGrade())
+                .append("memberTotal", getMemberTotal())
                 .append("createTime", getCreateTime())
                 .toString();
     }

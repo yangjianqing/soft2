@@ -7,7 +7,7 @@ import cn.lanqiao.system.domain.FUsers;
  * 用户管理Service接口
  *
  * @author chuan
- * @date 2024-05-14
+ * @date 2024-05-20
  */
 public interface IFUsersService
 {
@@ -58,17 +58,4 @@ public interface IFUsersService
      * @return 结果
      */
     public int deleteFUsersByUsersId(Long usersId);
-
-    /**
-     * 根据用户ids 获取信息
-     * @param UsersId
-     * @return
-     */
-    List<FUsers> selectUsersListCIds(List<Long> UsersId);
-
-    /**
-     * 查询所有用户
-     * @return
-     */
-    public List<FUsers> selectUsersAll();
 }

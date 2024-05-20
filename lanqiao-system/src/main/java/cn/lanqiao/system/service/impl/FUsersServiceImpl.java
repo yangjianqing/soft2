@@ -12,7 +12,7 @@ import cn.lanqiao.system.service.IFUsersService;
  * 用户管理Service业务层处理
  *
  * @author chuan
- * @date 2024-05-14
+ * @date 2024-05-20
  */
 @Service
 public class FUsersServiceImpl implements IFUsersService
@@ -91,15 +91,5 @@ public class FUsersServiceImpl implements IFUsersService
     public int deleteFUsersByUsersId(Long usersId)
     {
         return fUsersMapper.deleteFUsersByUsersId(usersId);
-    }
-
-    @Override
-    public List<FUsers> selectUsersListCIds(List<Long> UsersId) {
-        return fUsersMapper.selectUsersListCIds(UsersId);
-    }
-
-    @Override
-    public List<FUsers> selectUsersAll() {
-        return fUsersMapper.selectUsersAll();
     }
 }

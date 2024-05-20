@@ -1,4 +1,4 @@
-package cn.lanqiao.web.controller.system;
+package cn.lanqiao.system.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +25,7 @@ import cn.lanqiao.common.core.page.TableDataInfo;
  * 用户管理Controller
  *
  * @author chuan
- * @date 2024-05-14
+ * @date 2024-05-20
  */
 @RestController
 @RequestMapping("/system/users")

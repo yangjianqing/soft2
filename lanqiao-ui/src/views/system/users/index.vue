@@ -17,13 +17,15 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="用户地址" prop="userAddress">
-        <el-input
-          v-model="queryParams.userAddress"
-          placeholder="请输入用户地址"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="会员级别" prop="memberGrade">
+        <el-select v-model="queryParams.memberGrade" placeholder="请选择会员级别" clearable>
+          <el-option
+            v-for="dict in dict.type.f_membership_grade"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
         <el-date-picker clearable
@@ -110,6 +112,12 @@
         </template>
       </el-table-column>
 
+      <el-table-column label="会员级别" align="center" prop="memberGrade">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.f_membership_grade" :value="scope.row.memberGrade"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="会员积分" align="center" prop="memberTotal" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
@@ -169,7 +177,20 @@
           <image-upload v-model="form.usersAvatar"/>
         </el-form-item>
         <el-form-item label="用户地址" prop="userAddress">
-          <el-input v-model="form.userAddress" placeholder="请输入用户地址" />
+          <el-input v-model="form.userAddress" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="会员积分" prop="memberTotal">
+          <el-input v-model="form.memberTotal" placeholder="请输入会员积分" />
+        </el-form-item>
+        <el-form-item label="会员级别" prop="memberGrade">
+          <el-select v-model="form.memberGrade" placeholder="请选择会员级别">
+            <el-option
+              v-for="dict in dict.type.f_membership_grade"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -193,11 +214,9 @@ import { listUsers, getUsers, delUsers, addUsers, updateUsers } from "@/api/syst
 
 export default {
   name: "Users",
-  dicts: ['sys_user_sex'],
+  dicts: ['f_membership_grade', 'sys_user_sex'],
   data() {
     return {
-      userId: this.$route.params.usersId,
-
       // 遮罩层
       loading: true,
       // 选中数组
@@ -222,7 +241,7 @@ export default {
         pageSize: 10,
         usersName: null,
         usersPhone: null,
-        userAddress: null,
+        memberGrade: null,
         createTime: null
       },
       // 表单参数
@@ -260,6 +279,8 @@ export default {
         usersPassword: null,
         usersAvatar: null,
         userAddress: null,
+        memberGrade: null,
+        memberTotal: null,
         createTime: null
       };
       this.resetForm("form");

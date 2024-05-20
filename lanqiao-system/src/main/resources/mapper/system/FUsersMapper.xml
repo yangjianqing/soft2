@@ -12,11 +12,13 @@
         <result property="usersPassword"    column="users_password"    />
         <result property="usersAvatar"    column="users_avatar"    />
         <result property="userAddress"    column="user_address"    />
+        <result property="memberGrade"    column="member_grade"    />
+        <result property="memberTotal"    column="member_total"    />
         <result property="createTime"    column="create_time"    />
     </resultMap>
 
     <sql id="selectFUsersVo">
-        select users_id, users_name, users_sex, users_phone, users_password, users_avatar, user_address, create_time from f_users
+        select users_id, users_name, users_sex, users_phone, users_password, users_avatar, user_address, member_grade, member_total, create_time from f_users
     </sql>
 
     <select id="selectFUsersList" parameterType="FUsers" resultMap="FUsersResult">
@@ -24,7 +26,7 @@
         <where>
             <if test="usersName != null  and usersName != ''"> and users_name like concat('%', #{usersName}, '%')</if>
             <if test="usersPhone != null  and usersPhone != ''"> and users_phone = #{usersPhone}</if>
-            <if test="userAddress != null  and userAddress != ''"> and user_address like concat('%', #{userAddress}, '%')</if>
+            <if test="memberGrade != null "> and member_grade = #{memberGrade}</if>
             <if test="createTime != null "> and create_time = #{createTime}</if>
         </where>
     </select>
@@ -43,6 +45,8 @@
             <if test="usersPassword != null">users_password,</if>
             <if test="usersAvatar != null">users_avatar,</if>
             <if test="userAddress != null">user_address,</if>
+            <if test="memberGrade != null">member_grade,</if>
+            <if test="memberTotal != null">member_total,</if>
             <if test="createTime != null">create_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -52,6 +56,8 @@
             <if test="usersPassword != null">#{usersPassword},</if>
             <if test="usersAvatar != null">#{usersAvatar},</if>
             <if test="userAddress != null">#{userAddress},</if>
+            <if test="memberGrade != null">#{memberGrade},</if>
+            <if test="memberTotal != null">#{memberTotal},</if>
             <if test="createTime != null">#{createTime},</if>
         </trim>
     </insert>
@@ -65,6 +71,8 @@
             <if test="usersPassword != null">users_password = #{usersPassword},</if>
             <if test="usersAvatar != null">users_avatar = #{usersAvatar},</if>
             <if test="userAddress != null">user_address = #{userAddress},</if>
+            <if test="memberGrade != null">member_grade = #{memberGrade},</if>
+            <if test="memberTotal != null">member_total = #{memberTotal},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
         </trim>
         where users_id = #{usersId}
@@ -80,16 +88,4 @@
             #{usersId}
         </foreach>
     </delete>
-
-    <select id="selectUsersListCIds" parameterType="Long" resultMap="FUsersResult">
-        <include refid="selectFUsersVo"/>
-        where users_id in
-        <foreach item="UsersId" collection="list" open="(" separator="," close=")">
-            #{UsersId}
-        </foreach>
-    </select>
-
-    <select id="selectUsersAll" resultMap="FUsersResult">
-        <include refid="selectFUsersVo"/>
-    </select>
 </mapper>
