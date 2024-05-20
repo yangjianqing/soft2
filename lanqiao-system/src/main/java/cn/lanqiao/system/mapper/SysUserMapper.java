@@ -1,6 +1,8 @@
 package cn.lanqiao.system.mapper;
 
 import java.util.List;
+
+import cn.lanqiao.system.domain.FUsers;
 import org.apache.ibatis.annotations.Param;
 import cn.lanqiao.common.core.domain.entity.SysUser;
 
@@ -124,4 +126,11 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+    /**
+     * 根据Id查
+     * @param UserId
+     * @return
+     */
+    List<SysUser> selectUserListCIds(List<Long> UserId);
 }

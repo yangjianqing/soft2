@@ -217,5 +217,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			#{userId}
         </foreach> 
  	</delete>
+<!--	根据Id查询用户数据-->
+	<select id="selectUserListCIds" parameterType="Long" resultMap="SysUserResult">
+		<include refid="selectUserVo"/>
+		where u.user_id in
+		<foreach item="UserId" collection="list" open="(" separator="," close=")">
+			#{UserId}
+		</foreach>
+	</select>
 	
 </mapper> 
