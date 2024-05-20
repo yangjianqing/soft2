@@ -138,4 +138,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ( #{item.deptId}, #{item.parentId}, #{item.ancestors}, #{item.deptName}, #{item.orderNum}, #{item.cFlag}, #{item.createTime}, #{item.updateBy}, #{item.updateTime})
         </foreach>
     </insert>
+    <!--    根据id查询商品-->
+    <select id="selectListName" parameterType="Long" resultMap="FGoodsResult">
+        <include refid="selectFGoodsVo"/>
+        where id in
+        <foreach item="GoodsId" collection="list" open="(" separator="," close=")">
+            #{GoodsId}
+        </foreach>
+    </select>
 </mapper>

@@ -85,4 +85,10 @@ public interface FGoodsMapper
      * @return 结果
      */
     public int deleteCategoryByDeptId(Long id);
+    /**
+     * 根据Id查
+     * @param GoodsId
+     * @return
+     */
+    List<FGoods> selectListName(List<Long> GoodsId);
 }
