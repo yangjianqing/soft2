@@ -100,21 +100,36 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="主键" align="center" prop="id" />
         <el-table-column label="商品名称" align="center" prop="name" />
-        <el-table-column label="类别" align="center" prop="categoryId" />
+        <el-table-column label="类别" align="center" prop="categoryName" />
         <el-table-column label="商品价格" align="center" prop="price" />
         <el-table-column label="图片" align="center" prop="image" width="100">
           <template slot-scope="scope">
             <image-preview :src="scope.row.image" :width="50" :height="50"/>
           </template>
         </el-table-column>
-        <el-table-column label="描述信息" align="center" prop="description" />
+        <el-table-column label="库存" align="center" prop="num" />
+        <el-table-column label="描述" align="center" prop="description" >
+          <template slot-scope="scope">
+          <span
+            :title="scope.row.description"
+            style="
+            display: block;
+            width: 120px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-align:left;">
+            {{scope.row.description}}
+          </span>
+          </template>
+        </el-table-column>
         <el-table-column label="状态" align="center" prop="status">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.f_goods" :value="scope.row.status"/>
           </template>
         </el-table-column>
-        <el-table-column label="创建人" align="center" prop="createUser" />
-        <el-table-column label="修改人" align="center" prop="updateUser" />
+        <el-table-column label="创建人" align="center" prop="createUserName" />
+        <el-table-column label="修改人" align="center" prop="updateUserName" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button
@@ -148,16 +163,19 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="商品名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入商品名称" />
+              <el-input v-model="form.name" placeholder="请输入商品名称" />
         </el-form-item>
         <el-form-item label="商品价格" prop="price">
-          <el-input v-model="form.price" placeholder="请输入商品价格" />
+              <el-input v-model="form.price" placeholder="请输入商品价格" />
         </el-form-item>
         <el-form-item label="图片">
           <image-upload v-model="form.image"/>
         </el-form-item>
         <el-form-item label="描述信息" prop="description">
           <el-input v-model="form.description" placeholder="请输入描述信息" />
+        </el-form-item>
+        <el-form-item label="库存" prop="num">
+          <el-input v-model="form.num" placeholder="请输入库存" />
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
@@ -174,41 +192,9 @@
         <el-form-item label="修改人" prop="updateUser">
           <el-input v-model="form.updateUser" placeholder="请输入修改人" />
         </el-form-item>
-        <el-divider content-position="center">商品分类信息</el-divider>
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddCategory">添加</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteCategory">删除</el-button>
-          </el-col>
-        </el-row>
-        <el-table :data="categoryList" :row-class-name="rowCategoryIndex" @selection-change="handleCategorySelectionChange" ref="category">
-          <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="序号" align="center" prop="index" width="50"/>
-          <el-table-column label="父级id" prop="parentId" width="150">
-            <template slot-scope="scope">
-              <el-select v-model="scope.row.parentId" placeholder="请选择父级id">
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column label="祖级列表" prop="ancestors" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.ancestors" placeholder="请输入祖级列表" />
-            </template>
-          </el-table-column>
-          <el-table-column label="分类名称" prop="deptName" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.deptName" placeholder="请输入分类名称" />
-            </template>
-          </el-table-column>
-          <el-table-column label="显示顺序" prop="orderNum" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.orderNum" placeholder="请输入显示顺序" />
-            </template>
-          </el-table-column>
-        </el-table>
+          <el-form-item label="类别" prop="cateId">
+            <treeselect v-model="form.categoryId" :options="cateOptions" :show-count="true" placeholder="请选择类别" />
+          </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -220,10 +206,12 @@
 
 <script>
 import {listGoods, getGoods, delGoods, addGoods, updateGoods, cateTreeSelect} from "@/api/system/goods";
-import {deptTreeSelect} from "@/api/system/user";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "Goods",
+  components: {Treeselect},
   dicts: ['f_goods'],
   data() {
     return {
@@ -349,6 +337,14 @@ export default {
       this.categoryList = [];
       this.resetForm("form");
     },
+    onDescriptionInput(event) {
+      // 当输入的字符数超过100时，阻止继续输入
+      if (this.description.length >= 6) {
+        event.preventDefault();
+        // 可以在这里显示一个警告提示框
+        alert('描述不能超过100个字符！');
+      }
+    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -417,19 +413,7 @@ export default {
     rowCategoryIndex({ row, rowIndex }) {
       row.index = rowIndex + 1;
     },
-    // 更多操作触发
-    handleCommand(command, row) {
-      switch (command) {
-        case "handleResetPwd":
-          this.handleResetPwd(row);
-          break;
-        case "handleAuthRole":
-          this.handleAuthRole(row);
-          break;
-        default:
-          break;
-      }
-    },
+
     /** 商品分类添加按钮操作 */
     handleAddCategory() {
       let obj = {};

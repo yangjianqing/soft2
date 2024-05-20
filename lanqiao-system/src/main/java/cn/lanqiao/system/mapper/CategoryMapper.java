@@ -2,6 +2,7 @@ package cn.lanqiao.system.mapper;
 
 import cn.lanqiao.common.core.domain.entity.Category;
 import cn.lanqiao.common.core.domain.entity.SysDept;
+import cn.lanqiao.common.core.domain.entity.SysUser;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -112,6 +113,13 @@ public interface CategoryMapper
      * @return 结果
      */
     public int checkDeptExistUser(Long deptId);
+
+    /**
+     * 根据Id查
+     * @param CateId
+     * @return
+     */
+    List<Category> selectCateListCIds(List<Long> CateId);
 
     /**
      * 校验部门名称是否唯一

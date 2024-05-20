@@ -30,6 +30,18 @@ public class FGoods extends BaseEntity
     @Excel(name = "类别")
     private Long categoryId;
 
+    /** 类别 */
+    @Excel(name = "类别")
+    private String categoryName;
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
     /** 商品价格 */
     @Excel(name = "商品价格")
     private BigDecimal price;
@@ -50,9 +62,48 @@ public class FGoods extends BaseEntity
     @Excel(name = "创建人")
     private Long createUser;
 
+    /** 创建人 */
+    @Excel(name = "创建人")
+    private String createUserName;
+
     /** 修改人 */
     @Excel(name = "修改人")
     private Long updateUser;
+
+    /** 修改人 */
+    @Excel(name = "修改人")
+    private String updateUserName;
+
+    public String getUpdateUserName() {
+        return updateUserName;
+    }
+
+    public void setUpdateUserName(String updateUserName) {
+        this.updateUserName = updateUserName;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+
+
+    /** 商品数量 */
+    @Excel(name = "商品数量")
+    private Integer num;
+
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
 
     /** 商品分类信息 */
     private List<Category> categoryList;

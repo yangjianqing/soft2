@@ -72,6 +72,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="checkDeptExistUser" parameterType="Long" resultType="int">
         select count(1) from goods where dept_id = #{category_id} and c_flag = '0'
     </select>
+<!--    根据id查询姓名-->
+    <select id="selectCateListCIds" parameterType="Long" resultMap="CategoryResult">
+        <include refid="selectCategoryVo"/>
+        where dept_id in
+        <foreach item="CateId" collection="list" open="(" separator="," close=")">
+            #{CateId}
+        </foreach>
+    </select>
 
 
 

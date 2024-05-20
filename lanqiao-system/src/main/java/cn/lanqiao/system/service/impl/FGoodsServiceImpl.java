@@ -1,12 +1,17 @@
 package cn.lanqiao.system.service.impl;
 
-import java.util.List;
+import java.util.*;
 
 import cn.lanqiao.common.core.domain.entity.Category;
+import cn.lanqiao.common.core.domain.entity.SysUser;
 import cn.lanqiao.common.utils.DateUtils;
+import cn.lanqiao.system.domain.FMembers;
+import cn.lanqiao.system.domain.FUsers;
+import cn.lanqiao.system.mapper.CategoryMapper;
+import cn.lanqiao.system.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+
 import cn.lanqiao.common.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import cn.lanqiao.system.mapper.FGoodsMapper;
@@ -24,7 +29,10 @@ public class FGoodsServiceImpl implements IFGoodsService
 {
     @Autowired
     private FGoodsMapper fGoodsMapper;
-
+    @Autowired
+    private SysUserMapper SysUserMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
     /**
      * 查询商品
      * 
@@ -44,10 +52,83 @@ public class FGoodsServiceImpl implements IFGoodsService
      * @return 商品
      */
     @Override
-    public List<FGoods> selectFGoodsList(FGoods fGoods)
-    {
-        return fGoodsMapper.selectFGoodsList(fGoods);
+    public List<FGoods> selectFGoodsList(FGoods fGoods) {
+
+        List<FGoods> fGoods1 = fGoodsMapper.selectFGoodsList(fGoods);
+        Set<Long> UserId = new HashSet<>();
+        Set<Long> CateId=new HashSet<>();
+
+        //遍历会员管理列表数据，判断usersId是否为空，不是则将usersId存储到Set<Long> usersIds = new HashSet<>();
+        for (FGoods fm : fGoods1) {
+            if(fm.getCreateUser() != null) {
+                UserId.add(fm.getCreateUser());
+            }
+            if(fm.getCategoryId() != null) {
+                CateId.add(fm.getCategoryId());
+            }
+        }
+
+        // 根据会员列表数据的usersId来获取用户users列表数据
+        List<SysUser> UsersList = new ArrayList<>();
+        if(!UserId.isEmpty()) {
+            UsersList=SysUserMapper.selectUserListCIds(new ArrayList<>(UserId));
+        }
+        // 根据分类列表数据的cateId来获取用户分类列表数据
+        List<Category> CateList = new ArrayList<>();
+        if(!CateId.isEmpty()) {
+            CateList=categoryMapper.selectCateListCIds(new ArrayList<>(CateId));
+        }
+
+
+        //利用map集合键值对，将用户数据存储到map集合里面  (键：UsersId;值：UsersList)
+        Map<Long, SysUser> busersMap = new HashMap<>();
+        for (SysUser f : UsersList) {
+            busersMap.put(f.getUserId(), f);
+        }
+        //利用map集合键值对，将分类数据存储到map集合里面  (键：CateId;值：CateList)
+        Map<Long, Category> busersMap1 = new HashMap<>();
+        for (Category c : CateList) {
+            busersMap1.put(c.getDeptId(), c);
+        }
+
+        // 替换用户姓名
+        //进行遍历会员列表数据
+        for (FGoods fm : fGoods1) {
+            //判断用户列表的用户id是否为空
+            if (fm.getCreateUser() != null) {
+                //调用map集合根据当前用户的用户id来拿到用户id里面用户列表的数据
+                SysUser User = busersMap.get(fm.getCreateUser());
+                //判断拿到的用户列表数据是否为空
+                if (User != null) {
+                    //将会员列表的usersName传递给会员列表的usersName
+                    fm.setCreateUserName(User.getUserName());
+                }
+            }
+            //判断用户列表的用户id是否为空
+            if (fm.getUpdateUser() != null) {
+                //调用map集合根据当前用户的用户id来拿到用户id里面用户列表的数据
+                SysUser User1= busersMap.get(fm.getUpdateUser());
+                //判断拿到的用户列表数据是否为空
+                if (User1 != null) {
+                    //将会员列表的usersName传递给会员列表的usersName
+                    fm.setUpdateUserName(User1.getUserName());
+                }
+            }
+            //判断用户列表的分类id是否为空
+            if (fm.getCategoryId() != null) {
+                //调用map集合根据当前用户的用户id来拿到用户id里面用户列表的数据
+                Category User2= busersMap1.get(fm.getCategoryId());
+                //判断拿到的用户列表数据是否为空
+                if (User2 != null) {
+                    //将会员列表的usersName传递给会员列表的usersName
+                    fm.setCategoryName(User2.getDeptName());
+                }
+            }
+
+        }
+        return fGoods1;
     }
+
 
     /**
      * 新增商品
