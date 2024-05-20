@@ -248,6 +248,18 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        usersName: [
+          { required: true, message: "用户姓名不能为空", trigger: "blur" }
+        ],
+        usersSex: [
+          { required: true, message: "用户性别不能为空", trigger: "change" }
+        ],
+        usersPhone: [
+          { required: true, message: "联系方式不能为空", trigger: "blur" }
+        ],
+        usersPassword: [
+          { required: true, message: "用户密码不能为空", trigger: "blur" }
+        ],
       }
     };
   },

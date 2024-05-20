@@ -39,10 +39,10 @@
     <insert id="insertFUsers" parameterType="FUsers" useGeneratedKeys="true" keyProperty="usersId">
         insert into f_users
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="usersName != null">users_name,</if>
-            <if test="usersSex != null">users_sex,</if>
-            <if test="usersPhone != null">users_phone,</if>
-            <if test="usersPassword != null">users_password,</if>
+            <if test="usersName != null and usersName != ''">users_name,</if>
+            <if test="usersSex != null and usersSex != ''">users_sex,</if>
+            <if test="usersPhone != null and usersPhone != ''">users_phone,</if>
+            <if test="usersPassword != null and usersPassword != ''">users_password,</if>
             <if test="usersAvatar != null">users_avatar,</if>
             <if test="userAddress != null">user_address,</if>
             <if test="memberGrade != null">member_grade,</if>
@@ -50,10 +50,10 @@
             <if test="createTime != null">create_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="usersName != null">#{usersName},</if>
-            <if test="usersSex != null">#{usersSex},</if>
-            <if test="usersPhone != null">#{usersPhone},</if>
-            <if test="usersPassword != null">#{usersPassword},</if>
+            <if test="usersName != null and usersName != ''">#{usersName},</if>
+            <if test="usersSex != null and usersSex != ''">#{usersSex},</if>
+            <if test="usersPhone != null and usersPhone != ''">#{usersPhone},</if>
+            <if test="usersPassword != null and usersPassword != ''">#{usersPassword},</if>
             <if test="usersAvatar != null">#{usersAvatar},</if>
             <if test="userAddress != null">#{userAddress},</if>
             <if test="memberGrade != null">#{memberGrade},</if>
@@ -65,10 +65,10 @@
     <update id="updateFUsers" parameterType="FUsers">
         update f_users
         <trim prefix="SET" suffixOverrides=",">
-            <if test="usersName != null">users_name = #{usersName},</if>
-            <if test="usersSex != null">users_sex = #{usersSex},</if>
-            <if test="usersPhone != null">users_phone = #{usersPhone},</if>
-            <if test="usersPassword != null">users_password = #{usersPassword},</if>
+            <if test="usersName != null and usersName != ''">users_name = #{usersName},</if>
+            <if test="usersSex != null and usersSex != ''">users_sex = #{usersSex},</if>
+            <if test="usersPhone != null and usersPhone != ''">users_phone = #{usersPhone},</if>
+            <if test="usersPassword != null and usersPassword != ''">users_password = #{usersPassword},</if>
             <if test="usersAvatar != null">users_avatar = #{usersAvatar},</if>
             <if test="userAddress != null">user_address = #{userAddress},</if>
             <if test="memberGrade != null">member_grade = #{memberGrade},</if>
