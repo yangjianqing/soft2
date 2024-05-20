@@ -35,25 +35,25 @@ const routes = [
                 },
             },
             {
-                path:"/my",
+                path:"/classification",
                 component:MyInfo,
                 meta: {
-                    title: "个人中心",
+                    title: "分类",
                 },
             },
             {
-                path:"/car",
+                path:"/cart",
                 component:CarPage,
                 meta: {
                     title: "购物车",
                 },
             },
             {
-                path: "/memberList",
+                path: "/mine",
                 component:MemberList,
                 meta:
                     {
-                        title:"会员管理"
+                        title:"我的"
                     }
             }
         ]

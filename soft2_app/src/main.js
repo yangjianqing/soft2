@@ -7,18 +7,26 @@ import store from "@/store";
 //导入axios配置文件
 import request from "@/axios/request"
 
+//1.引入vant
+import Vant  from 'vant';
+// 2. 引入组件样式
+import 'vant/lib/index.css';
 
 import "./assets/css/main.css";
 import "./assets/iconfont/iconfont.css"
+
+
 const  app =createApp(App);
 
 
 app.config.globalProperties.$http = request //全局挂载 axios
-
 //在vue中使用路由
 app.use(router);
 //在vue中使用状态管理器
 app.use(store);
+
+// 方式一. 通过 app.use 注册
+app.use(Vant);
 app.mount('#app');
 
 
