@@ -24,8 +24,6 @@ public class TreeEntity extends BaseEntity
     /** 祖级列表 */
     private String ancestors;
 
-    /** 子部门 */
-    private List<?> children = new ArrayList<>();
 
     public String getParentName()
     {
@@ -67,13 +65,5 @@ public class TreeEntity extends BaseEntity
         this.ancestors = ancestors;
     }
 
-    public List<?> getChildren()
-    {
-        return children;
-    }
 
-    public void setChildren(List<?> children)
-    {
-        this.children = children;
-    }
 }

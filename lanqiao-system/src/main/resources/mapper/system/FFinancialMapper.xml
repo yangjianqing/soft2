@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.system.mapper.FFinancialMapper">
+    
+    <resultMap type="FFinancial" id="FFinancialResult">
+        <result property="financialId"    column="financial_id"    />
+        <result property="financialIncome"    column="financial_income"    />
+        <result property="financialExpense"    column="financial_expense"    />
+        <result property="financialProfit"    column="financial_profit"    />
+        <result property="financialCreatetime"    column="financial_createtime"    />
+    </resultMap>
+
+    <sql id="selectFFinancialVo">
+        select financial_id, financial_income, financial_expense, financial_profit, financial_createtime from f_financial
+    </sql>
+
+    <select id="selectFFinancialList" parameterType="FFinancial" resultMap="FFinancialResult">
+        <include refid="selectFFinancialVo"/>
+        <where>  
+            <if test="financialIncome != null  and financialIncome != ''"> and financial_income like concat('%', #{financialIncome}, '%')</if>
+            <if test="financialExpense != null  and financialExpense != ''"> and financial_expense like concat('%', #{financialExpense}, '%')</if>
+            <if test="financialProfit != null  and financialProfit != ''"> and financial_profit like concat('%', #{financialProfit}, '%')</if>
+            <if test="financialCreatetime != null "> and financial_createtime = #{financialCreatetime}</if>
+        </where>
+    </select>
+    
+    <select id="selectFFinancialByFinancialId" parameterType="Long" resultMap="FFinancialResult">
+        <include refid="selectFFinancialVo"/>
+        where financial_id = #{financialId}
+    </select>
+        
+    <insert id="insertFFinancial" parameterType="FFinancial">
+        insert into f_financial
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="financialId != null">financial_id,</if>
+            <if test="financialIncome != null">financial_income,</if>
+            <if test="financialExpense != null">financial_expense,</if>
+            <if test="financialProfit != null">financial_profit,</if>
+            <if test="financialCreatetime != null">financial_createtime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="financialId != null">#{financialId},</if>
+            <if test="financialIncome != null">#{financialIncome},</if>
+            <if test="financialExpense != null">#{financialExpense},</if>
+            <if test="financialProfit != null">#{financialProfit},</if>
+            <if test="financialCreatetime != null">#{financialCreatetime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFFinancial" parameterType="FFinancial">
+        update f_financial
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="financialIncome != null">financial_income = #{financialIncome},</if>
+            <if test="financialExpense != null">financial_expense = #{financialExpense},</if>
+            <if test="financialProfit != null">financial_profit = #{financialProfit},</if>
+            <if test="financialCreatetime != null">financial_createtime = #{financialCreatetime},</if>
+        </trim>
+        where financial_id = #{financialId}
+    </update>
+
+    <delete id="deleteFFinancialByFinancialId" parameterType="Long">
+        delete from f_financial where financial_id = #{financialId}
+    </delete>
+
+    <delete id="deleteFFinancialByFinancialIds" parameterType="String">
+        delete from f_financial where financial_id in 
+        <foreach item="financialId" collection="array" open="(" separator="," close=")">
+            #{financialId}
+        </foreach>
+    </delete>
+</mapper>

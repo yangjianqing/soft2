@@ -135,6 +135,20 @@ export const dynamicRoutes = [
     ]
   },
   {
+    path: '/system/users-data',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:address:list'],
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/system/users/data'),
+        name: 'Data',
+        meta: { title: '地址数据', activeMenu: '/system/users' }
+      }
+    ]
+  },
+  {
     path: '/monitor/job-log',
     component: Layout,
     hidden: true,

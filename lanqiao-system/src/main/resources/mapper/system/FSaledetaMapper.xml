@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.system.mapper.FSaledetaMapper">
+    
+    <resultMap type="FSaledeta" id="FSaledetaResult">
+        <result property="saledetaId"    column="saledeta_id"    />
+        <result property="salesId"    column="sales_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="saledetaTity"    column="saledeta_tity"    />
+        <result property="saledetaPrice"    column="saledeta_price"    />
+        <result property="saledetaCreationtime"    column="saledeta_creationtime"    />
+    </resultMap>
+
+    <sql id="selectFSaledetaVo">
+        select saledeta_id, sales_id, goods_id, saledeta_tity, saledeta_price, saledeta_creationtime from f_saledeta
+    </sql>
+
+    <select id="selectFSaledetaList" parameterType="FSaledeta" resultMap="FSaledetaResult">
+        <include refid="selectFSaledetaVo"/>
+        <where>  
+            <if test="salesId != null "> and sales_id = #{salesId}</if>
+            <if test="goodsId != null "> and goods_id = #{goodsId}</if>
+            <if test="saledetaTity != null "> and saledeta_tity = #{saledetaTity}</if>
+            <if test="saledetaCreationtime != null "> and saledeta_creationtime = #{saledetaCreationtime}</if>
+        </where>
+    </select>
+    
+    <select id="selectFSaledetaBySaledetaId" parameterType="Long" resultMap="FSaledetaResult">
+        <include refid="selectFSaledetaVo"/>
+        where saledeta_id = #{saledetaId}
+    </select>
+        
+    <insert id="insertFSaledeta" parameterType="FSaledeta" useGeneratedKeys="true" keyProperty="saledetaId">
+        insert into f_saledeta
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="salesId != null">sales_id,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="saledetaTity != null">saledeta_tity,</if>
+            <if test="saledetaPrice != null">saledeta_price,</if>
+            <if test="saledetaCreationtime != null">saledeta_creationtime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="salesId != null">#{salesId},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="saledetaTity != null">#{saledetaTity},</if>
+            <if test="saledetaPrice != null">#{saledetaPrice},</if>
+            <if test="saledetaCreationtime != null">#{saledetaCreationtime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFSaledeta" parameterType="FSaledeta">
+        update f_saledeta
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="salesId != null">sales_id = #{salesId},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="saledetaTity != null">saledeta_tity = #{saledetaTity},</if>
+            <if test="saledetaPrice != null">saledeta_price = #{saledetaPrice},</if>
+            <if test="saledetaCreationtime != null">saledeta_creationtime = #{saledetaCreationtime},</if>
+        </trim>
+        where saledeta_id = #{saledetaId}
+    </update>
+
+    <delete id="deleteFSaledetaBySaledetaId" parameterType="Long">
+        delete from f_saledeta where saledeta_id = #{saledetaId}
+    </delete>
+
+    <delete id="deleteFSaledetaBySaledetaIds" parameterType="String">
+        delete from f_saledeta where saledeta_id in 
+        <foreach item="saledetaId" collection="array" open="(" separator="," close=")">
+            #{saledetaId}
+        </foreach>
+    </delete>
+</mapper>

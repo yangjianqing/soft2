@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.system.mapper.CategoryMapper">
+    
+    <resultMap type="Category" id="CategoryResult">
+        <result property="deptId"    column="dept_id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="ancestors"    column="ancestors"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="cFlag"    column="c_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCategoryVo">
+        select dept_id, parent_id, ancestors, dept_name, order_num, c_flag, create_time, update_by, update_time from category
+    </sql>
+
+    <select id="selectCategoryList" parameterType="Category" resultMap="CategoryResult">
+        <include refid="selectCategoryVo"/>
+        <where>  
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="deptName != null  and deptName != ''"> and dept_name like concat('%', #{deptName}, '%')</if>
+            <if test="orderNum != null "> and order_num = #{orderNum}</if>
+        </where>
+    </select>
+    
+    <select id="selectCategoryByDeptId" parameterType="Long" resultMap="CategoryResult">
+        <include refid="selectCategoryVo"/>
+        where dept_id = #{deptId}
+    </select>
+<!--&lt;!&ndash;    根据角色ID查询部门树信息&ndash;&gt;-->
+<!--    <select id="selectListByRoleId" resultType="java.lang.Long">-->
+<!--        select c.dept_id-->
+<!--        from category c-->
+<!--        left join sys_role_dept rd on c.dept_id = rd.dept_id-->
+<!--        where rd.role_id = #{roleId}-->
+<!--        <if test="deptCheckStrictly">-->
+<!--            and c.dept_id not in (select c.parent_id from category c inner join sys_role_dept rd on c.dept_id = rd.dept_id and rd.role_id = #{roleId})-->
+<!--        </if>-->
+<!--        order by c.parent_id, c.order_num-->
+<!--    </select>-->
+
+<!--    根据部门id查询信息-->
+    <select id="selectCateById" parameterType="Long" resultMap="CategoryResult">
+        <include refid="selectCategoryVo"/>
+        where dept_id = #{deptId}
+    </select>
+<!--    查询所有子部门-->
+    <select id="selectChildrenDeptById" parameterType="Long" resultMap="CategoryResult">
+        select * from category where find_in_set(#{deptId}, ancestors)
+    </select>
+<!--    根据id查询所有正常状态子部门-->
+    <select id="selectNormalChildrenDeptById" parameterType="Long" resultType="int">
+        select count(*) from category where c_flag = '0' and find_in_set(#{deptId}, ancestors)
+    </select>
+<!--    判断是否存在子节点-->
+    <select id="hasChildByDeptId" parameterType="Long" resultType="int">
+        select count(1) from category
+        where c_flag = '0' and parent_id = #{deptId} limit 1
+    </select>
+<!--    校验部门名称是否唯一-->
+    <select id="checkDeptNameUnique" resultMap="CategoryResult">
+        <include refid="selectCategoryVo"/>
+        where dept_name=#{deptName} and parent_id = #{parentId} and c_flag = '0' limit 1
+    </select>
+<!--    查询部门是否存在用户-->
+    <select id="checkDeptExistUser" parameterType="Long" resultType="int">
+        select count(1) from goods where dept_id = #{category_id} and c_flag = '0'
+    </select>
+
+
+
+
+
+
+
+
+
+    <insert id="insertCategory" parameterType="Category" useGeneratedKeys="true" keyProperty="deptId">
+        insert into category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parentId != null">parent_id,</if>
+            <if test="ancestors != null">ancestors,</if>
+            <if test="deptName != null">dept_name,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="cFlag != null">c_flag,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parentId != null">#{parentId},</if>
+            <if test="ancestors != null">#{ancestors},</if>
+            <if test="deptName != null">#{deptName},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="cFlag != null">#{cFlag},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCategory" parameterType="Category">
+        update category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="ancestors != null">ancestors = #{ancestors},</if>
+            <if test="deptName != null">dept_name = #{deptName},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="cFlag != null">c_flag = #{cFlag},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where dept_id = #{deptId}
+    </update>
+
+    <delete id="deleteCategoryByDeptId" parameterType="Long">
+        delete from category where dept_id = #{deptId}
+    </delete>
+
+    <delete id="deleteCategoryByDeptIds" parameterType="String">
+        delete from category where dept_id in 
+        <foreach item="deptId" collection="array" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </delete>
+</mapper>
