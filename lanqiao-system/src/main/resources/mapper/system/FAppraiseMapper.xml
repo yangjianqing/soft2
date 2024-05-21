@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.system.mapper.FAppraiseMapper">
+    
+    <resultMap type="FAppraise" id="FAppraiseResult">
+        <result property="reviewid"    column="reviewId"    />
+        <result property="goodsid"    column="goodsId"    />
+        <result property="userid"    column="userId"    />
+        <result property="rating"    column="rating"    />
+        <result property="starts"    column="starts"    />
+        <result property="reviewText"    column="review_text"    />
+        <result property="reviewDate"    column="review_date"    />
+    </resultMap>
+
+    <sql id="selectFAppraiseVo">
+        select reviewId, goodsId, userId, rating, starts, review_text, review_date from f_appraise
+    </sql>
+
+    <select id="selectFAppraiseList" parameterType="FAppraise" resultMap="FAppraiseResult">
+        <include refid="selectFAppraiseVo"/>
+        <where>  
+            <if test="goodsid != null "> and goodsId = #{goodsid}</if>
+            <if test="userid != null "> and userId = #{userid}</if>
+        </where>
+    </select>
+    
+    <select id="selectFAppraiseByReviewid" parameterType="Long" resultMap="FAppraiseResult">
+        <include refid="selectFAppraiseVo"/>
+        where reviewId = #{reviewid}
+    </select>
+        
+    <insert id="insertFAppraise" parameterType="FAppraise" useGeneratedKeys="true" keyProperty="reviewid">
+        insert into f_appraise
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsid != null">goodsId,</if>
+            <if test="userid != null">userId,</if>
+            <if test="rating != null">rating,</if>
+            <if test="starts != null">starts,</if>
+            <if test="reviewText != null">review_text,</if>
+            <if test="reviewDate != null">review_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsid != null">#{goodsid},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="rating != null">#{rating},</if>
+            <if test="starts != null">#{starts},</if>
+            <if test="reviewText != null">#{reviewText},</if>
+            <if test="reviewDate != null">#{reviewDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFAppraise" parameterType="FAppraise">
+        update f_appraise
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsid != null">goodsId = #{goodsid},</if>
+            <if test="userid != null">userId = #{userid},</if>
+            <if test="rating != null">rating = #{rating},</if>
+            <if test="starts != null">starts = #{starts},</if>
+            <if test="reviewText != null">review_text = #{reviewText},</if>
+            <if test="reviewDate != null">review_date = #{reviewDate},</if>
+        </trim>
+        where reviewId = #{reviewid}
+    </update>
+
+    <delete id="deleteFAppraiseByReviewid" parameterType="Long">
+        delete from f_appraise where reviewId = #{reviewid}
+    </delete>
+
+    <delete id="deleteFAppraiseByReviewids" parameterType="String">
+        delete from f_appraise where reviewId in 
+        <foreach item="reviewid" collection="array" open="(" separator="," close=")">
+            #{reviewid}
+        </foreach>
+    </delete>
+</mapper>
