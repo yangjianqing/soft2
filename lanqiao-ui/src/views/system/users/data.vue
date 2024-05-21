@@ -141,7 +141,7 @@
     <!-- 添加或修改地址管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户id" prop="addressUsersId">
+        <el-form-item label="用户姓名" prop="addressUsersId">
           <el-input v-model="usersName" disabled/>
         </el-form-item>
         <el-form-item label="地址排序" prop="addressSort">

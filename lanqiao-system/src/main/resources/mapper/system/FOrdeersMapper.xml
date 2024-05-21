@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.system.mapper.FOrdeersMapper">
+    
+    <resultMap type="FOrdeers" id="FOrdeersResult">
+        <result property="ordersId"    column="orders_id"    />
+        <result property="ordersNumber"    column="orders_number"    />
+        <result property="ordersUsersId"    column="orders_users_id"    />
+        <result property="ordersSysuserId"    column="orders_sysuser_id"    />
+        <result property="ordersPayMethod"    column="orders_pay_method"    />
+        <result property="ordersPayStatuds"    column="orders_pay_statuds"    />
+        <result property="ordersStatus"    column="orders_status"    />
+        <result property="ordersCreattime"    column="orders_creattime"    />
+        <result property="ordersRemark"    column="orders_remark"    />
+    </resultMap>
+
+    <sql id="selectFOrdeersVo">
+        select orders_id, orders_number, orders_users_id, orders_sysuser_id, orders_pay_method, orders_pay_statuds, orders_status, orders_creattime, orders_remark from f_ordeers
+    </sql>
+
+    <select id="selectFOrdeersList" parameterType="FOrdeers" resultMap="FOrdeersResult">
+        <include refid="selectFOrdeersVo"/>
+        <where>  
+            <if test="ordersNumber != null "> and orders_number = #{ordersNumber}</if>
+            <if test="ordersUsersId != null "> and orders_users_id = #{ordersUsersId}</if>
+            <if test="ordersSysuserId != null "> and orders_sysuser_id = #{ordersSysuserId}</if>
+            <if test="ordersStatus != null "> and orders_status = #{ordersStatus}</if>
+            <if test="ordersCreattime != null "> and orders_creattime = #{ordersCreattime}</if>
+        </where>
+    </select>
+    
+    <select id="selectFOrdeersByOrdersId" parameterType="Long" resultMap="FOrdeersResult">
+        <include refid="selectFOrdeersVo"/>
+        where orders_id = #{ordersId}
+    </select>
+        
+    <insert id="insertFOrdeers" parameterType="FOrdeers" useGeneratedKeys="true" keyProperty="ordersId">
+        insert into f_ordeers
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ordersNumber != null">orders_number,</if>
+            <if test="ordersUsersId != null">orders_users_id,</if>
+            <if test="ordersSysuserId != null">orders_sysuser_id,</if>
+            <if test="ordersPayMethod != null">orders_pay_method,</if>
+            <if test="ordersPayStatuds != null">orders_pay_statuds,</if>
+            <if test="ordersStatus != null">orders_status,</if>
+            <if test="ordersCreattime != null">orders_creattime,</if>
+            <if test="ordersRemark != null">orders_remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ordersNumber != null">#{ordersNumber},</if>
+            <if test="ordersUsersId != null">#{ordersUsersId},</if>
+            <if test="ordersSysuserId != null">#{ordersSysuserId},</if>
+            <if test="ordersPayMethod != null">#{ordersPayMethod},</if>
+            <if test="ordersPayStatuds != null">#{ordersPayStatuds},</if>
+            <if test="ordersStatus != null">#{ordersStatus},</if>
+            <if test="ordersCreattime != null">#{ordersCreattime},</if>
+            <if test="ordersRemark != null">#{ordersRemark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFOrdeers" parameterType="FOrdeers">
+        update f_ordeers
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ordersNumber != null">orders_number = #{ordersNumber},</if>
+            <if test="ordersUsersId != null">orders_users_id = #{ordersUsersId},</if>
+            <if test="ordersSysuserId != null">orders_sysuser_id = #{ordersSysuserId},</if>
+            <if test="ordersPayMethod != null">orders_pay_method = #{ordersPayMethod},</if>
+            <if test="ordersPayStatuds != null">orders_pay_statuds = #{ordersPayStatuds},</if>
+            <if test="ordersStatus != null">orders_status = #{ordersStatus},</if>
+            <if test="ordersCreattime != null">orders_creattime = #{ordersCreattime},</if>
+            <if test="ordersRemark != null">orders_remark = #{ordersRemark},</if>
+        </trim>
+        where orders_id = #{ordersId}
+    </update>
+
+    <delete id="deleteFOrdeersByOrdersId" parameterType="Long">
+        delete from f_ordeers where orders_id = #{ordersId}
+    </delete>
+
+    <delete id="deleteFOrdeersByOrdersIds" parameterType="String">
+        delete from f_ordeers where orders_id in 
+        <foreach item="ordersId" collection="array" open="(" separator="," close=")">
+            #{ordersId}
+        </foreach>
+    </delete>
+</mapper>

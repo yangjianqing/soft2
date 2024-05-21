@@ -1,38 +1,46 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="用户姓名" prop="usersName">
+      <el-form-item label="订单编号" prop="ordersNumber">
         <el-input
-          v-model="queryParams.usersName"
-          placeholder="请输入用户姓名"
+          v-model="queryParams.ordersNumber"
+          placeholder="请输入订单编号"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="联系方式" prop="usersPhone">
+      <el-form-item label="买家姓名" prop="ordersUsersId">
         <el-input
-          v-model="queryParams.usersPhone"
-          placeholder="请输入联系方式"
+          v-model="queryParams.ordersUsersId"
+          placeholder="请输入买家姓名"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="会员级别" prop="memberGrade">
-        <el-select v-model="queryParams.memberGrade" placeholder="请选择会员级别" clearable>
+      <el-form-item label="配送员" prop="ordersSysuserId">
+        <el-input
+          v-model="queryParams.ordersSysuserId"
+          placeholder="请输入配送员"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="订单状态" prop="ordersStatus">
+        <el-select v-model="queryParams.ordersStatus" placeholder="请选择订单状态" clearable>
           <el-option
-            v-for="dict in dict.type.f_membership_grade"
+            v-for="dict in dict.type.f_sales_status"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="创建时间" prop="createTime">
+      <el-form-item label="下单时间" prop="ordersCreattime">
         <el-date-picker clearable
-                        v-model="queryParams.createTime"
-                        type="date"
-                        value-format="yyyy-MM-dd"
-                        placeholder="请选择创建时间">
+          v-model="queryParams.ordersCreattime"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请选择下单时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -49,7 +57,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:users:add']"
+          v-hasPermi="['system:ordeers:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -60,7 +68,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:users:edit']"
+          v-hasPermi="['system:ordeers:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -71,7 +79,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:users:remove']"
+          v-hasPermi="['system:ordeers:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -81,48 +89,39 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:users:export']"
+          v-hasPermi="['system:ordeers:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="usersList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="ordeersList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="用户id" align="center" prop="usersId" />
-      <el-table-column label="用户姓名" align="center" prop="usersName" />
-      <el-table-column label="用户性别" align="center" prop="usersSex">
+      <!--<el-table-column label="订单id" align="center" prop="ordersId" />-->
+      <el-table-column label="订单编号" align="center" prop="ordersNumber" />
+      <el-table-column label="买家姓名" align="center" prop="ordersUsersId" />
+      <el-table-column label="配送员" align="center" prop="ordersSysuserId" />
+      <el-table-column label="支付方式" align="center" prop="ordersPayMethod">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.usersSex"/>
+          <dict-tag :options="dict.type.sys_model_pay" :value="scope.row.ordersPayMethod"/>
         </template>
       </el-table-column>
-      <el-table-column label="联系方式" align="center" prop="usersPhone" />
-      <el-table-column label="用户密码" type="password" align="center" prop="usersPassword" />
-      <el-table-column label="用户头像" align="center" prop="usersAvatar" width="100">
+      <el-table-column label="支付状态" align="center" prop="ordersPayStatuds">
         <template slot-scope="scope">
-          <image-preview :src="scope.row.usersAvatar" :width="50" :height="50"/>
+          <dict-tag :options="dict.type.sys_status_typ" :value="scope.row.ordersPayStatuds"/>
         </template>
       </el-table-column>
-
-      <el-table-column label="用户地址" align="center" prop="userAddress" class-name="address-column" :show-overflow-tooltip="true">
+      <el-table-column label="订单状态" align="center" prop="ordersStatus">
         <template slot-scope="scope">
-          <router-link :to="'/system/users-data/index?usersId='+ scope.row.usersId" class="link-type">
-            <div class="address-cell">{{ scope.row.userAddress }}</div>
-          </router-link>
+          <dict-tag :options="dict.type.f_sales_status" :value="scope.row.ordersStatus"/>
         </template>
       </el-table-column>
-
-      <el-table-column label="会员级别" align="center" prop="memberGrade">
+      <el-table-column label="下单时间" align="center" prop="ordersCreattime" width="180">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.f_membership_grade" :value="scope.row.memberGrade"/>
+          <span>{{ parseTime(scope.row.ordersCreattime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="会员积分" align="center" prop="memberTotal" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="备注信息" align="center" prop="ordersRemark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -130,14 +129,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:users:edit']"
+            v-hasPermi="['system:ordeers:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:users:remove']"
+            v-hasPermi="['system:ordeers:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -151,46 +150,47 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改用户管理对话框 -->
+    <!-- 添加或修改订单管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户姓名" prop="usersName">
-          <el-input v-model="form.usersName" placeholder="请输入用户姓名" />
+        <el-form-item label="买家姓名" prop="ordersUsersId">
+          <el-input v-model="form.ordersUsersId" placeholder="请输入买家姓名" />
         </el-form-item>
-        <el-form-item label="用户性别" prop="usersSex">
-          <el-select v-model="form.usersSex" placeholder="请选择用户性别">
+        <el-form-item label="配送员" prop="ordersSysuserId">
+          <el-input v-model="form.ordersSysuserId" placeholder="请输入配送员" />
+        </el-form-item>
+        <el-form-item label="支付方式" prop="ordersPayMethod">
+          <el-select v-model="form.ordersPayMethod" placeholder="请选择支付方式">
             <el-option
-              v-for="dict in dict.type.sys_user_sex"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="联系方式" prop="usersPhone">
-          <el-input v-model="form.usersPhone" placeholder="请输入联系方式" />
-        </el-form-item>
-        <el-form-item label="用户密码" prop="usersPassword">
-          <el-input v-model="form.usersPassword" type="password" placeholder="请输入用户密码" prefix-icon="el-icon-lock" />
-        </el-form-item>
-        <el-form-item label="用户头像">
-          <image-upload v-model="form.usersAvatar"/>
-        </el-form-item>
-        <el-form-item label="用户地址" prop="userAddress">
-          <el-input v-model="form.userAddress" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="会员积分" prop="memberTotal">
-          <el-input v-model="form.memberTotal" placeholder="请输入会员积分" />
-        </el-form-item>
-        <el-form-item label="会员级别" prop="memberGrade">
-          <el-select v-model="form.memberGrade" placeholder="请选择会员级别">
-            <el-option
-              v-for="dict in dict.type.f_membership_grade"
+              v-for="dict in dict.type.sys_model_pay"
               :key="dict.value"
               :label="dict.label"
               :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="支付状态" prop="ordersPayStatuds">
+          <el-select v-model="form.ordersPayStatuds" placeholder="请选择支付状态">
+            <el-option
+              v-for="dict in dict.type.sys_status_typ"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="订单状态" prop="ordersStatus">
+          <el-select v-model="form.ordersStatus" placeholder="请选择订单状态">
+            <el-option
+              v-for="dict in dict.type.f_sales_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="备注信息" prop="ordersRemark">
+          <el-input v-model="form.ordersRemark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -201,20 +201,12 @@
   </div>
 </template>
 
-<style scoped>
-.address-cell {
-  white-space: nowrap; /* 文本不换行 */
-  overflow: hidden; /* 溢出部分隐藏 */
-  text-overflow: ellipsis; /* 超出部分显示省略号 */
-}
-</style>
-
 <script>
-import { listUsers, getUsers, delUsers, addUsers, updateUsers } from "@/api/system/users/users";
+import { listOrdeers, getOrdeers, delOrdeers, addOrdeers, updateOrdeers } from "@/api/system/ordeers";
 
 export default {
-  name: "Users",
-  dicts: ['f_membership_grade', 'sys_user_sex'],
+  name: "Ordeers",
+  dicts: ['sys_model_pay', 'sys_status_typ', 'f_sales_status'],
   data() {
     return {
       // 遮罩层
@@ -229,8 +221,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 用户管理表格数据
-      usersList: [],
+      // 订单管理表格数据
+      ordeersList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -239,27 +231,16 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        usersName: null,
-        usersPhone: null,
-        memberGrade: null,
-        createTime: null
+        ordersNumber: null,
+        ordersUsersId: null,
+        ordersSysuserId: null,
+        ordersStatus: null,
+        ordersCreattime: null,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        usersName: [
-          { required: true, message: "用户姓名不能为空", trigger: "blur" }
-        ],
-        usersSex: [
-          { required: true, message: "用户性别不能为空", trigger: "change" }
-        ],
-        usersPhone: [
-          { required: true, message: "联系方式不能为空", trigger: "blur" }
-        ],
-        usersPassword: [
-          { required: true, message: "用户密码不能为空", trigger: "blur" }
-        ],
       }
     };
   },
@@ -267,11 +248,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询用户管理列表 */
+    /** 查询订单管理列表 */
     getList() {
       this.loading = true;
-      listUsers(this.queryParams).then(response => {
-        this.usersList = response.rows;
+      listOrdeers(this.queryParams).then(response => {
+        this.ordeersList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -284,16 +265,15 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        usersId: null,
-        usersName: null,
-        usersSex: null,
-        usersPhone: null,
-        usersPassword: null,
-        usersAvatar: null,
-        userAddress: null,
-        memberGrade: null,
-        memberTotal: null,
-        createTime: null
+        ordersId: null,
+        ordersNumber: null,
+        ordersUsersId: null,
+        ordersSysuserId: null,
+        ordersPayMethod: null,
+        ordersPayStatuds: null,
+        ordersStatus: null,
+        ordersCreattime: null,
+        ordersRemark: null
       };
       this.resetForm("form");
     },
@@ -309,7 +289,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.usersId)
+      this.ids = selection.map(item => item.ordersId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -317,30 +297,30 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加用户管理";
+      this.title = "添加订单管理";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const usersId = row.usersId || this.ids
-      getUsers(usersId).then(response => {
+      const ordersId = row.ordersId || this.ids
+      getOrdeers(ordersId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改用户管理";
+        this.title = "修改订单管理";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.usersId != null) {
-            updateUsers(this.form).then(response => {
+          if (this.form.ordersId != null) {
+            updateOrdeers(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addUsers(this.form).then(response => {
+            addOrdeers(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -351,9 +331,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const usersIds = row.usersId || this.ids;
-      this.$modal.confirm('是否确认删除用户管理编号为"' + usersIds + '"的数据项？').then(function() {
-        return delUsers(usersIds);
+      const ordersIds = row.ordersId || this.ids;
+      this.$modal.confirm('是否确认删除订单管理编号为"' + ordersIds + '"的数据项？').then(function() {
+        return delOrdeers(ordersIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -361,9 +341,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/users/export', {
+      this.download('system/ordeers/export', {
         ...this.queryParams
-      }, `users_${new Date().getTime()}.xlsx`)
+      }, `ordeers_${new Date().getTime()}.xlsx`)
     }
   }
 };
