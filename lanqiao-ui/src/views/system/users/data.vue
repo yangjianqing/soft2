@@ -1,23 +1,21 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="收货人" prop="addressConsigneeName">
+      <el-form-item label="收货人" prop="addressName">
         <el-input
-          v-model="queryParams.addressConsigneeName"
+          v-model="queryParams.addressName"
           placeholder="请输入收货人"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="性别" prop="addressSex">
-        <el-select v-model="queryParams.addressSex" placeholder="请选择性别" clearable>
-          <el-option
-            v-for="dict in dict.type.sys_user_sex"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
+      <el-form-item label="手机号" prop="addressPhone">
+        <el-input
+          v-model="queryParams.addressPhone"
+          placeholder="请输入手机号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="地址标签" prop="addressLabel">
         <el-select v-model="queryParams.addressLabel" placeholder="请选择地址标签" clearable>
@@ -85,31 +83,25 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="地址id" align="center" prop="addressId" />
       <el-table-column label="地址排序" align="center" prop="addressSort" />
-      <el-table-column label="收货人" align="center" prop="addressConsigneeName" />
+      <el-table-column label="收货人" align="center" prop="addressName" />
       <el-table-column label="性别" align="center" prop="addressSex">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.addressSex"/>
         </template>
       </el-table-column>
-      <el-table-column label="联系方式" align="center" prop="addressPhone" width="110" />
+      <el-table-column label="联系方式" align="center" prop="addressPhone" />
       <el-table-column label="地址标签" align="center" prop="addressLabel">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.f_address_label" :value="scope.row.addressLabel"/>
         </template>
       </el-table-column>
-      <el-table-column label="省级编号" align="center" prop="addressProvinceCode" />
-      <el-table-column label="省级名称" align="center" prop="addressProvinceName" />
-      <el-table-column label="市级编号" align="center" prop="addressCityCode" />
-      <el-table-column label="市级名称" align="center" prop="addressCityName" />
-      <el-table-column label="区级编号" align="center" prop="addressDistrictCode" />
-      <el-table-column label="区级名称" align="center" prop="addressDistrictName" />
-
+      <el-table-column label="地址经度" align="center" prop="addressTude" />
+      <el-table-column label="地址纬度" align="center" prop="addressLatit" />
       <el-table-column label="详细地址" align="center" prop="addressDetail" class-name="address-column" :show-overflow-tooltip="true" >
         <template slot-scope="scope">
-            <div class="address-cell">{{ scope.row.addressDetail }}</div>
+          <div class="address-cell">{{ scope.row.addressDetail }}</div>
         </template>
       </el-table-column>
-
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -147,8 +139,8 @@
         <el-form-item label="地址排序" prop="addressSort">
           <el-input-number v-model="form.addressSort" controls-position="right" :min="0" />
         </el-form-item>
-        <el-form-item label="收货人" prop="addressConsigneeName">
-          <el-input v-model="form.addressConsigneeName" placeholder="请输入收货人" />
+        <el-form-item label="收货人" prop="addressName">
+          <el-input v-model="form.addressName" placeholder="请输入收货人" />
         </el-form-item>
         <el-form-item label="性别" prop="addressSex">
           <el-select v-model="form.addressSex" placeholder="请选择性别">
@@ -156,7 +148,7 @@
               v-for="dict in dict.type.sys_user_sex"
               :key="dict.value"
               :label="dict.label"
-              :value="dict.value"
+              :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -169,27 +161,15 @@
               v-for="dict in dict.type.f_address_label"
               :key="dict.value"
               :label="dict.label"
-              :value="dict.value"
+              :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="省级编号" prop="addressProvinceCode">
-          <el-input v-model="form.addressProvinceCode" placeholder="请输入省级编号" />
+        <el-form-item label="地址经度" prop="addressTude">
+          <el-input v-model="form.addressTude" placeholder="请输入地址经度" />
         </el-form-item>
-        <el-form-item label="省级名称" prop="addressProvinceName">
-          <el-input v-model="form.addressProvinceName" placeholder="请输入省级名称" />
-        </el-form-item>
-        <el-form-item label="市级编号" prop="addressCityCode">
-          <el-input v-model="form.addressCityCode" placeholder="请输入市级编号" />
-        </el-form-item>
-        <el-form-item label="市级名称" prop="addressCityName">
-          <el-input v-model="form.addressCityName" placeholder="请输入市级名称" />
-        </el-form-item>
-        <el-form-item label="区级编号" prop="addressDistrictCode">
-          <el-input v-model="form.addressDistrictCode" placeholder="请输入区级编号" />
-        </el-form-item>
-        <el-form-item label="区级名称" prop="addressDistrictName">
-          <el-input v-model="form.addressDistrictName" placeholder="请输入区级名称" />
+        <el-form-item label="地址纬度" prop="addressLatit">
+          <el-input v-model="form.addressLatit" placeholder="请输入地址纬度" />
         </el-form-item>
         <el-form-item label="详细地址" prop="addressDetail">
           <el-input v-model="form.addressDetail" type="textarea" placeholder="请输入内容" />
@@ -245,31 +225,25 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        addressSort: null,
-        addressConsigneeName: null,
-        addressSex: null,
+        addressName: null,
         addressPhone: null,
         addressLabel: null,
-        addressProvinceCode: null,
-        addressProvinceName: null,
-        addressCityCode: null,
-        addressCityName: null,
-        addressDistrictCode: null,
-        addressDistrictName: null,
-        addressDetail: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        adderssUsersId: [
-          { required: true, message: "用户id不能为空", trigger: "blur" }
-        ],
-        addressConsigneeName: [
+        addressName: [
           { required: true, message: "收货人不能为空", trigger: "blur" }
         ],
         addressPhone: [
-          { required: true, message: "联系方式不能为空", trigger: "blur" }
+          { required: true, message: "手机号不能为空", trigger: "blur" }
+        ],
+        addressTude: [
+          { required: true, message: "地址经度不能为空", trigger: "blur" }
+        ],
+        addressLatit: [
+          { required: true, message: "地址纬度不能为空", trigger: "blur" }
         ],
         addressDetail: [
           { required: true, message: "详细地址不能为空", trigger: "blur" }
@@ -321,16 +295,12 @@ export default {
         addressId: null,
         adderssUsersId: null,
         addressSort: null,
-        addressConsigneeName: null,
+        addressName: null,
         addressSex: null,
         addressPhone: null,
         addressLabel: null,
-        addressProvinceCode: null,
-        addressProvinceName: null,
-        addressCityCode: null,
-        addressCityName: null,
-        addressDistrictCode: null,
-        addressDistrictName: null,
+        addressTude: null,
+        addressLatit: null,
         addressDetail: null
       };
       this.resetForm("form");

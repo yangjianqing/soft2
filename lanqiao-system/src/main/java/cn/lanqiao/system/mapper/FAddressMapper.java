@@ -1,15 +1,13 @@
 package cn.lanqiao.system.mapper;
 
 import java.util.List;
-
-import cn.lanqiao.common.core.domain.entity.SysDictData;
 import cn.lanqiao.system.domain.FAddress;
 
 /**
  * 地址管理Mapper接口
  * 
  * @author chuan
- * @date 2024-05-15
+ * @date 2024-05-21
  */
 public interface FAddressMapper 
 {

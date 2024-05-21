@@ -1,8 +1,6 @@
 package cn.lanqiao.system.service.impl;
 
 import java.util.List;
-
-import cn.lanqiao.common.core.domain.entity.SysDictData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.lanqiao.system.mapper.FAddressMapper;
@@ -13,7 +11,7 @@ import cn.lanqiao.system.service.IFAddressService;
  * 地址管理Service业务层处理
  * 
  * @author chuan
- * @date 2024-05-15
+ * @date 2024-05-21
  */
 @Service
 public class FAddressServiceImpl implements IFAddressService 

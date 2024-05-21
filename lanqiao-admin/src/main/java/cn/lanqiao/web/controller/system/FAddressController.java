@@ -1,11 +1,8 @@
 package cn.lanqiao.web.controller.system;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
-import cn.lanqiao.common.core.domain.entity.SysDictData;
-import cn.lanqiao.common.utils.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +26,7 @@ import cn.lanqiao.common.core.page.TableDataInfo;
  * 地址管理Controller
  * 
  * @author chuan
- * @date 2024-05-15
+ * @date 2024-05-21
  */
 @RestController
 @RequestMapping("/system/address")

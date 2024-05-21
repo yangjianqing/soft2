@@ -8,38 +8,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="addressId"    column="address_id"    />
         <result property="adderssUsersId"    column="adderss_users_id"    />
         <result property="addressSort"    column="address_sort"    />
-        <result property="addressConsigneeName"    column="address_consignee_name"    />
+        <result property="addressName"    column="address_name"    />
         <result property="addressSex"    column="address_sex"    />
         <result property="addressPhone"    column="address_phone"    />
         <result property="addressLabel"    column="address_label"    />
-        <result property="addressProvinceCode"    column="address_province_code"    />
-        <result property="addressProvinceName"    column="address_province_name"    />
-        <result property="addressCityCode"    column="address_city_code"    />
-        <result property="addressCityName"    column="address_city_name"    />
-        <result property="addressDistrictCode"    column="address_district_code"    />
-        <result property="addressDistrictName"    column="address_district_name"    />
+        <result property="addressTude"    column="address_tude"    />
+        <result property="addressLatit"    column="address_latit"    />
         <result property="addressDetail"    column="address_detail"    />
     </resultMap>
 
     <sql id="selectFAddressVo">
-        select address_id, adderss_users_id, address_sort, address_consignee_name, address_sex, address_phone, address_label, address_province_code, address_province_name, address_city_code, address_city_name, address_district_code, address_district_name, address_detail from f_address
+        select address_id, adderss_users_id, address_sort, address_name, address_sex, address_phone, address_label, address_tude, address_latit, address_detail from f_address
     </sql>
 
     <select id="selectFAddressList" parameterType="FAddress" resultMap="FAddressResult">
         <include refid="selectFAddressVo"/>
         <where>  
-            <if test="addressSort != null  and addressSort != ''"> and address_sort = #{addressSort}</if>
-            <if test="addressConsigneeName != null  and addressConsigneeName != ''"> and address_consignee_name like concat('%', #{addressConsigneeName}, '%')</if>
-            <if test="addressSex != null  and addressSex != ''"> and address_sex = #{addressSex}</if>
+            <if test="addressName != null  and addressName != ''"> and address_name like concat('%', #{addressName}, '%')</if>
             <if test="addressPhone != null  and addressPhone != ''"> and address_phone = #{addressPhone}</if>
-            <if test="addressLabel != null  and addressLabel != ''"> and address_label = #{addressLabel}</if>
-            <if test="addressProvinceCode != null  and addressProvinceCode != ''"> and address_province_code = #{addressProvinceCode}</if>
-            <if test="addressProvinceName != null  and addressProvinceName != ''"> and address_province_name like concat('%', #{addressProvinceName}, '%')</if>
-            <if test="addressCityCode != null  and addressCityCode != ''"> and address_city_code = #{addressCityCode}</if>
-            <if test="addressCityName != null  and addressCityName != ''"> and address_city_name like concat('%', #{addressCityName}, '%')</if>
-            <if test="addressDistrictCode != null  and addressDistrictCode != ''"> and address_district_code = #{addressDistrictCode}</if>
-            <if test="addressDistrictName != null  and addressDistrictName != ''"> and address_district_name like concat('%', #{addressDistrictName}, '%')</if>
-            <if test="addressDetail != null  and addressDetail != ''"> and address_detail = #{addressDetail}</if>
+            <if test="addressLabel != null "> and address_label = #{addressLabel}</if>
         </where>
     </select>
     
@@ -47,38 +34,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFAddressVo"/>
         where address_id = #{addressId}
     </select>
-
+        
     <insert id="insertFAddress" parameterType="FAddress" useGeneratedKeys="true" keyProperty="addressId">
         insert into f_address
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="adderssUsersId != null">adderss_users_id,</if>
             <if test="addressSort != null">address_sort,</if>
-            <if test="addressConsigneeName != null">address_consignee_name,</if>
+            <if test="addressName != null and addressName != ''">address_name,</if>
             <if test="addressSex != null">address_sex,</if>
-            <if test="addressPhone != null">address_phone,</if>
+            <if test="addressPhone != null and addressPhone != ''">address_phone,</if>
             <if test="addressLabel != null">address_label,</if>
-            <if test="addressProvinceCode != null">address_province_code,</if>
-            <if test="addressProvinceName != null">address_province_name,</if>
-            <if test="addressCityCode != null">address_city_code,</if>
-            <if test="addressCityName != null">address_city_name,</if>
-            <if test="addressDistrictCode != null">address_district_code,</if>
-            <if test="addressDistrictName != null">address_district_name,</if>
-            <if test="addressDetail != null">address_detail,</if>
+            <if test="addressTude != null">address_tude,</if>
+            <if test="addressLatit != null">address_latit,</if>
+            <if test="addressDetail != null and addressDetail != ''">address_detail,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="adderssUsersId != null">#{adderssUsersId},</if>
             <if test="addressSort != null">#{addressSort},</if>
-            <if test="addressConsigneeName != null">#{addressConsigneeName},</if>
+            <if test="addressName != null and addressName != ''">#{addressName},</if>
             <if test="addressSex != null">#{addressSex},</if>
-            <if test="addressPhone != null">#{addressPhone},</if>
+            <if test="addressPhone != null and addressPhone != ''">#{addressPhone},</if>
             <if test="addressLabel != null">#{addressLabel},</if>
-            <if test="addressProvinceCode != null">#{addressProvinceCode},</if>
-            <if test="addressProvinceName != null">#{addressProvinceName},</if>
-            <if test="addressCityCode != null">#{addressCityCode},</if>
-            <if test="addressCityName != null">#{addressCityName},</if>
-            <if test="addressDistrictCode != null">#{addressDistrictCode},</if>
-            <if test="addressDistrictName != null">#{addressDistrictName},</if>
-            <if test="addressDetail != null">#{addressDetail},</if>
+            <if test="addressTude != null">#{addressTude},</if>
+            <if test="addressLatit != null">#{addressLatit},</if>
+            <if test="addressDetail != null and addressDetail != ''">#{addressDetail},</if>
          </trim>
     </insert>
 
@@ -87,17 +66,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="adderssUsersId != null">adderss_users_id = #{adderssUsersId},</if>
             <if test="addressSort != null">address_sort = #{addressSort},</if>
-            <if test="addressConsigneeName != null">address_consignee_name = #{addressConsigneeName},</if>
+            <if test="addressName != null and addressName != ''">address_name = #{addressName},</if>
             <if test="addressSex != null">address_sex = #{addressSex},</if>
-            <if test="addressPhone != null">address_phone = #{addressPhone},</if>
+            <if test="addressPhone != null and addressPhone != ''">address_phone = #{addressPhone},</if>
             <if test="addressLabel != null">address_label = #{addressLabel},</if>
-            <if test="addressProvinceCode != null">address_province_code = #{addressProvinceCode},</if>
-            <if test="addressProvinceName != null">address_province_name = #{addressProvinceName},</if>
-            <if test="addressCityCode != null">address_city_code = #{addressCityCode},</if>
-            <if test="addressCityName != null">address_city_name = #{addressCityName},</if>
-            <if test="addressDistrictCode != null">address_district_code = #{addressDistrictCode},</if>
-            <if test="addressDistrictName != null">address_district_name = #{addressDistrictName},</if>
-            <if test="addressDetail != null">address_detail = #{addressDetail},</if>
+            <if test="addressTude != null">address_tude = #{addressTude},</if>
+            <if test="addressLatit != null">address_latit = #{addressLatit},</if>
+            <if test="addressDetail != null and addressDetail != ''">address_detail = #{addressDetail},</if>
         </trim>
         where address_id = #{addressId}
     </update>

@@ -9,7 +9,7 @@ import cn.lanqiao.common.core.domain.BaseEntity;
  * 地址管理对象 f_address
  * 
  * @author chuan
- * @date 2024-05-15
+ * @date 2024-05-21
  */
 public class FAddress extends BaseEntity
 {
@@ -20,51 +20,35 @@ public class FAddress extends BaseEntity
     private Long addressId;
 
     /** 用户id */
-    private String adderssUsersId;
+    private Long adderssUsersId;
 
     /** 地址排序 */
     @Excel(name = "地址排序")
-    private String addressSort;
+    private Long addressSort;
 
     /** 收货人 */
     @Excel(name = "收货人")
-    private String addressConsigneeName;
+    private String addressName;
 
     /** 性别 */
     @Excel(name = "性别")
-    private String addressSex;
+    private Long addressSex;
 
-    /** 联系方式 */
-    @Excel(name = "联系方式")
+    /** 手机号 */
+    @Excel(name = "手机号")
     private String addressPhone;
 
     /** 地址标签 */
     @Excel(name = "地址标签")
-    private String addressLabel;
+    private Long addressLabel;
 
-    /** 省级编号 */
-    @Excel(name = "省级编号")
-    private String addressProvinceCode;
+    /** 地址经度 */
+    @Excel(name = "地址经度")
+    private Double addressTude;
 
-    /** 省级名称 */
-    @Excel(name = "省级名称")
-    private String addressProvinceName;
-
-    /** 市级编号 */
-    @Excel(name = "市级编号")
-    private String addressCityCode;
-
-    /** 市级名称 */
-    @Excel(name = "市级名称")
-    private String addressCityName;
-
-    /** 区级编号 */
-    @Excel(name = "区级编号")
-    private String addressDistrictCode;
-
-    /** 区级名称 */
-    @Excel(name = "区级名称")
-    private String addressDistrictName;
+    /** 地址纬度 */
+    @Excel(name = "地址纬度")
+    private Double addressLatit;
 
     /** 详细地址 */
     @Excel(name = "详细地址")
@@ -79,39 +63,39 @@ public class FAddress extends BaseEntity
     {
         return addressId;
     }
-    public void setAdderssUsersId(String adderssUsersId)
+    public void setAdderssUsersId(Long adderssUsersId) 
     {
         this.adderssUsersId = adderssUsersId;
     }
 
-    public String getAdderssUsersId()
+    public Long getAdderssUsersId() 
     {
         return adderssUsersId;
     }
-    public void setAddressSort(String addressSort) 
+    public void setAddressSort(Long addressSort) 
     {
         this.addressSort = addressSort;
     }
 
-    public String getAddressSort() 
+    public Long getAddressSort() 
     {
         return addressSort;
     }
-    public void setAddressConsigneeName(String addressConsigneeName) 
+    public void setAddressName(String addressName) 
     {
-        this.addressConsigneeName = addressConsigneeName;
+        this.addressName = addressName;
     }
 
-    public String getAddressConsigneeName() 
+    public String getAddressName() 
     {
-        return addressConsigneeName;
+        return addressName;
     }
-    public void setAddressSex(String addressSex) 
+    public void setAddressSex(Long addressSex) 
     {
         this.addressSex = addressSex;
     }
 
-    public String getAddressSex() 
+    public Long getAddressSex() 
     {
         return addressSex;
     }
@@ -124,68 +108,32 @@ public class FAddress extends BaseEntity
     {
         return addressPhone;
     }
-    public void setAddressLabel(String addressLabel) 
+    public void setAddressLabel(Long addressLabel) 
     {
         this.addressLabel = addressLabel;
     }
 
-    public String getAddressLabel() 
+    public Long getAddressLabel() 
     {
         return addressLabel;
     }
-    public void setAddressProvinceCode(String addressProvinceCode) 
+    public void setAddressTude(Double addressTude) 
     {
-        this.addressProvinceCode = addressProvinceCode;
+        this.addressTude = addressTude;
     }
 
-    public String getAddressProvinceCode() 
+    public Double getAddressTude() 
     {
-        return addressProvinceCode;
+        return addressTude;
     }
-    public void setAddressProvinceName(String addressProvinceName) 
+    public void setAddressLatit(Double addressLatit) 
     {
-        this.addressProvinceName = addressProvinceName;
-    }
-
-    public String getAddressProvinceName() 
-    {
-        return addressProvinceName;
-    }
-    public void setAddressCityCode(String addressCityCode) 
-    {
-        this.addressCityCode = addressCityCode;
+        this.addressLatit = addressLatit;
     }
 
-    public String getAddressCityCode() 
+    public Double getAddressLatit() 
     {
-        return addressCityCode;
-    }
-    public void setAddressCityName(String addressCityName) 
-    {
-        this.addressCityName = addressCityName;
-    }
-
-    public String getAddressCityName() 
-    {
-        return addressCityName;
-    }
-    public void setAddressDistrictCode(String addressDistrictCode) 
-    {
-        this.addressDistrictCode = addressDistrictCode;
-    }
-
-    public String getAddressDistrictCode() 
-    {
-        return addressDistrictCode;
-    }
-    public void setAddressDistrictName(String addressDistrictName) 
-    {
-        this.addressDistrictName = addressDistrictName;
-    }
-
-    public String getAddressDistrictName() 
-    {
-        return addressDistrictName;
+        return addressLatit;
     }
     public void setAddressDetail(String addressDetail) 
     {
@@ -203,16 +151,12 @@ public class FAddress extends BaseEntity
             .append("addressId", getAddressId())
             .append("adderssUsersId", getAdderssUsersId())
             .append("addressSort", getAddressSort())
-            .append("addressConsigneeName", getAddressConsigneeName())
+            .append("addressName", getAddressName())
             .append("addressSex", getAddressSex())
             .append("addressPhone", getAddressPhone())
             .append("addressLabel", getAddressLabel())
-            .append("addressProvinceCode", getAddressProvinceCode())
-            .append("addressProvinceName", getAddressProvinceName())
-            .append("addressCityCode", getAddressCityCode())
-            .append("addressCityName", getAddressCityName())
-            .append("addressDistrictCode", getAddressDistrictCode())
-            .append("addressDistrictName", getAddressDistrictName())
+            .append("addressTude", getAddressTude())
+            .append("addressLatit", getAddressLatit())
             .append("addressDetail", getAddressDetail())
             .toString();
     }
