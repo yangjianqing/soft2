@@ -537,4 +537,9 @@ public class SysUserServiceImpl implements ISysUserService
         }
         return successMsg.toString();
     }
+
+    @Override
+    public List<SysUser> selectUsersListdeliveryIds(List<Long> depTid) {
+        return userMapper.selectUsersListdeliveryIds(depTid);
+    }
 }

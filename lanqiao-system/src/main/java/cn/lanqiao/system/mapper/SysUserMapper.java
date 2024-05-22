@@ -133,4 +133,11 @@ public interface SysUserMapper
      * @return
      */
     List<SysUser> selectUserListCIds(List<Long> UserId);
+
+    /**
+     * 根据用户ids 获取信息
+     * @param depTid
+     * @return
+     */
+    List<SysUser> selectUsersListdeliveryIds(List<Long> depTid);
 }

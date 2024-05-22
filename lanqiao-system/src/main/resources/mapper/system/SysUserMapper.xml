@@ -55,6 +55,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    left join sys_user_role ur on u.user_id = ur.user_id
 		    left join sys_role r on r.role_id = ur.role_id
     </sql>
+
+	<sql id="selectDepTid">
+		select user_id,dept_id,user_name,nick_name,user_type,email,phonenumber,sex,avatar,password,status,del_flag,login_ip,login_date,create_by,create_time,update_by,update_time,remark from sys_user
+	</sql>
     
     <select id="selectUserList" parameterType="SysUser" resultMap="SysUserResult">
 		select u.user_id, u.dept_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber, u.sex, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name, d.leader from sys_user u
@@ -225,5 +229,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{UserId}
 		</foreach>
 	</select>
-	
+
+    <select id="selectUsersListdeliveryIds" parameterType="Long" resultMap="SysUserResult">
+		<include refid="selectDepTid"/>
+		where dept_id in
+		<foreach item="depTid" collection="list" open="(" separator="," close=")">
+			#{depTid}
+		</foreach>
+	</select>
 </mapper> 

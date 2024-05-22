@@ -28,9 +28,33 @@ public class FOrdeers extends BaseEntity
     @Excel(name = "买家姓名")
     private Long ordersUsersId;
 
+    /** 买家姓名 */
+    @Excel(name = "买家姓名")
+    private String ordersUsersName;
+
+    public String getOrdersUsersName() {
+        return ordersUsersName;
+    }
+
+    public void setOrdersUsersName(String ordersUsersName) {
+        this.ordersUsersName = ordersUsersName;
+    }
+
+    public String getOrdersSysuserName() {
+        return ordersSysuserName;
+    }
+
+    public void setOrdersSysuserName(String ordersSysuserName) {
+        this.ordersSysuserName = ordersSysuserName;
+    }
+
     /** 配送员 */
     @Excel(name = "配送员")
     private Long ordersSysuserId;
+
+    /** 配送员 */
+    @Excel(name = "配送员")
+    private String ordersSysuserName;
 
     /** 支付方式 */
     @Excel(name = "支付方式")

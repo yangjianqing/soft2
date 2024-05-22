@@ -99,8 +99,8 @@
       <el-table-column type="selection" width="55" align="center" />
       <!--<el-table-column label="订单id" align="center" prop="ordersId" />-->
       <el-table-column label="订单编号" align="center" prop="ordersNumber" />
-      <el-table-column label="买家姓名" align="center" prop="ordersUsersId" />
-      <el-table-column label="配送员" align="center" prop="ordersSysuserId" />
+      <el-table-column label="买家姓名" align="center" prop="ordersUsersName" />
+      <el-table-column label="配送员" align="center" prop="ordersSysuserName" />
       <el-table-column label="支付方式" align="center" prop="ordersPayMethod">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_model_pay" :value="scope.row.ordersPayMethod"/>
