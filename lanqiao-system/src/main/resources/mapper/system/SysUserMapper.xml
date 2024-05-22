@@ -237,4 +237,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{depTid}
 		</foreach>
 	</select>
+
+	<select id="selectSysUserAll" resultMap="SysUserResult">
+		<include refid="selectDepTid"/>
+		where dept_id = 108
+	</select>
 </mapper> 

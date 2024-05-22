@@ -9,22 +9,27 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--      <el-form-item label="买家姓名" prop="ordersUsersId">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.ordersUsersId"-->
-<!--          placeholder="请输入买家姓名"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-      <el-form-item label="配送员" prop="ordersSysuserId">
-        <el-input
-          v-model="queryParams.ordersSysuserId"
-          placeholder="请输入配送员"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="买家姓名" prop="ordersUsersId">
+        <el-select v-model="queryParams.ordersUsersId" :data="ordeersList" clearable placeholder="请输入买家姓名" @keyup.enter.native="handleQuery" filterable>
+          <el-option
+            v-for="item in ordeersList"
+            :key="item.address.addressId"
+            :label="item.address.addressName"
+            :value="item.address.addressId"
+          ></el-option>
+        </el-select>
       </el-form-item>
+      <el-form-item label="配送员" prop="ordersSysuserId">
+        <el-select v-model="queryParams.ordersSysuserId" :data="Delivery" clearable placeholder="请输入配送员" @keyup.enter.native="handleQuery" filterable>
+          <el-option
+            v-for="item in Delivery"
+            :key="item.deptId"
+            :label="item.userName"
+            :value="item.deptId"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="订单状态" prop="ordersStatus">
         <el-select v-model="queryParams.ordersStatus" placeholder="请选择订单状态" clearable>
           <el-option
@@ -216,7 +221,7 @@
 </style>
 
 <script>
-import {listOrdeers, getOrdeers, delOrdeers, addOrdeers, updateOrdeers, listAddress} from "@/api/system/ordeers";
+import {listOrdeers, getOrdeers, delOrdeers, addOrdeers, updateOrdeers, listDelivery} from "@/api/system/ordeers";
 
 export default {
   name: "Ordeers",
@@ -235,6 +240,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      //配送员信息
+      Delivery: [],
       // 订单管理表格数据
       ordeersList: [],
       // 订单管理用户ids
@@ -264,14 +271,14 @@ export default {
   },
   created() {
     this.getList();
-    console.log(this.ordeersListIds);
-    this.listAddress();
+    this.getDelivery();
   },
   methods: {
-    /** 根据usersId查询地址详情 */
-    listAddress() {
-      listAddress(this.ordeersListIds).then(response => {
-        // console.log(response);
+    // 页面加载初始化数据
+    getDelivery(){
+      listDelivery().then(response => {
+        this.Delivery = response.Delivery;
+        console.log(this.Delivery)
       });
     },
     /** 查询订单管理列表 */
@@ -280,9 +287,6 @@ export default {
       listOrdeers(this.queryParams).then(response => {
         this.ordeersList = response.rows;
         this.total = response.total;
-        this.ordeersList.forEach(item => {
-          this.ordeersListIds.push(item.ordersUsersId);
-        });
         this.loading = false;
       });
     },

@@ -2,7 +2,7 @@ package cn.lanqiao.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-import cn.lanqiao.system.domain.FAddress;
+import cn.lanqiao.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +27,9 @@ public class FOrdeersController extends BaseController
 {
     @Autowired
     private IFOrdeersService fOrdeersService;
+
+    @Autowired
+    private ISysUserService iSysUserService;
 
     /**
      * 查询订单管理列表
@@ -96,14 +99,11 @@ public class FOrdeersController extends BaseController
         return toAjax(fOrdeersService.deleteFOrdeersByOrdersIds(ordersIds));
     }
 
-    /**
-     * 查询地址管理列表
-     */
-    @PostMapping("/listAddress")
-    public List<String> listAddress(@RequestBody List<String> ids) {
-        for (String id : ids) {
-            System.out.println(id);
-        }
-        return ids;
+    @GetMapping(value = "/listDelivery")
+    public AjaxResult listDelivery()
+    {
+        AjaxResult success = AjaxResult.success();
+        success.put("Delivery",iSysUserService.selectSysUserAll());
+        return success;
     }
 }

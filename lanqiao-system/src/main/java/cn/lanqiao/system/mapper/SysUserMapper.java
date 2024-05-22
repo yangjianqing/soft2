@@ -140,4 +140,10 @@ public interface SysUserMapper
      * @return
      */
     List<SysUser> selectUsersListdeliveryIds(List<Long> depTid);
+
+    /**
+     * 查询所有配送员信息
+     * @return
+     */
+    public List<SysUser> selectSysUserAll();
 }

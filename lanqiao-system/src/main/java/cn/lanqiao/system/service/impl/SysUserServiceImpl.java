@@ -542,4 +542,10 @@ public class SysUserServiceImpl implements ISysUserService
     public List<SysUser> selectUsersListdeliveryIds(List<Long> depTid) {
         return userMapper.selectUsersListdeliveryIds(depTid);
     }
+
+    @Override
+    public List<SysUser> selectSysUserAll()
+    {
+        return userMapper.selectSysUserAll();
+    }
 }

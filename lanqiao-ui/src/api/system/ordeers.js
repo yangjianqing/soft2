@@ -43,19 +43,10 @@ export function delOrdeers(ordersId) {
   })
 }
 
-// 根据usersId查询地址详细信息
-export function getType(usersId) {
+//根据sysusersid查询配送员名称
+export function listDelivery() {
   return request({
-    url: '/system/address/type/' + usersId,
+    url: '/system/ordeers/listDelivery',
     method: 'get'
-  })
-}
-
-// 查询地址管理列表
-export function listAddress(ids) {
-  return request({
-    url: '/system/ordeers/listAddress',
-    method: 'post',
-    data: ids // 直接发送数组数据
   })
 }
