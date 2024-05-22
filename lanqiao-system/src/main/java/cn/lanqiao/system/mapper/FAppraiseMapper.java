@@ -58,4 +58,5 @@ public interface FAppraiseMapper
      * @return 结果
      */
     public int deleteFAppraiseByReviewids(Long[] reviewids);
+
 }

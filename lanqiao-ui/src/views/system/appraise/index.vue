@@ -72,8 +72,8 @@
     <el-table v-loading="loading" :data="appraiseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="评价id" align="center" prop="reviewid" />
-      <el-table-column label="商品id" align="center" prop="goodsid" />
-      <el-table-column label="用户id" align="center" prop="userid" />
+      <el-table-column label="商品名称" align="center" prop="goodsName" />
+      <el-table-column label="用户名称" align="center" prop="userName" />
       <el-table-column label="评分" align="center" prop="rating">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.evaluation_score" :value="scope.row.rating"/>
@@ -109,7 +109,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"

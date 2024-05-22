@@ -24,9 +24,33 @@ public class FAppraise extends BaseEntity
     @Excel(name = "商品id")
     private Long goodsid;
 
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /** 商品名称 */
+    @Excel(name = "商品id")
+    private String goodsName;
+
     /** 用户id */
     @Excel(name = "用户id")
     private Long userid;
+
+    /** 用户名称 */
+    @Excel(name = "用户id")
+    private String userName;
 
     /** 评分 */
     @Excel(name = "评分")
