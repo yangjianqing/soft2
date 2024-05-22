@@ -22,7 +22,7 @@ public class FOrdeers extends BaseEntity
 
     /** 订单编号 */
     @Excel(name = "订单编号")
-    private Long ordersNumber;
+    private String ordersNumber;
 
     /** 买家姓名 */
     @Excel(name = "买家姓名")
@@ -84,12 +84,12 @@ public class FOrdeers extends BaseEntity
     {
         return ordersId;
     }
-    public void setOrdersNumber(Long ordersNumber) 
+    public void setOrdersNumber(String ordersNumber)
     {
         this.ordersNumber = ordersNumber;
     }
 
-    public Long getOrdersNumber() 
+    public String getOrdersNumber()
     {
         return ordersNumber;
     }

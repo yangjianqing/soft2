@@ -126,7 +126,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     public int insertFOrdeers(FOrdeers fOrdeers)
     {
         fOrdeers.setOrdersCreattime(DateUtils.getNowDate());
-        fOrdeers.setOrdersNumber(OrderNumberGenerator.generate());
+        fOrdeers.setOrdersNumber(OrderNumberGenerator.generateOrderNumber());
         return fOrdeersMapper.insertFOrdeers(fOrdeers);
     }
 

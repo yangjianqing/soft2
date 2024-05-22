@@ -103,7 +103,16 @@
     <el-table v-loading="loading" :data="ordeersList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <!--<el-table-column label="订单id" align="center" prop="ordersId" />-->
-      <el-table-column label="订单编号" align="center" prop="ordersNumber" />
+      <!--<el-table-column label="订单编号" align="center" prop="ordersNumber" />-->
+
+      <el-table-column label="订单编号" align="center" prop="ordersNumber">
+        <template slot-scope="scope">
+          <router-link :to="'/system/ordeers-data/index?ordersId='+ scope.row.ordersId" class="link-type">
+            <div class="address-cell">{{ scope.row.ordersNumber }}</div>
+          </router-link>
+        </template>
+      </el-table-column>
+
       <el-table-column label="买家姓名" align="center" prop="address.addressName" />
       <el-table-column label="联系方式" align="center" prop="address.addressPhone" />
       <el-table-column label="配送员" align="center" prop="ordersSysuserName" />
@@ -278,7 +287,6 @@ export default {
     getDelivery(){
       listDelivery().then(response => {
         this.Delivery = response.Delivery;
-        console.log(this.Delivery)
       });
     },
     /** 查询订单管理列表 */

@@ -1,37 +1,37 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="收货人" prop="addressName">
-        <el-input
-          v-model="queryParams.addressName"
-          placeholder="请输入收货人"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="手机号" prop="addressPhone">
-        <el-input
-          v-model="queryParams.addressPhone"
-          placeholder="请输入手机号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="地址标签" prop="addressLabel">
-        <el-select v-model="queryParams.addressLabel" placeholder="请选择地址标签" clearable>
-          <el-option
-            v-for="dict in dict.type.f_address_label"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+<!--    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">-->
+<!--      <el-form-item label="收货人" prop="addressName">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.addressName"-->
+<!--          placeholder="请输入收货人"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="手机号" prop="addressPhone">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.addressPhone"-->
+<!--          placeholder="请输入手机号"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="地址标签" prop="addressLabel">-->
+<!--        <el-select v-model="queryParams.addressLabel" placeholder="请选择地址标签" clearable>-->
+<!--          <el-option-->
+<!--            v-for="dict in dict.type.f_address_label"-->
+<!--            :key="dict.value"-->
+<!--            :label="dict.label"-->
+<!--            :value="dict.value"-->
+<!--          />-->
+<!--        </el-select>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item>-->
+<!--        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>-->
+<!--        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>-->
+<!--      </el-form-item>-->
+<!--    </el-form>-->
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -127,7 +127,7 @@
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
-      @pagination="getList"
+      @pagination="getType"
     />
 
     <!-- 添加或修改地址管理对话框 -->
@@ -252,17 +252,17 @@ export default {
     };
   },
   created() {
-    // 使用 query 传参
-    const usersId = this.$route.query.usersId;
     // 根据 usersId 查询地址详情
-    this.getType(usersId);
-    this.getUsers(usersId);
-    // // 获取地址列表
+    this.getType();
+    this.getUsers();
+    // 获取地址列表
     // this.getList();
   },
   methods: {
     /** 根据usersId查询地址详情 */
-    getType(usersId) {
+    getType() {
+      // 使用 query 传参
+      const usersId = this.$route.query.usersId;
       this.loading = true;
       getType(usersId).then(response => {
         this.addressIdList = response.data;
@@ -270,20 +270,21 @@ export default {
       });
     },
     /** 获取当前用户名称 */
-    getUsers(usersId) {
+    getUsers() {
+      const usersId = this.$route.query.usersId;
       getUsers(usersId).then(response => {
         this.usersName = response.usersList.usersName;
       });
     },
     /** 查询地址管理列表 */
-    getList() {
-      this.loading = true;
-      listAddress(this.queryParams).then(response => {
-        this.addressList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
-    },
+    // getList() {
+    //   this.loading = true;
+    //   listAddress(this.queryParams).then(response => {
+    //     this.addressList = response.rows;
+    //     this.total = response.total;
+    //     this.loading = false;
+    //   });
+    // },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -308,7 +309,7 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
-      this.getList();
+      this.getType();
     },
     /** 重置按钮操作 */
     resetQuery() {
@@ -345,13 +346,13 @@ export default {
             updateAddress(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
-              this.getList();
+              this.getType();
             });
           } else {
             addAddress(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
-              this.getList();
+              this.getType();
             });
           }
         }

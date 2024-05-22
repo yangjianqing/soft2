@@ -149,6 +149,20 @@ export const dynamicRoutes = [
     ]
   },
   {
+    path: '/system/ordeers-data',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:ordeers:list'],
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/system/partslist/index'),
+        name: 'Data',
+        meta: { title: '订单明细', activeMenu: '/system/ordeers' }
+      }
+    ]
+  },
+  {
     path: '/monitor/job-log',
     component: Layout,
     hidden: true,
