@@ -1,37 +1,37 @@
 <template>
   <div class="app-container">
-<!--    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">-->
-<!--      <el-form-item label="收货人" prop="addressName">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.addressName"-->
-<!--          placeholder="请输入收货人"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="手机号" prop="addressPhone">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.addressPhone"-->
-<!--          placeholder="请输入手机号"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="地址标签" prop="addressLabel">-->
-<!--        <el-select v-model="queryParams.addressLabel" placeholder="请选择地址标签" clearable>-->
-<!--          <el-option-->
-<!--            v-for="dict in dict.type.f_address_label"-->
-<!--            :key="dict.value"-->
-<!--            :label="dict.label"-->
-<!--            :value="dict.value"-->
-<!--          />-->
-<!--        </el-select>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item>-->
-<!--        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>-->
-<!--        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>-->
-<!--      </el-form-item>-->
-<!--    </el-form>-->
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="收货人" prop="addressName">
+        <el-input
+          v-model="queryParams.addressName"
+          placeholder="请输入收货人"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="手机号" prop="addressPhone">
+        <el-input
+          v-model="queryParams.addressPhone"
+          placeholder="请输入手机号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="地址标签" prop="addressLabel">
+        <el-select v-model="queryParams.addressLabel" placeholder="请选择地址标签" clearable>
+          <el-option
+            v-for="dict in dict.type.f_address_label"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -102,24 +102,24 @@
           <div class="address-cell">{{ scope.row.addressDetail }}</div>
         </template>
       </el-table-column>
-<!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-edit"-->
-<!--            @click="handleUpdate(scope.row)"-->
-<!--            v-hasPermi="['system:address:edit']"-->
-<!--          >修改</el-button>-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-delete"-->
-<!--            @click="handleDelete(scope.row)"-->
-<!--            v-hasPermi="['system:address:remove']"-->
-<!--          >删除</el-button>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['system:address:edit']"
+          >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['system:address:remove']"
+          >删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination

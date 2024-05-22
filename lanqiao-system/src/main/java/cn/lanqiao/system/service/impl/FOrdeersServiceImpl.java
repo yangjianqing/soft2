@@ -5,7 +5,9 @@ import java.util.*;
 import cn.lanqiao.common.core.domain.entity.SysUser;
 import cn.lanqiao.common.utils.DateUtils;
 import cn.lanqiao.common.utils.OrderNumberGenerator;
+import cn.lanqiao.system.domain.FAddress;
 import cn.lanqiao.system.domain.FUsers;
+import cn.lanqiao.system.mapper.FAddressMapper;
 import cn.lanqiao.system.mapper.FUsersMapper;
 import cn.lanqiao.system.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     private FOrdeersMapper fOrdeersMapper;
 
     @Autowired
-    private FUsersMapper fUsersMapper;
+    private FAddressMapper addressMapper;
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -53,55 +55,45 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     public List<FOrdeers> selectFOrdeersList(FOrdeers fOrdeers)
     {
         List<FOrdeers> fOrdeers1 = fOrdeersMapper.selectFOrdeersList(fOrdeers);
-        // 创建存储userid的存储器
-        Set<Long> usersIds = new HashSet<>();
         // 创建存储depTid的存储器
         Set<Long> depTidIds = new HashSet<>();
+        // 创建存储userid的存储器
+        Set<Long> usersIds = new HashSet<>();
 
         // 遍历订单管理列表数据，判断usersId是否为空，不是则将usersId存储到Set<Long> usersIds = new HashSet<>();
         for (FOrdeers fm : fOrdeers1) {
-            if(fm.getOrdersUsersId() != null) {
-                usersIds.add(fm.getOrdersUsersId());
-            }
             if(fm.getOrdersSysuserId() != null) {
                 depTidIds.add(fm.getOrdersSysuserId());
             }
+            if(fm.getOrdersUsersId() != null) {
+                usersIds.add(fm.getOrdersUsersId());
+            }
         }
 
-        // 根据订单列表数据的usersId来获取用户users列表数据
-        List<FUsers> UsersList = new ArrayList<>();
-        if(!usersIds.isEmpty()) {
-            UsersList = fUsersMapper.selectUsersListCIds(new ArrayList<>(usersIds));
-        }
         // 根据订单列表数据的usersId来获取用户users列表数据
         List<SysUser> depTidIdsList = new ArrayList<>();
         if(!depTidIds.isEmpty()) {
             depTidIdsList = sysUserMapper.selectUsersListdeliveryIds(new ArrayList<>(depTidIds));
         }
-
-        // 利用map集合键值对，将用户数据存储到map集合里面  (键：UsersId;值：UsersList)
-        Map<Long, FUsers> busersMap = new HashMap<>();
-        for (FUsers f : UsersList) {
-            busersMap.put(f.getUsersId(), f);
+        // 根据订单列表数据的AddsId来获取用户users列表数据
+        List<FAddress> AddreessList = new ArrayList<>();
+        if(!usersIds.isEmpty()) {
+            AddreessList = addressMapper.selectaddressIdByType(new ArrayList<>(usersIds));
         }
+
         Map<Long, SysUser> susUserMap = new HashMap<>();
         for (SysUser s : depTidIdsList) {
             susUserMap.put(s.getDeptId(), s);
         }
 
+        Map<Long, FAddress> addressMap = new HashMap<>();
+        for (FAddress f : AddreessList) {
+            addressMap.put(f.getAddressId(), f);
+        }
+
         // 替换用户姓名
         // 进行遍历订单列表数据
         for (FOrdeers fm : fOrdeers1) {
-            //判断订单列表的用户id是否为空
-            if (fm.getOrdersUsersId() != null) {
-                //调用map集合根据当前订单的用户id来拿到用户id里面用户列表的数据
-                FUsers fUsers = busersMap.get(fm.getOrdersUsersId());
-                //判断拿到的用户列表数据是否为空
-                if (fUsers != null) {
-                    //将会员列表的usersName传递给会员列表的usersName
-                    fm.setOrdersUsersName(fUsers.getUsersName());
-                }
-            }
             if (fm.getOrdersSysuserId() != null) {
                 //调用map集合根据当前订单的用户id来拿到用户id里面用户列表的数据
                 SysUser sysUser = susUserMap.get(fm.getOrdersSysuserId());
@@ -109,6 +101,15 @@ public class FOrdeersServiceImpl implements IFOrdeersService
                 if (sysUser != null) {
                     //将会员列表的usersName传递给会员列表的usersName
                     fm.setOrdersSysuserName(sysUser.getUserName());
+                }
+            }
+            if (fm.getOrdersUsersId() != null) {
+                //调用map集合根据当前订单的用户id来拿到用户id里面用户列表的数据
+                FAddress fAddress = addressMap.get(fm.getOrdersUsersId());
+                //判断拿到的用户列表数据是否为空
+                if (fAddress != null) {
+                    //将会员列表的usersName传递给会员列表的usersName
+                    fm.setAddress(fAddress);
                 }
             }
         }

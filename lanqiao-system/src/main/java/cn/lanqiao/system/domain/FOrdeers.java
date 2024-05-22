@@ -28,16 +28,14 @@ public class FOrdeers extends BaseEntity
     @Excel(name = "买家姓名")
     private Long ordersUsersId;
 
-    /** 买家姓名 */
-    @Excel(name = "买家姓名")
-    private String ordersUsersName;
+    private FAddress address;
 
-    public String getOrdersUsersName() {
-        return ordersUsersName;
+    public FAddress getAddress() {
+        return address;
     }
 
-    public void setOrdersUsersName(String ordersUsersName) {
-        this.ordersUsersName = ordersUsersName;
+    public void setAddress(FAddress address) {
+        this.address = address;
     }
 
     public String getOrdersSysuserName() {

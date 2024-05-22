@@ -66,4 +66,12 @@ public interface IFAddressService
      * @return 字典数据集合信息
      */
     public List<FAddress> selectUsersIdByType(String usersId);
+
+    /**
+     * 根据地址id查询数据
+     *
+     * @param addressId 字典类型
+     * @return 字典数据集合信息
+     */
+    public List<FAddress> selectaddressIdByType(List<Long> addressId);
 }

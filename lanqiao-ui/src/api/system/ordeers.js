@@ -42,3 +42,20 @@ export function delOrdeers(ordersId) {
     method: 'delete'
   })
 }
+
+// 根据usersId查询地址详细信息
+export function getType(usersId) {
+  return request({
+    url: '/system/address/type/' + usersId,
+    method: 'get'
+  })
+}
+
+// 查询地址管理列表
+export function listAddress(ids) {
+  return request({
+    url: '/system/ordeers/listAddress',
+    method: 'post',
+    data: ids // 直接发送数组数据
+  })
+}

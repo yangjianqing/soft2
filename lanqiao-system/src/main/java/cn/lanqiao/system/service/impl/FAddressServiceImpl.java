@@ -96,5 +96,8 @@ public class FAddressServiceImpl implements IFAddressService
         return fAddressMapper.selectUsersIdByType(usersId);
     }
 
-
+    @Override
+    public List<FAddress> selectaddressIdByType(List<Long> addressId) {
+        return fAddressMapper.selectaddressIdByType(addressId);
+    }
 }

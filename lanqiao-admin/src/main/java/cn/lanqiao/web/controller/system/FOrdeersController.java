@@ -2,16 +2,10 @@ package cn.lanqiao.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+import cn.lanqiao.system.domain.FAddress;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import cn.lanqiao.common.annotation.Log;
 import cn.lanqiao.common.core.controller.BaseController;
 import cn.lanqiao.common.core.domain.AjaxResult;
@@ -100,5 +94,16 @@ public class FOrdeersController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ordersIds)
     {
         return toAjax(fOrdeersService.deleteFOrdeersByOrdersIds(ordersIds));
+    }
+
+    /**
+     * 查询地址管理列表
+     */
+    @PostMapping("/listAddress")
+    public List<String> listAddress(@RequestBody List<String> ids) {
+        for (String id : ids) {
+            System.out.println(id);
+        }
+        return ids;
     }
 }

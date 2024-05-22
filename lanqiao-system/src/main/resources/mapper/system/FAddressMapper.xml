@@ -92,4 +92,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFAddressVo"/>
         where adderss_users_id = #{usersId} ORDER BY address_sort ASC
     </select>
+
+    <select id="selectaddressIdByType" parameterType="FAddress" resultMap="FAddressResult">
+        <include refid="selectFAddressVo"/>
+        where address_id in
+        <foreach item="addressId" collection="list" open="(" separator="," close=")">
+            #{addressId}
+        </foreach>
+    </select>
 </mapper>

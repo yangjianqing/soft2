@@ -9,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="买家姓名" prop="ordersUsersId">
-        <el-input
-          v-model="queryParams.ordersUsersId"
-          placeholder="请输入买家姓名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+<!--      <el-form-item label="买家姓名" prop="ordersUsersId">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.ordersUsersId"-->
+<!--          placeholder="请输入买家姓名"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
       <el-form-item label="配送员" prop="ordersSysuserId">
         <el-input
           v-model="queryParams.ordersSysuserId"
@@ -99,7 +99,8 @@
       <el-table-column type="selection" width="55" align="center" />
       <!--<el-table-column label="订单id" align="center" prop="ordersId" />-->
       <el-table-column label="订单编号" align="center" prop="ordersNumber" />
-      <el-table-column label="买家姓名" align="center" prop="ordersUsersName" />
+      <el-table-column label="买家姓名" align="center" prop="address.addressName" />
+      <el-table-column label="联系方式" align="center" prop="address.addressPhone" />
       <el-table-column label="配送员" align="center" prop="ordersSysuserName" />
       <el-table-column label="支付方式" align="center" prop="ordersPayMethod">
         <template slot-scope="scope">
@@ -114,6 +115,11 @@
       <el-table-column label="订单状态" align="center" prop="ordersStatus">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.f_sales_status" :value="scope.row.ordersStatus"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="收货地址" align="center" prop="address.addressDetail" class-name="address-column" :show-overflow-tooltip="true" >
+        <template slot-scope="scope">
+          <div class="address-cell">{{ scope.row.address.addressDetail }}</div>
         </template>
       </el-table-column>
       <el-table-column label="下单时间" align="center" prop="ordersCreattime" width="180">
@@ -201,8 +207,16 @@
   </div>
 </template>
 
+<style scoped>
+.address-cell {
+  white-space: nowrap; /* 文本不换行 */
+  overflow: hidden; /* 溢出部分隐藏 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+}
+</style>
+
 <script>
-import { listOrdeers, getOrdeers, delOrdeers, addOrdeers, updateOrdeers } from "@/api/system/ordeers";
+import {listOrdeers, getOrdeers, delOrdeers, addOrdeers, updateOrdeers, listAddress} from "@/api/system/ordeers";
 
 export default {
   name: "Ordeers",
@@ -223,6 +237,10 @@ export default {
       total: 0,
       // 订单管理表格数据
       ordeersList: [],
+      // 订单管理用户ids
+      ordeersListIds: [],
+      // 订单管理表格数据
+      addressList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -246,14 +264,25 @@ export default {
   },
   created() {
     this.getList();
+    console.log(this.ordeersListIds);
+    this.listAddress();
   },
   methods: {
+    /** 根据usersId查询地址详情 */
+    listAddress() {
+      listAddress(this.ordeersListIds).then(response => {
+        // console.log(response);
+      });
+    },
     /** 查询订单管理列表 */
     getList() {
       this.loading = true;
       listOrdeers(this.queryParams).then(response => {
         this.ordeersList = response.rows;
         this.total = response.total;
+        this.ordeersList.forEach(item => {
+          this.ordeersListIds.push(item.ordersUsersId);
+        });
         this.loading = false;
       });
     },
