@@ -84,7 +84,21 @@
           <dict-tag :options="dict.type.anonymous_statu" :value="scope.row.starts"/>
         </template>
       </el-table-column>
-      <el-table-column label="评价内容" align="center" prop="reviewText" />
+      <el-table-column label="评价内容" align="center" prop="reviewText" >
+        <template slot-scope="scope">
+          <span
+            :title="scope.row.reviewText"
+            style="
+            display: block;
+            width: 120px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-align:left;">
+            {{scope.row.reviewText}}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="评价时间" align="center" prop="reviewDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.reviewDate, '{y}-{m}-{d}') }}</span>

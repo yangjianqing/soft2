@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.system.mapper.FOrderPartslistMapper">
+    
+    <resultMap type="FOrderPartslist" id="FOrderPartslistResult">
+        <result property="id"    column="id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="goodsNum"    column="goods_num"    />
+    </resultMap>
+
+    <sql id="selectFOrderPartslistVo">
+        select id, goods_id, order_id, goods_num from f_order_partslist
+    </sql>
+
+    <select id="selectFOrderPartslistList" parameterType="FOrderPartslist" resultMap="FOrderPartslistResult">
+        <include refid="selectFOrderPartslistVo"/>
+        <where>  
+            <if test="goodsId != null "> and goods_id = #{goodsId}</if>
+            <if test="orderId != null "> and order_id = #{orderId}</if>
+            <if test="goodsNum != null "> and goods_num = #{goodsNum}</if>
+        </where>
+    </select>
+    
+    <select id="selectFOrderPartslistById" parameterType="Long" resultMap="FOrderPartslistResult">
+        <include refid="selectFOrderPartslistVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFOrderPartslist" parameterType="FOrderPartslist" useGeneratedKeys="true" keyProperty="id">
+        insert into f_order_partslist
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">goods_id,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="goodsNum != null">goods_num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="goodsNum != null">#{goodsNum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFOrderPartslist" parameterType="FOrderPartslist">
+        update f_order_partslist
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="goodsNum != null">goods_num = #{goodsNum},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFOrderPartslistById" parameterType="Long">
+        delete from f_order_partslist where id = #{id}
+    </delete>
+
+    <delete id="deleteFOrderPartslistByIds" parameterType="String">
+        delete from f_order_partslist where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
