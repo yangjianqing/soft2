@@ -100,7 +100,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
                 //判断拿到的用户列表数据是否为空
                 if (sysUser != null) {
                     //将会员列表的usersName传递给会员列表的usersName
-                    fm.setOrdersSysuserName(sysUser.getUserName());
+                    fm.setOrdersSysuserName(sysUser.getNickName());
                 }
             }
             if (fm.getOrdersUsersId() != null) {

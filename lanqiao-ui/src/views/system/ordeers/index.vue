@@ -24,7 +24,7 @@
           <el-option
             v-for="item in Delivery"
             :key="item.deptId"
-            :label="item.userName"
+            :label="item.nickName"
             :value="item.deptId"
           ></el-option>
         </el-select>
