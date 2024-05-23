@@ -24,7 +24,15 @@ public class FOrderPartslist extends BaseEntity
 
     /** 订单编号 */
     @Excel(name = "订单编号")
-    private Long orderId;
+    private String orderId;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
     /** 商品数量 */
     @Excel(name = "商品数量")
@@ -60,15 +68,9 @@ public class FOrderPartslist extends BaseEntity
     {
         return goodsId;
     }
-    public void setOrderId(Long orderId) 
-    {
-        this.orderId = orderId;
-    }
 
-    public Long getOrderId() 
-    {
-        return orderId;
-    }
+
+
     public void setGoodsNum(Long goodsNum) 
     {
         this.goodsNum = goodsNum;

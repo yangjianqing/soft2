@@ -138,6 +138,7 @@
       </div>
     </el-dialog>
   </div>
+
 </template>
 
 <script>
@@ -170,7 +171,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         goodsId: null,
-        orderId: null,
+        orderId: this.$route.query.ordersNumber,
         goodsNum: null
       },
       // 表单参数

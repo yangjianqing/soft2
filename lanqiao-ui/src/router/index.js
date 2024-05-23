@@ -163,6 +163,20 @@ export const dynamicRoutes = [
     ]
   },
   {
+    path: '/system/goods-data',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:goods:list'],
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/system/appraise/index'),
+        name: 'Data',
+        meta: { title: '商品评价', activeMenu: '/system/goods' }
+      }
+    ]
+  },
+  {
     path: '/monitor/job-log',
     component: Layout,
     hidden: true,

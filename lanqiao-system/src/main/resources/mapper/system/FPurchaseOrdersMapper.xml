@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectFPurchaseOrdersList" parameterType="FPurchaseOrders" resultMap="FPurchaseOrdersResult">
         <include refid="selectFPurchaseOrdersVo"/>
         <where>  
-            <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
+            <if test="supplier != null  and supplier != ''"> and  supplier like concat('%', #{supplier}, '%')</if>
             <if test="paymentTerms != null  and paymentTerms != ''"> and payment_terms = #{paymentTerms}</if>
             <if test="shippingAddress != null  and shippingAddress != ''"> and shipping_address like concat('%', #{shippingAddress}, '%')</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
