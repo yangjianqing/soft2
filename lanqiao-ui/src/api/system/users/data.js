@@ -42,20 +42,3 @@ export function delAddress(addressId) {
     method: 'delete'
   })
 }
-
-
-// 根据usersId查询地址详细信息
-export function getType(usersId) {
-  return request({
-    url: '/system/address/type/' + usersId,
-    method: 'get'
-  })
-}
-
-// 查询用户管理详细
-export function getUsers(usersId) {
-  return request({
-    url: '/system/users/type/' + usersId,
-    method: 'get'
-  })
-}
