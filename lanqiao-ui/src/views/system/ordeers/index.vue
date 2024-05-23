@@ -107,7 +107,7 @@
 
       <el-table-column label="订单编号" align="center" prop="ordersNumber">
         <template slot-scope="scope">
-          <router-link :to="'/system/ordeers-data/index?ordersId='+ scope.row.ordersId" class="link-type">
+          <router-link :to="'/system/ordeers-data/index?ordersNumber='+ scope.row.ordersNumber" class="link-type">
             <div class="address-cell">{{ scope.row.ordersNumber }}</div>
           </router-link>
         </template>

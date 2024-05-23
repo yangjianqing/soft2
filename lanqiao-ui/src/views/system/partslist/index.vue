@@ -182,6 +182,8 @@ export default {
   },
   created() {
     this.getList();
+    const ordersNumber = this.$route.query.ordersNumber;
+    console.log(ordersNumber);
   },
   methods: {
     /** 查询订单明细列表 */
