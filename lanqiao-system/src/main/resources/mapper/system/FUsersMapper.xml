@@ -11,14 +11,13 @@
         <result property="usersPhone"    column="users_phone"    />
         <result property="usersPassword"    column="users_password"    />
         <result property="usersAvatar"    column="users_avatar"    />
-        <result property="userAddress"    column="user_address"    />
         <result property="memberGrade"    column="member_grade"    />
         <result property="memberTotal"    column="member_total"    />
         <result property="createTime"    column="create_time"    />
     </resultMap>
 
     <sql id="selectFUsersVo">
-        select users_id, users_name, users_sex, users_phone, users_password, users_avatar, user_address, member_grade, member_total, create_time from f_users
+        select users_id, users_name, users_sex, users_phone, users_password, users_avatar, member_grade, member_total, create_time from f_users
     </sql>
 
     <select id="selectFUsersList" parameterType="FUsers" resultMap="FUsersResult">
@@ -44,7 +43,6 @@
             <if test="usersPhone != null and usersPhone != ''">users_phone,</if>
             <if test="usersPassword != null and usersPassword != ''">users_password,</if>
             <if test="usersAvatar != null">users_avatar,</if>
-            <if test="userAddress != null">user_address,</if>
             <if test="memberGrade != null">member_grade,</if>
             <if test="memberTotal != null">member_total,</if>
             <if test="createTime != null">create_time,</if>
@@ -70,7 +68,6 @@
             <if test="usersPhone != null and usersPhone != ''">users_phone = #{usersPhone},</if>
             <if test="usersPassword != null and usersPassword != ''">users_password = #{usersPassword},</if>
             <if test="usersAvatar != null">users_avatar = #{usersAvatar},</if>
-            <if test="userAddress != null">user_address = #{userAddress},</if>
             <if test="memberGrade != null">member_grade = #{memberGrade},</if>
             <if test="memberTotal != null">member_total = #{memberTotal},</if>
             <if test="createTime != null">create_time = #{createTime},</if>

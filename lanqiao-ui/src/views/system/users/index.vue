@@ -104,10 +104,10 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="用户地址" align="center" prop="userAddress" class-name="address-column" :show-overflow-tooltip="true">
+      <el-table-column label="用户地址" align="center" class-name="address-column" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <router-link :to="'/system/users-data/index?usersId='+ scope.row.usersId" class="link-type">
-            <div class="address-cell">{{ scope.row.userAddress }}</div>
+            <div class="address-cell">用户地址</div>
           </router-link>
         </template>
       </el-table-column>
@@ -175,9 +175,6 @@
         </el-form-item>
         <el-form-item label="用户头像">
           <image-upload v-model="form.usersAvatar"/>
-        </el-form-item>
-        <el-form-item label="用户地址" prop="userAddress">
-          <el-input v-model="form.userAddress" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="会员积分" prop="memberTotal">
           <el-input v-model="form.memberTotal" placeholder="请输入会员积分" />
@@ -290,7 +287,6 @@ export default {
         usersPhone: null,
         usersPassword: null,
         usersAvatar: null,
-        userAddress: null,
         memberGrade: null,
         memberTotal: null,
         createTime: null

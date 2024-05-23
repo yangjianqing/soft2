@@ -39,10 +39,6 @@ public class FUsers extends BaseEntity
     @Excel(name = "用户头像")
     private String usersAvatar;
 
-    /** 用户地址 */
-    @Excel(name = "用户地址")
-    private String userAddress;
-
     /** 会员级别 */
     @Excel(name = "会员级别")
     private Long memberGrade;
@@ -105,15 +101,7 @@ public class FUsers extends BaseEntity
     {
         return usersAvatar;
     }
-    public void setUserAddress(String userAddress)
-    {
-        this.userAddress = userAddress;
-    }
 
-    public String getUserAddress()
-    {
-        return userAddress;
-    }
     public void setMemberGrade(Long memberGrade)
     {
         this.memberGrade = memberGrade;
@@ -142,7 +130,6 @@ public class FUsers extends BaseEntity
                 .append("usersPhone", getUsersPhone())
                 .append("usersPassword", getUsersPassword())
                 .append("usersAvatar", getUsersAvatar())
-                .append("userAddress", getUserAddress())
                 .append("memberGrade", getMemberGrade())
                 .append("memberTotal", getMemberTotal())
                 .append("createTime", getCreateTime())
