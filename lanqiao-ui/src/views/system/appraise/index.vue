@@ -1,28 +1,5 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="商品id" prop="goodsid">
-        <el-input
-          v-model="queryParams.goodsid"
-          placeholder="请输入商品id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="用户id" prop="userid">
-        <el-input
-          v-model="queryParams.userid"
-          placeholder="请输入用户id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
@@ -211,7 +188,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        goodsid: null,
+        goodsid: this.$route.query.id,
         userid: null,
       },
       // 表单参数
@@ -223,6 +200,8 @@ export default {
   },
   created() {
     this.getList();
+    const goodsid = this.$route.query.id;
+    console.log(goodsid);
   },
   methods: {
     /** 查询评价管理列表 */

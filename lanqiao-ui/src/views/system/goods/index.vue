@@ -123,6 +123,14 @@
           </span>
           </template>
         </el-table-column>
+        <el-table-column label="评价" align="center" prop="appraise" >
+          <template slot-scope="scope">
+            <router-link :to="'/system/goods-data/index?id='+ scope.row.id" class="link-type">
+              <div class="address-cell">评价</div>
+            </router-link>
+          </template>
+        </el-table-column>
+
         <el-table-column label="状态" align="center" prop="status">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.f_goods" :value="scope.row.status"/>
