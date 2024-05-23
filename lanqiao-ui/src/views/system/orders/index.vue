@@ -1,12 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="供应商
-" prop="supplier">
+      <el-form-item label="供应商" prop="supplier">
         <el-input
           v-model="queryParams.supplier"
-          placeholder="请输入供应商
-"
+          placeholder="请输入供应商"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -95,8 +93,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="订单Id" align="center" prop="orderId" />
       <el-table-column label="商品Id" align="center" prop="goodsName" />
-      <el-table-column label="供应商
-" align="center" prop="supplier" />
+      <el-table-column label="供应商" align="center" prop="supplier" />
       <el-table-column label="数量" align="center" prop="quantity" />
       <el-table-column label="单价" align="center" prop="unitPrice" />
       <el-table-column label="总金额" align="center" >
@@ -174,10 +171,8 @@
         <el-form-item label="商品Id" prop="goodsId">
           <el-input v-model="form.goodsId" placeholder="请输入商品Id" />
         </el-form-item>
-        <el-form-item label="供应商
-" prop="supplier">
-          <el-input v-model="form.supplier" placeholder="请输入供应商
-" />
+        <el-form-item label="供应商" prop="supplier">
+          <el-input v-model="form.supplier" placeholder="请输入供应商" />
         </el-form-item>
         <el-form-item label="商品数量" prop="quantity">
           <el-input v-model="form.quantity" placeholder="请输入商品数量" />

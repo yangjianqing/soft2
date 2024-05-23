@@ -97,13 +97,12 @@
         </template>
       </el-table-column>
       <el-table-column label="联系方式" align="center" prop="usersPhone" />
-      <el-table-column label="用户密码" type="password" align="center" prop="usersPassword" />
+      <!--<el-table-column label="用户密码" type="password" align="center" prop="usersPassword" />-->
       <el-table-column label="用户头像" align="center" prop="usersAvatar" width="100">
         <template slot-scope="scope">
           <image-preview :src="scope.row.usersAvatar" :width="50" :height="50"/>
         </template>
       </el-table-column>
-
       <el-table-column label="用户地址" align="center" class-name="address-column" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <router-link :to="'/system/users-data/index?usersId='+ scope.row.usersId" class="link-type">
@@ -111,7 +110,6 @@
           </router-link>
         </template>
       </el-table-column>
-
       <el-table-column label="会员级别" align="center" prop="memberGrade">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.f_membership_grade" :value="scope.row.memberGrade"/>

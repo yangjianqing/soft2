@@ -9,18 +9,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-
-      <el-form-item label="买家姓名" prop="ordersUsersId">
-        <el-select v-model="queryParams.ordersUsersId" :data="ordeersList" clearable placeholder="请输入买家姓名" @keyup.enter.native="handleQuery" filterable>
-          <el-option
-            v-for="item in ordeersList"
-            :key="item.address.addressId"
-            :label="item.address.addressName"
-            :value="item.address.addressId"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-
+<!--      <el-form-item label="买家姓名" prop="ordersUsersId">-->
+<!--        <el-select v-model="queryParams.ordersUsersId" :data="ordeersList" clearable placeholder="请输入买家姓名" @keyup.enter.native="handleQuery" filterable>-->
+<!--          <el-option-->
+<!--            v-for="item in ordeersList"-->
+<!--            :key="item.address.addressId"-->
+<!--            :label="item.address.addressName"-->
+<!--            :value="item.address.addressId"-->
+<!--          ></el-option>-->
+<!--        </el-select>-->
+<!--      </el-form-item>-->
       <el-form-item label="配送员" prop="ordersSysuserId">
         <el-select v-model="queryParams.ordersSysuserId" :data="Delivery" clearable placeholder="请输入配送员" @keyup.enter.native="handleQuery" filterable>
           <el-option
@@ -57,16 +55,16 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:ordeers:add']"
-        >新增</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="primary"-->
+<!--          plain-->
+<!--          icon="el-icon-plus"-->
+<!--          size="mini"-->
+<!--          @click="handleAdd"-->
+<!--          v-hasPermi="['system:ordeers:add']"-->
+<!--        >新增</el-button>-->
+<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -106,7 +104,6 @@
       <el-table-column type="selection" width="55" align="center" />
       <!--<el-table-column label="订单id" align="center" prop="ordersId" />-->
       <!--<el-table-column label="订单编号" align="center" prop="ordersNumber" />-->
-
       <el-table-column label="订单编号" align="center" prop="ordersNumber">
         <template slot-scope="scope">
           <router-link :to="'/system/ordeers-data/index?ordersNumber='+ scope.row.ordersNumber" class="link-type">
@@ -114,7 +111,6 @@
           </router-link>
         </template>
       </el-table-column>
-
       <el-table-column label="买家姓名" align="center" prop="address.addressName" />
       <el-table-column label="联系方式" align="center" prop="address.addressPhone" />
       <el-table-column label="配送员" align="center" prop="ordersSysuserName" />
