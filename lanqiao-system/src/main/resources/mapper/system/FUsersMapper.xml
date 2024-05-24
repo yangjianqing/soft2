@@ -53,7 +53,6 @@
             <if test="usersPhone != null and usersPhone != ''">#{usersPhone},</if>
             <if test="usersPassword != null and usersPassword != ''">#{usersPassword},</if>
             <if test="usersAvatar != null">#{usersAvatar},</if>
-            <if test="userAddress != null">#{userAddress},</if>
             <if test="memberGrade != null">#{memberGrade},</if>
             <if test="memberTotal != null">#{memberTotal},</if>
             <if test="createTime != null">#{createTime},</if>
