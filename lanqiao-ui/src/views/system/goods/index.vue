@@ -102,23 +102,23 @@
         <el-table-column label="商品名称" align="center" prop="name" />
         <el-table-column label="类别" align="center" prop="categoryName" />
         <el-table-column label="商品价格" align="center" prop="price" />
+        <el-table-column label="单位" align="unit" prop="unit" />
+        <el-table-column label="编码" align="coding" prop="coding" class-name="goods-coding":show-overflow-tooltip="true" >
+          <template slot-scope="scope">
+          <span :title="scope.row.coding">
+            {{scope.row.coding}}
+          </span>
+          </template>
+        </el-table-column>
         <el-table-column label="图片" align="center" prop="image" width="100">
           <template slot-scope="scope">
             <image-preview :src="scope.row.image" :width="50" :height="50"/>
           </template>
         </el-table-column>
         <el-table-column label="库存" align="center" prop="num" />
-        <el-table-column label="描述" align="center" prop="description" >
+        <el-table-column label="描述" align="center" prop="description" class-name="goods-description":show-overflow-tooltip="true" >
           <template slot-scope="scope">
-          <span
-            :title="scope.row.description"
-            style="
-            display: block;
-            width: 120px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            text-align:left;">
+          <span :title="scope.row.description">
             {{scope.row.description}}
           </span>
           </template>
@@ -136,8 +136,8 @@
             <dict-tag :options="dict.type.f_goods" :value="scope.row.status"/>
           </template>
         </el-table-column>
-        <el-table-column label="创建人" align="center" prop="createUserName" />
-        <el-table-column label="修改人" align="center" prop="updateUserName" />
+<!--        <el-table-column label="创建人" align="center" prop="createUserName" />-->
+<!--        <el-table-column label="修改人" align="center" prop="updateUserName" />-->
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button
@@ -176,6 +176,12 @@
         <el-form-item label="商品价格" prop="price">
               <el-input v-model="form.price" placeholder="请输入商品价格" />
         </el-form-item>
+        <el-form-item label="单位" prop="unit">
+              <el-input v-model="form.unit" placeholder="请输入单位" />
+        </el-form-item>
+        <el-form-item label="编码" prop="coding">
+              <el-input v-model="form.coding" placeholder="请输入编码" />
+        </el-form-item>
         <el-form-item label="图片">
           <image-upload v-model="form.image"/>
         </el-form-item>
@@ -194,12 +200,12 @@
             >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="创建人" prop="createUser">
-          <el-input v-model="form.createUser" placeholder="请输入创建人" />
-        </el-form-item>
-        <el-form-item label="修改人" prop="updateUser">
-          <el-input v-model="form.updateUser" placeholder="请输入修改人" />
-        </el-form-item>
+<!--        <el-form-item label="创建人" prop="createUser">-->
+<!--          <el-input v-model="form.createUser" placeholder="请输入创建人" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="修改人" prop="updateUser">-->
+<!--          <el-input v-model="form.updateUser" placeholder="请输入修改人" />-->
+<!--        </el-form-item>-->
           <el-form-item label="类别" prop="cateId">
             <treeselect v-model="form.categoryId" :options="cateOptions" :show-count="true" placeholder="请选择类别" />
           </el-form-item>
@@ -211,7 +217,14 @@
     </el-dialog>
   </div>
 </template>
-
+<!--样式-->
+<style scoped>
+.address-cell {
+  white-space: nowrap; /* 文本不换行 */
+  overflow: hidden; /* 溢出部分隐藏 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+}
+</style>
 <script>
 import {listGoods, getGoods, delGoods, addGoods, updateGoods, cateTreeSelect} from "@/api/system/goods";
 import Treeselect from "@riophae/vue-treeselect";
@@ -334,6 +347,8 @@ export default {
         name: null,
         categoryId: null,
         price: null,
+        unit: null,
+        coding: null,
         image: null,
         description: null,
         status: 0,

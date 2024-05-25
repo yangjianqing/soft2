@@ -33,6 +33,7 @@ public class FGoods extends BaseEntity
     @Excel(name = "编码")
     private Long coding;
 
+
     public Long getCoding() {
         return coding;
     }
@@ -56,6 +57,17 @@ public class FGoods extends BaseEntity
     /** 商品价格 */
     @Excel(name = "商品价格")
     private BigDecimal price;
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    @Excel(name = "单位")
+    private String unit;
 
     /** 图片 */
     @Excel(name = "图片")
@@ -218,6 +230,8 @@ public class FGoods extends BaseEntity
             .append("name", getName())
             .append("categoryId", getCategoryId())
             .append("price", getPrice())
+            .append("unit", getUnit())
+            .append("coding", getCoding())
             .append("image", getImage())
             .append("description", getDescription())
             .append("status", getStatus())

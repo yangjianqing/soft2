@@ -61,17 +61,9 @@
           <dict-tag :options="dict.type.anonymous_statu" :value="scope.row.starts"/>
         </template>
       </el-table-column>
-      <el-table-column label="评价内容" align="center" prop="reviewText" >
+      <el-table-column label="评价内容" align="center" prop="reviewText" class-name="goods-reviewText":show-overflow-tooltip="true">
         <template slot-scope="scope">
-          <span
-            :title="scope.row.reviewText"
-            style="
-            display: block;
-            width: 120px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            text-align:left;">
+          <span :title="scope.row.reviewText">
             {{scope.row.reviewText}}
           </span>
         </template>
@@ -157,7 +149,13 @@
     </el-dialog>
   </div>
 </template>
-
+<style scoped>
+.address-cell {
+  white-space: nowrap; /* 文本不换行 */
+  overflow: hidden; /* 溢出部分隐藏 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+}
+</style>
 <script>
 import { listAppraise, getAppraise, delAppraise, addAppraise, updateAppraise } from "@/api/system/appraise";
 
