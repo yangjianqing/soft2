@@ -3,7 +3,7 @@ import request from "@/axios/request"
 // 查询会员管理列表
 export function listMembers(query) {
   return request({
-    url: '/member',
+    url: '/userlist',
     method: 'get',
     params: query
   })

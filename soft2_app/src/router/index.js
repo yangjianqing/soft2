@@ -5,9 +5,8 @@ import loginPage from "@/pages/LoginPage.vue";
 // 2. 从其他文件导入路由组件。
 
 //一次性全部加载
-// import HomePage from "@/pages/HomePage";
-// import MyInfo from "@/pages/MyInfo";
-// import CarPage from "@/pages/CarPage";
+import MyInfo from "@/pages/MyInfo";
+import CarPage from "@/pages/CarPage";
 
 //懒加载
 
@@ -15,16 +14,21 @@ const CategoryPage = () => import("@/pages/CategoryPage.vue")
 const CartPage = () => import("@/pages/CartPage.vue")
 const LoginPage = () => import("@/pages/LoginPage.vue")
 const Home = () => import("@/pages/HomePage.vue")
-const MinePage=()=>import("@/pages/MinePage.vue")
 const IndexPage = () => import("@/pages/IndexPage.vue")
+const PointsManagement=() =>import("@/pages/PointsManagement.vue")
 
+const OrderManagement =() =>import("@/pages/OrderManagement")
+const AddressEdit =() =>import("@/pages/Addadress/AddressEdit.vue")
+const SetTing =() =>import("@/pages/SetTing")
+const AddAddress =() =>import("@/pages/Addadress/AddAddress")
+const ShoppingGement =() =>import("@/components/Shopping/ShoppingGement.vue")
 // 3. 定义一些路由。
 // 每个路由都需要映射到一个组件。
 const routes = [
     //一级路由
     {
         path:"/",
-        component:Home ,
+        component:Home,
         //二级路由
         children: [
             // 空嵌套路由
@@ -44,15 +48,63 @@ const routes = [
                 },
             },
             {
+            path:"/mine/poma",
+            component:PointsManagement,
+            name:"poma",
+            meta: {
+                title: "积分管理页面",
+            }
+            },
+            {
+                path:"/mine/ordermanagement",
+                component:OrderManagement,
+                name:"ordermanagement",
+                meta: {
+                    title: "订单信息管理",
+                }
+            },
+            {
+                path:"/mine/address",
+                component:AddressEdit,
+                name:"address",
+                meta: {
+                    title: "地址",
+                }
+            },
+            {
+                path:"/mine/setting",
+                component:SetTing,
+                name:"setting",
+                meta: {
+                    title: "设置",
+                }
+            },
+            {
+                path:"/mine/addadres",
+                component:AddAddress,
+                name:"addadres",
+                meta: {
+                    title: "新增地址",
+                }
+            },
+            {
                 path:"/cart",
-                component:CartPage,
+                component:CarPage,
                 meta: {
                     title: "购物车",
                 },
             },
             {
+                path:"/cart/shoppinggement",
+                component:ShoppingGement,
+                name:"shoppinggement",
+                meta: {
+                    title: "商品",
+                },
+            },
+            {
                 path: "/mine",
-                component:MinePage,
+                component:MyInfo,
                 meta:
                     {
                         title:"我的"

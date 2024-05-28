@@ -2,7 +2,7 @@
     <div class="nav">
       <van-tabbar route v-model="active">
         <van-tabbar-item icon="home-o" to="/index"  >首页</van-tabbar-item>
-        <van-tabbar-item icon="apps-o"  to="/classification">分类</van-tabbar-item>
+        <van-tabbar-item icon="apps-o" dot to="/classification">分类</van-tabbar-item>
         <van-tabbar-item icon="cart-o" badge="5" to="/cart" >购物车</van-tabbar-item>
         <van-tabbar-item icon="user-o" badge="20" to="/mine">我的</van-tabbar-item>
       </van-tabbar>
@@ -30,6 +30,7 @@ export default {
         /*将导航栏固定到底部*/
         position: fixed;
         bottom: 0;
+        border-top: 1px solid #878787;
     }
 
     /*激活样式*/

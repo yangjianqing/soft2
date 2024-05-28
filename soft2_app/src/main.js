@@ -6,7 +6,7 @@ import router  from "@/router";
 import store from "@/store";
 //导入axios配置文件
 import request from "@/axios/request"
-
+import { AddressEdit } from 'vant';
 //1.引入vant
 import Vant  from 'vant';
 // 2. 引入组件样式
@@ -28,5 +28,6 @@ app.use(store);
 // 方式一. 通过 app.use 注册
 app.use(Vant);
 app.mount('#app');
-
+//地址管理器
+app.use(AddressEdit);
 
