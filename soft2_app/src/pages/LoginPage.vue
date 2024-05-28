@@ -28,7 +28,7 @@
                 // 1、校验用户名和密码是否合规
                 // 2、登录服务器
                 //登录完成后服务器给的登录凭证
-                var token="";
+                var token="sdg";
                 //将登录token 保存到服务器
                 localStorage.setItem("token",token);
                 // 3、完成页面跳转

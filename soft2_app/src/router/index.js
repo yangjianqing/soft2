@@ -1,5 +1,6 @@
 // 1. 从依赖包中导入路由函数 createRouter 和 createWebHashHistory。
 import { createRouter, createWebHashHistory } from "vue-router";
+import loginPage from "@/pages/LoginPage.vue";
 
 // 2. 从其他文件导入路由组件。
 
@@ -9,12 +10,13 @@ import { createRouter, createWebHashHistory } from "vue-router";
 // import CarPage from "@/pages/CarPage";
 
 //懒加载
-const HomePage = () => import("@/pages/HomePage")
-const MyInfo = () => import("@/pages/MyInfo")
-const CarPage = () => import("@/pages/CarPage")
-const Login = () => import("@/pages/Login")
-const Home = () => import("@/pages/Home")
-const MemberList=()=>import("@/pages/MemberList")
+
+const CategoryPage = () => import("@/pages/CategoryPage.vue")
+const CartPage = () => import("@/pages/CartPage.vue")
+const LoginPage = () => import("@/pages/LoginPage.vue")
+const Home = () => import("@/pages/HomePage.vue")
+const MinePage=()=>import("@/pages/MinePage.vue")
+const IndexPage = () => import("@/pages/IndexPage.vue")
 
 // 3. 定义一些路由。
 // 每个路由都需要映射到一个组件。
@@ -22,13 +24,13 @@ const routes = [
     //一级路由
     {
         path:"/",
-        component:Home,
+        component:Home ,
         //二级路由
         children: [
             // 空嵌套路由
             {
                 path:"/index",
-                component:HomePage,
+                component:IndexPage,
                 name:"index",
                 meta: {
                     title: "首页",
@@ -36,21 +38,21 @@ const routes = [
             },
             {
                 path:"/classification",
-                component:MyInfo,
+                component:CategoryPage,
                 meta: {
                     title: "分类",
                 },
             },
             {
                 path:"/cart",
-                component:CarPage,
+                component:CartPage,
                 meta: {
                     title: "购物车",
                 },
             },
             {
                 path: "/mine",
-                component:MemberList,
+                component:MinePage,
                 meta:
                     {
                         title:"我的"
@@ -60,7 +62,7 @@ const routes = [
     },
     {
         path:"/login",
-        component:Login,
+        component:LoginPage,
         name:"login",
         meta: {
             title: "登录",
