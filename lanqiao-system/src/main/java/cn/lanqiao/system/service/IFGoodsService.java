@@ -58,4 +58,16 @@ public interface IFGoodsService
      * @return 结果
      */
     public int deleteFGoodsById(Long id);
+
+    /**
+     * 根据商品名称查询
+     * @param goodsName
+     * @return
+     */
+    public List<FGoods> selectGoodsName(String goodsName); /**
+     * 根据商品名称查询
+     * @param goodsType
+     * @return
+     */
+    public List<FGoods> selectGoodsType(String goodsType);
 }

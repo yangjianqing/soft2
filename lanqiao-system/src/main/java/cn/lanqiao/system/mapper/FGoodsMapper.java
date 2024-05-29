@@ -91,4 +91,17 @@ public interface FGoodsMapper
      * @return
      */
     List<FGoods> selectListName(List<Long> GoodsId);
+
+    /**
+     *根据商品名称查询
+     * @param
+     * @return
+     */
+    public   List<FGoods> selectGoodsName(String goodsName);
+    /**
+     *根据商品分类称查询
+     * @param
+     * @return
+     */
+    public   List<FGoods> selectGoodsType(String gooodsType);
 }

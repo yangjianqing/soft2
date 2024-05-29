@@ -153,4 +153,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{GoodsId}
         </foreach>
     </select>
+
+    <select id="selectGoodsName"  resultType="cn.lanqiao.system.domain.FGoods">
+                <include refid="selectFGoodsVo"/>
+                WHERE  name = #{goodsName}
+    </select>
+
+
+    <!--   根据商品分类查询-->
+    <select id="selectGoodsType" resultType="cn.lanqiao.system.domain.FGoods">
+<!--        <include refid="selectFGoodsVo"/>-->
+        select fg.*
+        from f_goods fg
+        join category c on fg.category_id = c.dept_id
+        where c.dept_name = #{goodsType}
+    </select>
+
 </mapper>

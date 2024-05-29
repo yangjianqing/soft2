@@ -189,6 +189,27 @@ public class FGoodsServiceImpl implements IFGoodsService
     }
 
     /**
+     * 根据商品名称查询
+     * @param goodsName
+     * @return
+     */
+    @Override
+    public List<FGoods> selectGoodsName(String goodsName) {
+
+        return fGoodsMapper.selectGoodsName(goodsName);
+    }
+
+    /**
+     * 根据商品分类查询
+     * @param goodsType
+     * @return
+     */
+    @Override
+    public List<FGoods> selectGoodsType(String goodsType) {
+        return fGoodsMapper.selectGoodsType(goodsType);
+    }
+
+    /**
      * 新增商品分类信息
      * 
      * @param fGoods 商品对象

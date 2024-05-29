@@ -1,6 +1,7 @@
 package cn.lanqiao.api.controller;
 
 import cn.lanqiao.common.core.controller.BaseController;
+import cn.lanqiao.common.core.domain.AjaxResult;
 import cn.lanqiao.common.core.page.TableDataInfo;
 import cn.lanqiao.system.domain.FGoods;
 import cn.lanqiao.system.domain.FOrdeers;
@@ -12,6 +13,7 @@ import cn.lanqiao.system.service.IFOrderPartslistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +21,7 @@ import java.util.List;
 
 import static cn.lanqiao.common.utils.PageUtils.startPage;
 @RestController
-@RequestMapping("/fresh")
+@RequestMapping("/api/fresh")
 public class ApiShoppingIController extends BaseController {
     @Autowired
     private IFGoodsService fGoodsService;
@@ -59,6 +61,26 @@ public class ApiShoppingIController extends BaseController {
         List<FOrderPartslist> list = fOrderPartslistService.selectFOrderPartslistList(fOrderPartslist);
         return getDataTable(list);
     }
+    /**
+     * 根据商品名称查询
+     */
+    @GetMapping("/goods/{goodsName}")
+    public AjaxResult goodsName( @PathVariable("goodsName")String goodsName)
+    {
+//        startPage();
+        List<FGoods> fGoodsName = fGoodsService.selectGoodsName(goodsName);
 
+        return AjaxResult.success().put("goods",fGoodsName);
+    }
+    /**
+     * 根据商品分类查询
+     */
+    @GetMapping("/goodsTpye/{goodsType}")
+    public AjaxResult goodsType( @PathVariable("goodsType")String goodsType)
+    {
+//        startPage();
+        List<FGoods> fGoodstype = fGoodsService.selectGoodsType(goodsType);
+        return AjaxResult.success().put("goodsTpye",fGoodstype);
+    }
 
 }
