@@ -96,4 +96,9 @@
     <select id="selectUsersAll" resultMap="FUsersResult">
         <include refid="selectFUsersVo"/>
     </select>
+
+    <select id="selectUsersusersPhone" parameterType="String" resultMap="FUsersResult">
+        <include refid="selectFUsersVo"/>
+        where users_phone = #{usersPhone}
+    </select>
 </mapper>

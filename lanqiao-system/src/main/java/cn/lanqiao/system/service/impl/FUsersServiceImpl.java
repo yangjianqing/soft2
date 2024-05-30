@@ -102,4 +102,9 @@ public class FUsersServiceImpl implements IFUsersService
     public List<FUsers> selectUsersAll() {
         return fUsersMapper.selectUsersAll();
     }
+
+    @Override
+    public FUsers selectUsersusersPhone(String usersPhone) {
+        return fUsersMapper.selectUsersusersPhone(usersPhone);
+    }
 }

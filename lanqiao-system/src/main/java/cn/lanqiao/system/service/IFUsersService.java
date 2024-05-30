@@ -71,4 +71,11 @@ public interface IFUsersService
      * @return
      */
     public List<FUsers> selectUsersAll();
+
+    /**
+     * 根据用户usersPhone 获取信息
+     * @param usersPhone
+     * @return
+     */
+    FUsers selectUsersusersPhone(String usersPhone);
 }
