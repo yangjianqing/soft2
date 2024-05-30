@@ -55,17 +55,17 @@
           v-hasPermi="['system:address:edit']"
         >修改</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:address:remove']"
-        >删除</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="danger"-->
+<!--          plain-->
+<!--          icon="el-icon-delete"-->
+<!--          size="mini"-->
+<!--          :disabled="multiple"-->
+<!--          @click="handleDelete"-->
+<!--          v-hasPermi="['system:address:remove']"-->
+<!--        >删除</el-button>-->
+<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -111,13 +111,13 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:address:edit']"
           >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:address:remove']"
-          >删除</el-button>
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            type="text"-->
+<!--            icon="el-icon-delete"-->
+<!--            @click="handleDelete(scope.row)"-->
+<!--            v-hasPermi="['system:address:remove']"-->
+<!--          >删除</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -153,7 +153,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="联系方式" prop="addressPhone">
-          <el-input v-model="form.addressPhone" placeholder="请输入联系方式" />
+          <el-input v-model="form.addressPhone" placeholder="请输入联系方式" prefix-icon="el-icon-phone-outline" />
         </el-form-item>
         <el-form-item label="地址标签" prop="addressLabel">
           <el-select v-model="form.addressLabel" placeholder="请选择地址标签">
@@ -233,19 +233,24 @@ export default {
       // 表单校验
       rules: {
         addressName: [
-          { required: true, message: "收货人不能为空", trigger: "blur" }
+          { required: true, message: "收货人不能为空", trigger: "blur" },
+          { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]{3,6}$/, message: "3-6位中文、英文、英文数字组合", trigger: "blur" }
         ],
         addressPhone: [
-          { required: true, message: "手机号不能为空", trigger: "blur" }
+          { required: true, message: "联系方式不能为空", trigger: "blur" },
+          { pattern: /^((0\d{2,3}-\d{7,8})|(1[34578]\d{9}))$/, message: "电话号码无效", trigger: "blur" }
         ],
         addressTude: [
-          { required: true, message: "地址经度不能为空", trigger: "blur" }
+          { required: true, message: "地址经度不能为空", trigger: "blur" },
+          { pattern: /^[1-9]\d*$/, message: "地址经度无效", trigger: "blur" }
         ],
         addressLatit: [
-          { required: true, message: "地址纬度不能为空", trigger: "blur" }
+          { required: true, message: "地址纬度不能为空", trigger: "blur" },
+          { pattern: /^[1-9]\d*$/, message: "地址纬度无效", trigger: "blur" }
         ],
         addressDetail: [
-          { required: true, message: "详细地址不能为空", trigger: "blur" }
+          { required: true, message: "详细地址不能为空", trigger: "blur" },
+          { pattern:/^[\u4e00-\u9fa5]+$/, message: '请输入中文地址', trigger: 'blur' }
         ]
       }
     };
@@ -253,6 +258,13 @@ export default {
   created() {
     // 获取地址列表
     this.getList();
+  },
+  watch: {
+    'form.addressSex': function(value) {
+      if (value == null) {
+        this.form.addressSex = 2;
+      }
+    }
   },
   methods: {
     /** 查询地址管理列表 */

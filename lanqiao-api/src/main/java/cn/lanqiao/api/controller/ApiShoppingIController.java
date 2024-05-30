@@ -1,6 +1,5 @@
 package cn.lanqiao.api.controller;
 
-import cn.lanqiao.common.annotation.Anonymous;
 import cn.lanqiao.common.constant.CacheConstants;
 import cn.lanqiao.common.constant.Constants;
 import cn.lanqiao.common.core.controller.BaseController;
@@ -157,8 +156,9 @@ public class ApiShoppingIController extends BaseController {
     @PostMapping("/Login")
     public AjaxResult Login(String usersPhone, String usersPassword)
     {
-        if (ifUsersService.selectUsersusersPhone(usersPhone) != null) {
-            if (SecurityUtils.matchesPassword(usersPassword, ifUsersService.selectUsersusersPhone(usersPhone).getUsersPassword())) {
+        FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
+        if (fUsers != null) {
+            if (SecurityUtils.matchesPassword(usersPassword,fUsers.getUsersPassword())) {
                 return AjaxResult.error("登录成功");
             } else {
                 return AjaxResult.error("登录失败,密码错误");
