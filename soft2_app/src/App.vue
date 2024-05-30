@@ -13,6 +13,6 @@ export default {
 </script>
 <style>
 #app{
-  background-color: rgb(246, 246, 246);
+  background-color: rgb(245, 245, 245);
 }
 </style>

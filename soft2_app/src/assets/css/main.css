@@ -1,5 +1,5 @@
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-family: "华文楷体", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
@@ -22,3 +22,4 @@ a {
 a:hover {
     text-decoration: none; /* 取消鼠标悬停时的下划线 */
 }
+

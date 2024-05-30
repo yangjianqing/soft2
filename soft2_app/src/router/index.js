@@ -11,7 +11,6 @@ import CarPage from "@/pages/CarPage";
 //懒加载
 
 const CategoryPage = () => import("@/pages/CategoryPage.vue")
-const CartPage = () => import("@/pages/CartPage.vue")
 const LoginPage = () => import("@/pages/LoginPage.vue")
 const Home = () => import("@/pages/HomePage.vue")
 const IndexPage = () => import("@/pages/IndexPage.vue")
@@ -22,6 +21,9 @@ const AddressEdit =() =>import("@/pages/Addadress/AddressEdit.vue")
 const SetTing =() =>import("@/pages/SetTing")
 const AddAddress =() =>import("@/pages/Addadress/AddAddress")
 const ShoppingGement =() =>import("@/components/Shopping/ShoppingGement.vue")
+
+const SearchPage =() =>import("@/pages/SearchPage.vue")
+const DiscountPage =() =>import("@/pages/DiscountPage.vue")
 // 3. 定义一些路由。
 // 每个路由都需要映射到一个组件。
 const routes = [
@@ -109,6 +111,22 @@ const routes = [
                     {
                         title:"我的"
                     }
+            },
+            {
+                path:"/index/search",
+                component:SearchPage,
+                name:"SearchPage",
+                meta: {
+                    title: "搜索",
+                },
+            },
+            {
+                path:"/index/DiscountPage",
+                component:DiscountPage,
+                name:"DiscountPage",
+                meta: {
+                    title: "优惠",
+                },
             }
         ]
     },

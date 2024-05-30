@@ -3,6 +3,7 @@
 <template>
   <!--顶部导航栏-->
   <!--定位信息-->
+
   <van-sticky >
   <van-nav-bar>
     <template #right>
@@ -18,12 +19,14 @@
     </template>
     <template #title>
       <!--搜索框-->
+      <router-link to="/index/search">
         <van-search
             style="width: 100%;height: 1.45rem"
             v-model="value"
             shape="round"
             placeholder="请输入搜索关键词"
         />
+      </router-link>
     </template>
   </van-nav-bar>
   </van-sticky>
@@ -37,12 +40,11 @@
       </van-swipe-item>
     </van-swipe>
   </div>
-
   <div class="Classification">
-
-    <van-swipe>
-      <van-swipe-item>
-        <van-grid  :border="true" :column-num="8">
+    <router-link to="/classification">
+    <van-swipe :show-indicators="false">
+      <van-swipe-item >
+          <van-grid  :border="true" :column-num="8">
           <van-grid-item >
             <img class="img_item" src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" >
             <p>果蔬鲜花</p>
@@ -92,9 +94,11 @@
 
       </van-swipe-item>
     </van-swipe>
+    </router-link>
 
   </div>
 <!-- 超合算 -->
+  <router-link to="/index/DiscountPage">
 <div class="bargain_div" >
     <div class="van_row_div1">
       <div class="box_icon">
@@ -110,24 +114,103 @@
       <Merchandise></Merchandise>
       <Merchandise></Merchandise>
     </div>
-
-  <div>
-
-  </div>
+</div>
+  </router-link>
+<!--  推荐栏-->
+<div>
+  <van-sticky>
+  <van-tabs line-height="10px" color="rgb(0,195,255)" background="rgb(245,245,245)" v-model:active="activeName">
+    <van-tab title="推   荐"  name="a">
+      <van-list
+          v-model:loading="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+      >
+        <van-cell v-for="item in list" :key="item" :title="item" />
+        <div class="total_box">
+          <MerchandiseInfo></MerchandiseInfo>
+          <MerchandiseInfo></MerchandiseInfo>
+        </div>
+        <div class="total_box">
+          <MerchandiseInfo></MerchandiseInfo>
+          <MerchandiseInfo></MerchandiseInfo>
+        </div>
+      </van-list>
+    </van-tab>
+    <van-tab title="生鲜自营" name="b">
+<!--      <van-list-->
+<!--          v-model:loading="loading"-->
+<!--          :finished="finished"-->
+<!--          finished-text="没有更多了"-->
+<!--          @load="onLoad"-->
+<!--      >-->
+<!--        <van-cell v-for="item in list" :key="item" :title="item" />-->
+<!--        <div class="total_box">-->
+<!--          <MerchandiseInfo></MerchandiseInfo>-->
+<!--          <MerchandiseInfo></MerchandiseInfo>-->
+<!--        </div>-->
+<!--        <div class="total_box">-->
+<!--          <MerchandiseInfo></MerchandiseInfo>-->
+<!--          <MerchandiseInfo></MerchandiseInfo>-->
+<!--        </div>-->
+<!--      </van-list>-->
+    </van-tab>
+    <van-tab title="进口超市" name="c">
+      <van-list
+          v-model:loading="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+      >
+        <van-cell v-for="item in list" :key="item" :title="item" />
+        <div class="total_box">
+          <MerchandiseInfo></MerchandiseInfo>
+          <MerchandiseInfo></MerchandiseInfo>
+        </div>
+        <div class="total_box">
+          <MerchandiseInfo></MerchandiseInfo>
+          <MerchandiseInfo></MerchandiseInfo>
+        </div>
+      </van-list>
+    </van-tab>
+    <van-tab title="10元 店"  name="d">
+<!--      <van-list-->
+<!--          v-model:loading="loading"-->
+<!--          :finished="finished"-->
+<!--          finished-text="没有更多了"-->
+<!--          @load="onLoad"-->
+<!--      >-->
+<!--        <van-cell v-for="item in list" :key="item" :title="item" />-->
+<!--        <div class="total_box">-->
+<!--          <MerchandiseInfo></MerchandiseInfo>-->
+<!--          <MerchandiseInfo></MerchandiseInfo>-->
+<!--        </div>-->
+<!--        <div class="total_box">-->
+<!--          <MerchandiseInfo></MerchandiseInfo>-->
+<!--          <MerchandiseInfo></MerchandiseInfo>-->
+<!--        </div>-->
+<!--      </van-list>-->
+    </van-tab>
+  </van-tabs>
+  </van-sticky>
 </div>
 
 
 </template>
 <script>
-import  Merchandise from "@/components/Merchandise";
+import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
+import Merchandise from "@/components/Index/Merchandise.vue";
+
 export default {
-  name:"IndexPage",
-  components:{Merchandise},
+  name: "IndexPage",
+  components: {
+    Merchandise,
+    MerchandiseInfo
+  },
   data() {
     return {
-      gridItems: [
-
-      ]
+      gridItems: []
     };
   },
   setup() {
@@ -217,5 +300,11 @@ export default {
 
 }
 
-
+.total_box{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color:rgb(245,245,245) ;
+  border-radius: 10px;
+}
 </style>
