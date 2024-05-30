@@ -279,13 +279,15 @@ export default {
       // 表单校验
       rules: {
         name: [
-          { required: true, message: "商品名称不能为空", trigger: "blur" }
+          { required: true, message: "商品名称不能为空", trigger: "blur" },
+          { pattern: /^[\u4e00-\u9fa5]+$/, message: "商品名称必须为中文", trigger: "blur" }
         ],
         categoryId: [
           { required: true, message: "类别不能为空", trigger: "change" }
         ],
         price: [
-          { required: true, message: "商品价格不能为空", trigger: "blur" }
+          { required: true, message: "商品价格不能为空", trigger: "blur" },
+          { pattern: /(^[\d]|^[1-9][\d]*)($|[\.][\d]{0,2}$)/, message: '商品价格必须为数字', trigger: 'blur' }
         ],
         image: [
           { required: true, message: "图片不能为空", trigger: "blur" }
@@ -295,6 +297,14 @@ export default {
         ],
         status: [
           { required: true, message: "状态不能为空", trigger: "blur" }
+        ],
+        coding: [
+          { required: true, message: "编码不能为空", trigger: "blur" },
+          { pattern:/^[1-9]\d{12}$/, message: '编码必须为13位数字', trigger: 'blur' }
+        ],
+        num: [
+          { required: true, message: "库存不能为空", trigger: "blur" },
+          { pattern: /^[1-9]\d*$/, message: '库存必须为正整数', trigger: 'blur' }
         ],
       }
     };
@@ -357,6 +367,7 @@ export default {
         createUser: null,
         updateUser: null
       };
+
       this.categoryList = [];
       this.resetForm("form");
     },

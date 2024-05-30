@@ -92,7 +92,7 @@
     <el-table v-loading="loading" :data="ordersList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="订单Id" align="center" prop="orderId" />
-      <el-table-column label="商品Id" align="center" prop="goodsName" />
+      <el-table-column label="商品名称" align="center" prop="goodsName" />
       <el-table-column label="供应商" align="center" prop="supplier" />
       <el-table-column label="数量" align="center" prop="quantity" />
       <el-table-column label="单价" align="center" prop="unitPrice" />
@@ -168,7 +168,7 @@
     <!-- 添加或修改采购信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="商品Id" prop="goodsId">
+        <el-form-item label="商品名称" prop="goodsId">
           <el-input v-model="form.goodsId" placeholder="请输入商品Id" />
         </el-form-item>
         <el-form-item label="供应商" prop="supplier">
@@ -276,6 +276,64 @@ export default {
       },
       // 表单校验
       rules: {
+        goodsId: [
+          { required: true, message: "商品名称不能为空", trigger: "blur" },
+          { pattern: /^[\u4e00-\u9fa5]+$/, message: "商品名称必须为中文", trigger: "blur" }
+        ],
+        supplier: [
+          { required: true, message: "供应商不能为空", trigger: "blur" },
+          { pattern: /^[\u4e00-\u9fa5]+$/, message: "供应商必须为中文", trigger: "blur" }
+        ],
+        quantity: [
+          { required: true, message: "数量不能为空", trigger: "blur" },
+          { pattern: /^[1-9]\d*$/, message: '数量必须为正整数', trigger: 'blur' }
+        ],
+        unitPrice: [
+          { required: true, message: "单价不能为空", trigger: "blur" },
+          { pattern: /(^[\d]|^[1-9][\d]*)($|[\.][\d]{0,2}$)/, message: '单价必须为数字', trigger: 'blur' }
+        ],
+        paymentTerms: [
+          { required: true, message: "付款方式不能为空", trigger: "blur" },
+        ],
+        status: [
+          { required: true, message: "状态不能为空", trigger: "blur" },
+        ],
+      },
+      watch:{
+        "form.netType": function (val){
+        //付款方式
+          if (val=="1"){
+            this.showPaymentTerms=true;
+            this.showPaymentTerms=false;
+            Object.assign(this.rules,{
+              paymentTerms
+            });
+            //点击提交按钮触发
+          //   this.$refs.form.validateField(["paymentTerms"]]);
+          //   this.$refs.form.clearValidate(["paymentTerms"]]);
+            //添加验证，立即触发校验
+            setTimeout(()=>{
+              this.$refs.form.validateField(["paymentTerms"]);
+              this.$refs.form.cleaValidate(["paymentTerms"]);
+            },1);
+          };
+          //状态
+          if (val=="1"){
+            this.showStatus=true;
+            this.showStatus=false;
+            Object.assign(this.rules,{
+              paymentTerms
+            });
+            //点击提交按钮触发
+            //   this.$refs.form.validateField(["status"]]);
+            //   this.$refs.form.clearValidate(["status"]]);
+            //添加验证，立即触发校验
+            setTimeout(()=>{
+              this.$refs.form.validateField(["status"]);
+              this.$refs.form.cleaValidate(["status"]);
+            },1);
+          };
+        }
       }
     };
   },

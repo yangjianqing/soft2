@@ -79,18 +79,17 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping("/goods/{goodsName}")
     public AjaxResult goodsName( @PathVariable("goodsName")String goodsName)
     {
-//        startPage();
+        startPage();
         List<FGoods> fGoodsName = fGoodsService.selectGoodsName(goodsName);
         return AjaxResult.success().put("goods",fGoodsName);
     }
-
     /**
      * 根据商品分类查询
      */
     @GetMapping("/goodsTpye/{goodsType}")
     public AjaxResult goodsType( @PathVariable("goodsType")String goodsType)
     {
-        //startPage();
+        startPage();
         List<FGoods> fGoodstype = fGoodsService.selectGoodsType(goodsType);
         return AjaxResult.success().put("goodsTpye",fGoodstype);
     }
