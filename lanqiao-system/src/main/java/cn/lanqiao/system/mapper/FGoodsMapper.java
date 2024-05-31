@@ -1,6 +1,7 @@
 package cn.lanqiao.system.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import cn.lanqiao.common.core.domain.entity.Category;
 import cn.lanqiao.system.domain.FGoods;
@@ -104,4 +105,5 @@ public interface FGoodsMapper
      * @return
      */
     public   List<FGoods> selectGoodsType(String gooodsType);
+
 }

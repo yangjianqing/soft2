@@ -21,6 +21,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="num"    column="num"    />
     </resultMap>
 
+    <resultMap type="FPurchaseOrders" id="FPurchaseOrdersResult">
+        <result property="orderId"    column="order_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <!--        <result property="totalAmount"    column="total_amount"    />-->
+        <result property="paymentTerms"    column="payment_terms"    />
+        <result property="shippingAddress"    column="shipping_address"    />
+        <result property="status"    column="status"    />
+        <result property="orderDate"    column="order_date"    />
+        <result property="requiredDate"    column="required_date"    />
+        <result property="orderComments"    column="order_comments"    />
+    </resultMap>
+
+    <!-- 定义 resultMap -->
+<!--    <resultMap id="FGoodsResultMap" type="java.util.HashMap">-->
+<!--        <result column="id" property="id" jdbcType="BIGINT"/>-->
+<!--        <result column="name" property="name" jdbcType="VARCHAR"/>-->
+<!--    </resultMap>-->
+
     <resultMap id="FGoodsCategoryResult" type="FGoods" extends="FGoodsResult">
         <collection property="categoryList" notNullColumn="sub_dept_id" javaType="java.util.List" resultMap="CategoryResult" />
     </resultMap>
@@ -167,6 +188,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from f_goods fg
         join category c on fg.category_id = c.dept_id
         where c.dept_name = #{goodsType}
+    </select>
+<!--   查询商品名称-->
+    <select id="selectMapGoodsName" parameterType="string"  resultMap="FGoodsResult" >
+        select  *  from f_goods where name like concat('%', #{goodsName}, '%');
     </select>
 
 </mapper>

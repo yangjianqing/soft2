@@ -1,5 +1,12 @@
 import request from '@/utils/request'
-
+//获取所有类型列表
+export function goodsListAll(query) {
+  return request({
+    url: '/system/orders/goodsListAll',
+    method: 'get',
+    params: query
+  })
+}
 // 查询采购信息列表
 export function listOrders(query) {
   return request({

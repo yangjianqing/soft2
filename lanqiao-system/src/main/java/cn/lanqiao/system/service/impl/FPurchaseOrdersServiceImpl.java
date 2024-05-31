@@ -19,7 +19,7 @@ import cn.lanqiao.system.service.IFPurchaseOrdersService;
  * @date 2024-05-20
  */
 @Service
-public class FPurchaseOrdersServiceImpl implements IFPurchaseOrdersService 
+public class FPurchaseOrdersServiceImpl implements IFPurchaseOrdersService
 {
     @Autowired
     private FPurchaseOrdersMapper fPurchaseOrdersMapper;
@@ -130,4 +130,5 @@ public class FPurchaseOrdersServiceImpl implements IFPurchaseOrdersService
     {
         return fPurchaseOrdersMapper.deleteFPurchaseOrdersByOrderId(orderId);
     }
+
 }
