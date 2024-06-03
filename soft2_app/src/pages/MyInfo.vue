@@ -21,8 +21,11 @@
     <div class="management-box">
       <div style="width: 100px" @click="ReturnPoMa"><p style="font-size: 10px">532</p>
         <p style="text-align:center;font-size: 12px;color: #808080">积分</p></div>
-      <div style="width: 100px"><p style="font-size: 10px">32</p>
-        <p style="text-align:center;font-size: 12px;color: #808080">历史记录</p></div>
+      <router-link to="/mine/history">
+        <div style="width: 100px"><p style="font-size: 10px">32</p>
+          <p style="text-align:center;font-size: 12px;color: #808080">历史记录</p>
+        </div>
+      </router-link>
     </div>
   </div>
 

@@ -27,6 +27,7 @@ const ShoppingGement =() =>import("@/pages/Shopping/ShoppingGement.vue")
 const SearchPage =() =>import("@/pages/SearchPage.vue")
 const DiscountPage =() =>import("@/pages/DiscountPage.vue")
 // 3. 定义一些路由。
+const HistoryInfo = () => import("@/pages/history/HistoryInfo.vue")
 // 每个路由都需要映射到一个组件。
 const routes = [
     //一级路由
@@ -161,6 +162,14 @@ const routes = [
         name:"poma",
         meta: {
             title: "积分管理页面",
+        }
+    },
+    {
+        path:"/mine/history",
+        component:HistoryInfo,
+        name:"history",
+        meta: {
+            title: "历史记录",
         }
     },
 ];
