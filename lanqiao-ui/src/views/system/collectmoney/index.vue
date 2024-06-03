@@ -23,7 +23,7 @@
           </el-row>
         </div>
         <div class="warp_info wrap_table" >
-          <el-table :data="productsInCart" style="width: 100%"     :row-class-name="tableRowClassName">
+          <el-table :data="productsInCart" style="width: 100%"  >
             <el-table-column prop="name" label="商品名称"></el-table-column>
             <el-table-column prop="price" label="价格"></el-table-column>
             <el-table-column prop="quantity" label="数量">
@@ -70,24 +70,24 @@
 </template>
 
 <script>
+import { getGoodsList, addGoodsList } from "@/api/system/collectmoney";
+
 export default {
+
   data() {
     return {
-      barcode: '', //条码
-      products: [
-        { id: 1, name: '商品A', price: 10.0},
-        { id: 2, name: '商品B', price: 20.0 },
-        // ... 其他商品
-      ],
-      productsInCart: [],
+      //条码
+      barcode: '',
+      productsInCart: []
     };
+  },
+  created() {
+
   },
   methods: {
     removeFromCart(index){
       this.productsInCart.splice(index,1);
     },
-
-
     handleIncrease(index) {
       this.productsInCart[index].quantity++;
       this.calculateTotalPrice();
@@ -98,36 +98,44 @@ export default {
         this.calculateTotalPrice();
       }
     },
-
     handleBarcodeInput() {
-      //判断商品是否存在
-      const foundProduct = this.products.find(product => product.id === parseInt(this.barcode, 10));
-
-      if (foundProduct) {
-        const existingProduct = this.productsInCart.find(item => item.id === foundProduct.id);
-        if (existingProduct) {
-          existingProduct.quantity++;
+      getGoodsList(this.barcode).then(response => {
+        var product = response.GoodsList[0];
+        if (product) {
+          //商品已加入购物车
+          const existingProduct = this.productsInCart.find(item => item.id === product.coding);
+          if (existingProduct) {
+            existingProduct.quantity++;
+          } else {
+            //商品未加入购物车
+            this.productsInCart.push({
+              id:product.coding,
+              name: product.name,
+              price:product.price,
+              quantity: 1
+            });
+          }
+          this.barcode = ''; // 清空条形码输入
         } else {
-          this.productsInCart.push({ ...foundProduct, quantity: 1 });
+          this.$message.error('未找到该商品');
         }
-        this.barcode = ''; // 清空条形码输入
-      } else {
-        this.$message.error('未找到该商品');
-      }
+      });
     },
     checkout() {
       // 实现结账逻辑，比如调用后端API进行支付
       this.$message.success('结账成功');
-      this.productsInCart = [];
+      addGoodsList(this.productsInCart);
+      this.clearCart(); // 调用清空购物车方法
     },
-
+    clearCart() {
+      this.productsInCart = [];
+    }
   },
   computed:{
     calculateTotalPrice(){
       return  this.productsInCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     }
   },
-
 };
 </script>
 

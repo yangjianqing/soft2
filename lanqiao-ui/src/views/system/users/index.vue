@@ -262,7 +262,7 @@ export default {
         ],
         memberTotal: [
           { required: true, message: "会员积分不能为空", trigger: "blur" },
-          { pattern: /^[1-9]\d*$/, message: "只能输入数字", trigger: "blur" }
+          { pattern: /^(0|[1-9]\d*)$/, message: "请输入非负整数", trigger: "blur" }
         ]
       }
     };

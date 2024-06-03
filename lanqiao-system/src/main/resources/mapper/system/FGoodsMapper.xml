@@ -194,4 +194,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select  *  from f_goods where name like concat('%', #{goodsName}, '%');
     </select>
 
+    <select id="selectGoodsList" resultType="FGoods">
+        <include refid="selectFGoodsVo"/>
+        WHERE  coding = #{coding}
+    </select>
+
 </mapper>

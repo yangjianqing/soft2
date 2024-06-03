@@ -211,6 +211,11 @@ public class FGoodsServiceImpl implements IFGoodsService
 
 
 
+    @Override
+    public List<FGoods> selectGoodsList(Long coding) {
+        return fGoodsMapper.selectGoodsList(coding);
+    }
+
     /**
      * 新增商品分类信息
      * 

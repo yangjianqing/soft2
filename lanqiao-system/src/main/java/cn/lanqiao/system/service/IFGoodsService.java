@@ -74,4 +74,11 @@ public interface IFGoodsService
      */
     public List<FGoods> selectGoodsType(String goodsType);
 
+    /**
+     *根据商品名称查询
+     * @param coding
+     * @return
+     */
+    public   List<FGoods> selectGoodsList(Long coding);
+
 }

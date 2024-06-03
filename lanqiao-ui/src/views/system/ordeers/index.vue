@@ -129,11 +129,12 @@
           <dict-tag :options="dict.type.f_sales_status" :value="scope.row.ordersStatus"/>
         </template>
       </el-table-column>
-      <el-table-column label="收货地址" align="center" prop="address.addressDetail" class-name="address-column" :show-overflow-tooltip="true" >
-        <template slot-scope="scope">
-          <div class="address-cell">{{ scope.row.address.addressDetail }}</div>
-        </template>
-      </el-table-column>
+      <el-table-column label="收货地址" align="center" prop="address.addressDetail" />
+<!--      <el-table-column label="收货地址" align="center" prop="address.addressDetail" class-name="address-column" :show-overflow-tooltip="true" >-->
+<!--        <template slot-scope="scope">-->
+<!--          <div class="address-cell">{{ scope.row.address.addressDetail }}</div>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="下单时间" align="center" prop="ordersCreattime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.ordersCreattime, '{y}-{m}-{d}') }}</span>
@@ -278,15 +279,15 @@ export default {
   },
   created() {
     this.getList();
-    this.getDelivery();
+    // this.getDelivery();
   },
   methods: {
     // 页面加载初始化数据
-    getDelivery(){
-      listDelivery().then(response => {
-        this.Delivery = response.Delivery;
-      });
-    },
+    // getDelivery(){
+    //   listDelivery().then(response => {
+    //     this.Delivery = response.Delivery;
+    //   });
+    // },
     /** 查询订单管理列表 */
     getList() {
       this.loading = true;

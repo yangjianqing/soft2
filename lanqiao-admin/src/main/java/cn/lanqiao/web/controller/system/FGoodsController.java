@@ -1,11 +1,18 @@
 package cn.lanqiao.web.controller.system;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.lanqiao.common.core.domain.entity.Category;
 import cn.lanqiao.common.core.domain.entity.SysDept;
+import cn.lanqiao.common.utils.OrderNumberGenerator;
+import cn.lanqiao.system.domain.FOrdeers;
+import cn.lanqiao.system.domain.FOrderPartslist;
 import cn.lanqiao.system.service.ICategoryService;
+import cn.lanqiao.system.service.IFOrdeersService;
+import cn.lanqiao.system.service.impl.FOrderPartslistServiceImpl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +47,11 @@ public class FGoodsController extends BaseController
     @Autowired
     private ICategoryService IcategoryService ;
 
+    @Autowired
+    private IFOrdeersService fOrdeersService;
+
+    @Autowired
+    private FOrderPartslistServiceImpl fOrderPartslistService;
     /**
      * 查询商品列表
      */
@@ -117,5 +129,38 @@ public class FGoodsController extends BaseController
         return AjaxResult.success(IcategoryService.selectCateTreeList(category));
     }
 
+    /**
+     * 根据编号获取商品详细信息
+     */
+    @GetMapping(value = "/Goods/{coding}")
+    public AjaxResult getGoodsList(@PathVariable("coding") Long coding)
+    {
+        return AjaxResult.success().put("GoodsList",fGoodsService.selectGoodsList(coding));
+    }
+
+    /**
+     * 收银结算
+     */
+    @PostMapping(value = "/addGoodsList")
+    public void addGoodsList(@RequestBody List<FGoods> fGoods)
+    {
+        String OrderNu = OrderNumberGenerator.generateOrderNumber();
+        FOrdeers ordeers = new FOrdeers();
+        ordeers.setOrdersNumber(OrderNu);
+        ordeers.setOrdersPayMethod(2L);
+        ordeers.setOrdersPayStatuds(0L);
+        ordeers.setOrdersStatus(2L);
+        fOrdeersService.insertFOrdeers(ordeers);
+        for (FGoods fGood : fGoods) {
+            List<FGoods> fGoods1 = fGoodsService.selectGoodsList(fGood.getId());
+            for (FGoods goods : fGoods1) {
+                FOrderPartslist fOrderPartslist = new FOrderPartslist();
+                fOrderPartslist.setGoodsId(goods.getId());
+                fOrderPartslist.setOrderId(OrderNu);
+                fOrderPartslist.setGoodsNum(fGood.getQuantity());
+                fOrderPartslistService.insertFOrderPartslist(fOrderPartslist);
+            }
+        }
+    }
 
 }

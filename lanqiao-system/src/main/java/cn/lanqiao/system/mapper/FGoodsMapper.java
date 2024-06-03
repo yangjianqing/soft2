@@ -106,4 +106,11 @@ public interface FGoodsMapper
      */
     public   List<FGoods> selectGoodsType(String gooodsType);
 
+    /**
+     *根据商品名称查询
+     * @param coding
+     * @return
+     */
+    public   List<FGoods> selectGoodsList(Long coding);
+
 }

@@ -143,7 +143,7 @@ export const dynamicRoutes = [
       {
         path: 'index',
         component: () => import('@/views/system/users/data'),
-        name: 'Data',
+        name: 'usersData',
         meta: { title: '地址数据', activeMenu: '/system/users' }
       }
     ]
@@ -157,7 +157,7 @@ export const dynamicRoutes = [
       {
         path: 'index',
         component: () => import('@/views/system/partslist/index'),
-        name: 'Data',
+        name: 'orDes',
         meta: { title: '订单明细', activeMenu: '/system/ordeers' }
       }
     ]
@@ -171,7 +171,7 @@ export const dynamicRoutes = [
       {
         path: 'index',
         component: () => import('@/views/system/appraise/index'),
-        name: 'Data',
+        name: 'Goodspj',
         meta: { title: '商品评价', activeMenu: '/system/goods' }
       }
     ]
