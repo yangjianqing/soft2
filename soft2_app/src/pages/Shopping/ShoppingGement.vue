@@ -17,10 +17,8 @@
     <h3 style="color: red;">￥38</h3>
     <p style="padding-left: 8px;
     padding-right: 8px;">/箱</p>
-    <p style="color:gray;font-size: 10px"><del>￥46</del></p>
   </div>
   <van-cell class="list-src" color="#A6C9E2" title="商家24H发货，第三方物流配送，免运费" icon="guide-o" />
-  <van-cell class="list-ts" color="#A6C9E2"  title="不支持7天无理由退换货" icon="clock-o" />
     <!-- 使用 right-icon 插槽来自定义右侧图标 -->
   <van-cell class="list-src"  title="已选：1个/箱" is-link url="https://github.com" />
   <van-divider
@@ -28,17 +26,10 @@
   >
     猜你喜欢
   </van-divider>
-  <van-card
-      num="2"
-      tag="标签"
-      price="2.00"
-      desc="这是一个非常好的信息页面，让人非常高西违法我去二分请问父亲文革确认过热交易日热轧十大v的啊份的撒旦撒饿啊分为啊额我发安慰"
-      title="商品这网上而我却扶额我去枪毙u"
-      thumb="https://fastly.jsdelivr.net/npm/@vant/assets/ipad.jpeg"
-      origin-price="10.00"
-      v-for="list in 2"
-
-  />
+  <div style="display: flex;flex-wrap: wrap;">
+    <MerchandiseInfo v-for="list in 10" v-on:click="Retrunshopping">
+    </MerchandiseInfo>
+  </div>
   <van-action-bar>
     <van-action-bar-icon icon="chat-o" text="客服" @click="onClickIcon" />
     <van-action-bar-icon icon="cart-o" text="购物车" @click="onClickIcon" />
@@ -48,10 +39,13 @@
 </template>
 <script>
 import { showToast } from 'vant';
+import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
+import router from "@/router";
 const onClickLeft = () => history.back();
-const onClickIcon = () => showToast('点击图标');
+const onClickIcon = () => showToast('已添加购物车');
 const onClickButton = () => showToast('点击按钮');
 export default {
+  components: {MerchandiseInfo},
   data(){
     return{
       onClickLeft,
@@ -59,6 +53,11 @@ export default {
       onClickIcon,
       onClickButton,
     }
+  },
+  methods:{
+    Retrunshopping(){
+      router.push({ path: '/cart/shoppinggement' });
+    },
   }
 }
 const images = [

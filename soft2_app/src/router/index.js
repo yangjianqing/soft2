@@ -9,6 +9,8 @@ import MyInfo from "@/pages/MyInfo";
 import CarPage from "@/pages/CarPage";
 
 //懒加载
+const AddUser = () => import("@/pages/AddUser/AddUser.vue")
+const UpdatePassword = () => import("@/pages/UpdatePassword/UpdatePassword.vue")
 
 const CategoryPage = () => import("@/pages/CategoryPage.vue")
 const LoginPage = () => import("@/pages/LoginPage.vue")
@@ -20,7 +22,7 @@ const OrderManagement =() =>import("@/pages/OrderManagement")
 const AddressEdit =() =>import("@/pages/Addadress/AddressEdit.vue")
 const SetTing =() =>import("@/pages/SetTing")
 const AddAddress =() =>import("@/pages/Addadress/AddAddress")
-const ShoppingGement =() =>import("@/components/Shopping/ShoppingGement.vue")
+const ShoppingGement =() =>import("@/pages/Shopping/ShoppingGement.vue")
 
 const SearchPage =() =>import("@/pages/SearchPage.vue")
 const DiscountPage =() =>import("@/pages/DiscountPage.vue")
@@ -49,22 +51,8 @@ const routes = [
                     title: "分类",
                 },
             },
-            {
-            path:"/mine/poma",
-            component:PointsManagement,
-            name:"poma",
-            meta: {
-                title: "积分管理页面",
-            }
-            },
-            {
-                path:"/mine/ordermanagement",
-                component:OrderManagement,
-                name:"ordermanagement",
-                meta: {
-                    title: "订单信息管理",
-                }
-            },
+
+
             {
                 path:"/mine/address",
                 component:AddressEdit,
@@ -73,22 +61,8 @@ const routes = [
                     title: "地址",
                 }
             },
-            {
-                path:"/mine/setting",
-                component:SetTing,
-                name:"setting",
-                meta: {
-                    title: "设置",
-                }
-            },
-            {
-                path:"/mine/addadres",
-                component:AddAddress,
-                name:"addadres",
-                meta: {
-                    title: "新增地址",
-                }
-            },
+
+
             {
                 path:"/cart",
                 component:CarPage,
@@ -96,14 +70,7 @@ const routes = [
                     title: "购物车",
                 },
             },
-            {
-                path:"/cart/shoppinggement",
-                component:ShoppingGement,
-                name:"shoppinggement",
-                meta: {
-                    title: "商品",
-                },
-            },
+
             {
                 path: "/mine",
                 component:MyInfo,
@@ -112,6 +79,7 @@ const routes = [
                         title:"我的"
                     }
             },
+
             {
                 path:"/index/search",
                 component:SearchPage,
@@ -131,6 +99,22 @@ const routes = [
         ]
     },
     {
+        path:"/mine/setting",
+        component:SetTing,
+        name:"setting",
+        meta: {
+            title: "设置",
+        }
+    },
+    {
+        path:"/cart/shoppinggement",
+        component:ShoppingGement,
+        name:"shoppinggement",
+        meta: {
+            title: "商品",
+        },
+    },
+    {
         path:"/login",
         component:LoginPage,
         name:"login",
@@ -138,7 +122,47 @@ const routes = [
             title: "登录",
         },
     },
-
+    {
+        path:"/adduser",
+        component:AddUser,
+        name:"adduser",
+        meta: {
+            title: "注册",
+        },
+    },
+    {
+        path: "/mine/updatepassword",
+        component:UpdatePassword,
+        name:"UpdatePassword",
+        meta:
+            {
+                title:"修改密码"
+            }
+    },
+    {
+        path:"/mine/addadres",
+        component:AddAddress,
+        name:"addadres",
+        meta: {
+            title: "新增地址",
+        }
+    },
+    {
+        path:"/mine/ordermanagement",
+        component:OrderManagement,
+        name:"ordermanagement",
+        meta: {
+            title: "订单信息管理",
+        }
+    },
+    {
+        path:"/mine/poma",
+        component:PointsManagement,
+        name:"poma",
+        meta: {
+            title: "积分管理页面",
+        }
+    },
 ];
 
 // 4. 使用 createRouter 方法创建一个路由实例 router

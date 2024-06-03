@@ -1,14 +1,50 @@
 <template>
-    <div class="contain">
-        <div class="box">
-            <h4>欢迎</h4>
-            <input class="login hw" v-model="user.username"  type="text" value="登录">
-            <input class="password hw" v-model="user.password"  type="text" value="密码">
-            <div class="in hw" v-on:click="login">立即登录</div>
-            <div class="other"><a href="#">忘记密码？丨</a><a href="#"> 立即注册</a></div>
-        </div>
+  <div style="display: flex;justify-content: center;
+    align-items: center;height: 300px">
+    <div class="nav_img">
+      <img src="@/assets/img/img.png" alt="">
     </div>
+  </div>
+<p style="font-size: 28px;">生鲜绿源水果蔬菜超市</p>
+  <van-cell-group inset style="margin-bottom: 10px;margin-top: 30px;">
+    <van-field
+        v-model="user.username"
+        label="电话号码"
+        left-icon="phone-circle"
+        style="background-color:rgb(208,224,212);height: 50px;display: flex;align-items: center;"
+    />
 
+  </van-cell-group>
+  <van-cell-group inset style="margin-bottom: 10px">
+  <van-field
+      v-model="user.password"
+      clearable
+      type="password"
+      label="密码"
+      left-icon="lock"
+      style="background-color:rgb(208,224,212);height: 50px;display: flex;align-items: center;"
+  />
+  </van-cell-group>
+  <div style="display: flex;justify-content: space-around;
+    align-items: center;">
+    <van-radio-group  shape="square">
+      <van-radio><p style="color: #afafaf">我同意平台的条款和条列</p></van-radio>
+    </van-radio-group>
+  </div>
+  <div style="margin: 16px;">
+<!--    -->
+    <van-button round block  type="primary" color="rgb(47,135,112)" native-type="submit">
+      登录
+    </van-button>
+  </div>
+
+  <div>
+    <div style="display: flex;justify-content: center;">
+      还没有注册？<router-link to="/adduser">
+      <p style="color: green" >点这里</p>
+    </router-link>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -24,68 +60,24 @@
             }
         },
         methods:{
-            login(){
-                // 1、校验用户名和密码是否合规
-                // 2、登录服务器
-                //登录完成后服务器给的登录凭证
-                var token="sdg";
-                //将登录token 保存到服务器
-                localStorage.setItem("token",token);
-                // 3、完成页面跳转
-                this.$router.push("/index/"+this.user.username);//不传参数
-                // this.$router.push({name:"index",params:{username:this.user.username}})
 
-
-                //query传参
-                // this.$router.push({path:"/index",query:{username:this.user.username}})
-
-            }
         }
     }
 </script>
 
 <style scoped>
-    *{
-        color: #ffffff;
-        box-sizing: border-box;
-    }
-    .contain {
-        height: 844px;
-        width: 100%;
-        background-image: linear-gradient(to right bottom, #6dcab7, #3979ca);
-        display: flex;
-        align-items: center;
-    }
+.nav_img{
+  border-radius: 3%;
+  height: 83px;
+}
+.nav_img img{
+  border-radius: 3%;
+  height: 92px;
+  width: 106px;
+}
 
-    .contain h4{
-        margin: 0 auto;
-        font-size: 45px;
-    }
-    .hw{
-        width: 235px;
-        height: 38px;
-        margin-bottom: 15px;
-        padding-left: 8px;
-        color: #ffffff;
-        font-size: 13px;
-        line-height: 38px;
-        border-radius: 18px;
-        border: solid 1px #ffffff;
-        background-color: transparent;
-    }
-    .box {
-        margin: 0 auto;
-        width: 235px;
-    }
-    .box .in{
-        text-align: center;
-        background-color: rgb(86, 179, 245);
-    }
-    .other{
-        text-align: center;
-    }
-    .other a{
-        text-decoration: none;
-        font: normal 400 10px '微软雅黑';
-    }
+.search-icon {
+  font-size: 16px;
+  line-height: inherit;
+}
 </style>

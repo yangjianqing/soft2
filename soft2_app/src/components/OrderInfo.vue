@@ -28,7 +28,7 @@
 </template>
 <script >
 export default {
-  name: "MerchantInfo",
+  name: "OrderInfo",
 }
 </script>
 <style scoped>

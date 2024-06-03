@@ -7,56 +7,30 @@
   />
   <van-pull-refresh v-model="loading" :onclick="AddProduct" @refresh="onRefresh">
     <van-tabs v-model:active="active">
-      <van-tab title="全部订单"> <van-cell  title="用户名"/>
+      <van-tab title="全部订单">
+        <van-cell  title="用户名"/>
 
         <van-swipe-cell v-for="list in 3">
-          <ShoppingCard>
+          <OrderInfo>
 
-          </ShoppingCard>
+          </OrderInfo>
         </van-swipe-cell>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
-        <van-card
 
-            price="2.00"
-            desc="描述信息"
-            title="商品标题"
-            thumb="https://fastly.jsdelivr.net/npm/@vant/assets/ipad.jpeg"
-            v-for="list in 9"
-        >
-          <template #tags>
-            <van-tag plain type="primary">折扣</van-tag>
-            <van-tag plain type="primary">包邮</van-tag>
-          </template>
-          <template #footer>
-            <van-button size="mini">加入购物车</van-button>
-
-          </template>
-        </van-card>
+        <div style="display: flex;flex-wrap: wrap;">
+          <MerchandiseInfo v-for="list in 9"></MerchandiseInfo>
+        </div>
       </van-tab>
       <van-tab title="待付款"> <van-cell  title="用户名"/>
         <van-swipe-cell v-for="list in 3">
-          <ShoppingCard>
+          <OrderInfo>
 
-          </ShoppingCard>
+          </OrderInfo>
         </van-swipe-cell>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
-        <van-card
-
-            price="2.00"
-            desc="描述信息"
-            title="商品标题"
-            thumb="https://fastly.jsdelivr.net/npm/@vant/assets/ipad.jpeg"
-            v-for="list in 9"
-        >
-          <template #tags>
-            <van-tag plain type="primary">折扣</van-tag>
-            <van-tag plain type="primary">包邮</van-tag>
-          </template>
-          <template #footer>
-            <van-button size="mini">加入购物车</van-button>
-
-          </template>
-        </van-card>
+        <div style="display: flex;flex-wrap: wrap;">
+          <MerchandiseInfo v-for="list in 9"></MerchandiseInfo>
+        </div>
       </van-tab>
       <van-tab title="待发货">
         <AddressGement>
@@ -67,28 +41,15 @@
         <van-cell  title="用户名"/>
 
         <van-swipe-cell v-for="list in 3">
-          <ShoppingCard>
+          <OrderInfo>
 
-          </ShoppingCard>
+          </OrderInfo>
         </van-swipe-cell>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
-        <van-card
-
-            price="2.00"
-            desc="描述信息"
-            title="商品标题"
-            thumb="https://fastly.jsdelivr.net/npm/@vant/assets/ipad.jpeg"
-            v-for="list in 9"
-        >
-          <template #tags>
-            <van-tag plain type="primary">折扣</van-tag>
-            <van-tag plain type="primary">包邮</van-tag>
-          </template>
-          <template #footer>
-            <van-button size="mini">加入购物车</van-button>
-
-          </template>
-        </van-card></van-tab>
+        <div style="display: flex;flex-wrap: wrap;">
+          <MerchandiseInfo v-for="list in 9"></MerchandiseInfo>
+        </div>
+      </van-tab>
       <van-tab title="评价">
       <AssessMent>
 
@@ -105,7 +66,7 @@ import AssessMent from "@/components/Assessment/AssessMent.vue";
 
 export default {
   name:"OrderManagement",
-  components: {ShoppingCard, AddressGement, AssessMent},
+  components: {MerchandiseInfo, OrderInfo, ShoppingCard, AddressGement, AssessMent},
   data(){
     return{
       count,
@@ -124,6 +85,8 @@ import {ref} from "vue";
 import {showToast} from "vant";
 import AddressGement from "@/components/address/AddressGement.vue";
 import ShoppingCard from "@/components/card/ShoppingCard.vue";
+import OrderInfo from "@/components/OrderInfo.vue";
+import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 const actives = ref(1);
 const count = ref(0);
 const loading = ref(false);

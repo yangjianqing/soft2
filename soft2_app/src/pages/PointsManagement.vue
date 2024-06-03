@@ -8,7 +8,7 @@
        @click-left="onClickLeft"
    />
    <van-cell-group v-for="list in 3">
-     <van-cell title="单元格" value="内容" />
+     <van-cell title="{{list.name}}" value="{{list.valuephone}}" />
    </van-cell-group>
  </div>
 </template>
@@ -16,10 +16,16 @@
 <script>
 
 
+
 export default {
     name:"PointsManagement",
+     computed: {  },
     data(){
       return {
+        list: {
+        name: "在2024年6月3号，办理了会员",
+        valuephone: "+3",
+      },
         onClickLeft,
       };
     }

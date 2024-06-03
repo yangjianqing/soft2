@@ -2,16 +2,12 @@
 <div class="body">
   <van-nav-bar
       title="个人中心"
-      left-text="返回"
-      left-arrow
-      @click-left="onClickLeft"
+
   />
-  <van-pull-refresh v-model="loading" :onclick="AddProduct" @refresh="onRefresh">
   <div class="image-wrapper">
     <div class="image-wrappers">
-      <div style="padding-left: 12px;padding-top: 3px">
+      <div style="padding-left: 12px;padding-top: 12px">
         <p>生鲜绿源</p>
-        <p style="text-align:left;font-size: 12px;color: #808080">昵称:</p>
       </div>
       <van-image
           round
@@ -67,16 +63,34 @@
          <p style="font-size: 13px;color: #808080;flex-direction: column;">收货地址</p>
        </div>
      </router-link>
+      <router-link to="/mine/">
+        <div style="display: flex; align-items: center;    flex-direction: column;">
+          <van-icon size="30px" name="phone-circle" color="#1989fa"/>
+          <p style="font-size: 13px;color: #808080;flex-direction: column;">
+            联系电话</p>
+        </div>
+      </router-link>
     </div>
     <van-cell />
   </van-cell-group>
   <van-action-sheet v-model:show="show" :actions="actions" @select="onSelect" />
 
+  <van-cell-group style="margin-top: 13px;margin-bottom: 13px"  inset>
+    <router-link to="/mine/UpdatePassword"><van-cell title="修改密码" is-link /></router-link>
+
+  <van-cell  title="退出登录" is-link/>
+  </van-cell-group>
     <van-divider
         :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
     >
       猜你喜欢
     </van-divider>
+  <div style="display: flex;flex-wrap: wrap;">
+      <MerchandiseInfo v-for="list in 10" v-on:click="Retrunshopping">
+
+      </MerchandiseInfo>
+  </div>
+
   <div v-for="goods in 9">
     <van-list
         v-model:loading="loading"
@@ -88,12 +102,13 @@
 
       <template v-for="item in merList">
         <!-- 商家组件-->
-        <MerchantInfo :merchantInfo="item"></MerchantInfo>
+        <MerchandiseInfo :merchantInfo="item"></MerchandiseInfo>
       </template>
     </van-list>
+
   </div>
-  <van-button type="primary" block @click="exit">退出登录</van-button>
-  </van-pull-refresh>
+
+
 </div>
 </template>
 <script>
@@ -107,13 +122,14 @@
     import {listMembers} from "@/api/members";
     import MerchantList from "@/components/MerchantInfo.vue";
     import MerchantInfo from "@/components/MerchantInfo.vue";
+    import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 
     export default {
       name: "MyInfo",
-      components: {MerchantInfo, NavTitle, ShoppingCard},
+      components: {MerchandiseInfo, MerchantInfo, NavTitle, ShoppingCard},
       data() {
         return{
-          onClickLeft,
+
           show,
           actions,
           onSelect,
@@ -146,6 +162,9 @@
         ReturnSetting(){
           router.push({ path: '/mine/setting' });
         },
+        Retrunshopping(){
+          router.push({ path: '/cart/shoppinggement' });
+        },
         onLoad(){
           // 开启loading
           this.loading = true;
@@ -177,7 +196,7 @@
       }
     };
     // 导入插件样式返回
-    const onClickLeft = () => history.back();
+
     const show = ref(false);
     const actions = [
       { name: '选项一' },
