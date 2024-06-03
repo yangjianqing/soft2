@@ -52,28 +52,28 @@
           v-hasPermi="['system:users:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:users:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:users:remove']"
-        >删除</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="success"-->
+<!--          plain-->
+<!--          icon="el-icon-edit"-->
+<!--          size="mini"-->
+<!--          :disabled="single"-->
+<!--          @click="handleUpdate"-->
+<!--          v-hasPermi="['system:users:edit']"-->
+<!--        >修改</el-button>-->
+<!--      </el-col>-->
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="danger"-->
+<!--          plain-->
+<!--          icon="el-icon-delete"-->
+<!--          size="mini"-->
+<!--          :disabled="multiple"-->
+<!--          @click="handleDelete"-->
+<!--          v-hasPermi="['system:users:remove']"-->
+<!--        >删除</el-button>-->
+<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -121,24 +121,24 @@
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:users:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:users:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
+<!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->
+<!--        <template slot-scope="scope">-->
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            type="text"-->
+<!--            icon="el-icon-edit"-->
+<!--            @click="handleUpdate(scope.row)"-->
+<!--            v-hasPermi="['system:users:edit']"-->
+<!--          >修改</el-button>-->
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            type="text"-->
+<!--            icon="el-icon-delete"-->
+<!--            @click="handleDelete(scope.row)"-->
+<!--            v-hasPermi="['system:users:remove']"-->
+<!--          >删除</el-button>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
     </el-table>
 
     <pagination
@@ -161,18 +161,22 @@
               v-for="dict in dict.type.sys_user_sex"
               :key="dict.value"
               :label="dict.label"
-              :value="dict.value"
+              :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="联系方式" prop="usersPhone">
-          <el-input v-model="form.usersPhone" placeholder="请输入联系方式" />
+          <el-input v-model="form.usersPhone" placeholder="请输入联系方式" prefix-icon="el-icon-phone-outline" />
         </el-form-item>
         <el-form-item label="用户密码" prop="usersPassword">
-          <el-input v-model="form.usersPassword" type="password" placeholder="请输入用户密码" prefix-icon="el-icon-lock" />
+          <el-input v-model="form.usersPassword" :type="showPassword ? 'text' : 'password'" placeholder="请输入用户密码" prefix-icon="el-icon-lock">
+            <template #append>
+              <el-button icon="el-icon-view" @click="showPassword = !showPassword" circle></el-button>
+            </template>
+          </el-input>
         </el-form-item>
         <el-form-item label="用户头像">
-          <image-upload v-model="form.usersAvatar"/>
+          <image-upload  v-model="form.usersAvatar"/>
         </el-form-item>
         <el-form-item label="会员积分" prop="memberTotal">
           <el-input v-model="form.memberTotal" placeholder="请输入会员积分" />
@@ -230,6 +234,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      showPassword: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -244,22 +249,36 @@ export default {
       // 表单校验
       rules: {
         usersName: [
-          { required: true, message: "用户姓名不能为空", trigger: "blur" }
-        ],
-        usersSex: [
-          { required: true, message: "用户性别不能为空", trigger: "change" }
+          { required: true, message: "用户姓名不能为空", trigger: "blur" },
+          { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]{3,6}$/, message: "3-6位中文、英文、英文数字组合", trigger: "blur" }
         ],
         usersPhone: [
-          { required: true, message: "联系方式不能为空", trigger: "blur" }
+          { required: true, message: "联系方式不能为空", trigger: "blur" },
+          { pattern: /^((0\d{2,3}-\d{7,8})|(1[34578]\d{9}))$/, message: "电话号码无效", trigger: "blur" }
         ],
         usersPassword: [
-          { required: true, message: "用户密码不能为空", trigger: "blur" }
+          { required: true, message: "用户密码不能为空", trigger: "blur" },
+          { pattern:/^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$)([^\u4e00-\u9fa5\s]){6,20}$/, message: "6-20位英文数字组合", trigger: "blur" }
         ],
+        memberTotal: [
+          { required: true, message: "会员积分不能为空", trigger: "blur" },
+          { pattern: /^[1-9]\d*$/, message: "只能输入数字", trigger: "blur" }
+        ]
       }
     };
   },
   created() {
     this.getList();
+  },
+  watch: {
+    'form.memberTotal': function(value) {
+      if (value == null || value < 100) {
+        this.form.memberGrade = 0;
+        this.form.usersSex= 2;
+      } else if (value >= 100) {
+        this.form.memberGrade = 1;
+      }
+    }
   },
   methods: {
     /** 查询用户管理列表 */

@@ -2,6 +2,7 @@ package cn.lanqiao.system.mapper;
 
 import java.util.List;
 import cn.lanqiao.system.domain.FPurchaseOrders;
+import cn.lanqiao.system.service.IFPurchaseOrdersService;
 
 /**
  * 采购信息Mapper接口
@@ -57,6 +58,11 @@ public interface FPurchaseOrdersMapper
      * @param orderIds 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteFPurchaseOrdersByOrderIds(Long[] orderIds);
-
+    public int deleteFPurchaseOrdersByOrderIds(Long[] orderIds);/**
+     * 批量删除采购信息
+     *
+     * @param orderName 需要删除的数据主键集合
+     * @return 结果
+     */
+public List<FPurchaseOrders> selectListName(FPurchaseOrders orderName);
 }

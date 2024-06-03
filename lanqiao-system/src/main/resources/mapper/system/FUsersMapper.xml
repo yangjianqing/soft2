@@ -21,7 +21,7 @@
     </sql>
 
     <select id="selectFUsersList" parameterType="FUsers" resultMap="FUsersResult">
-        <include refid="selectFUsersVo"/>
+        select users_id, users_name, users_sex, users_phone, users_avatar, member_grade, member_total, create_time from f_users
         <where>
             <if test="usersName != null  and usersName != ''"> and users_name like concat('%', #{usersName}, '%')</if>
             <if test="usersPhone != null  and usersPhone != ''"> and users_phone = #{usersPhone}</if>

@@ -209,12 +209,14 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.selectGoodsType(goodsType);
     }
 
+
+
     /**
      * 新增商品分类信息
      * 
      * @param fGoods 商品对象
      */
-    public void insertCategory(FGoods fGoods)
+    public void insertCategory(FGoods  fGoods)
     {
         List<Category> categoryList = fGoods.getCategoryList();
         Long id = fGoods.getId();

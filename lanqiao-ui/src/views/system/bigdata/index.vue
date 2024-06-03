@@ -11,11 +11,14 @@
       </div>
 
       <!--中间-->
-      <div class="middle-container"/>
+      <div class="middle-container">
+        <!-- 爱心图_中间 -->
+        <div id="loveChart"/>
+      </div>
 
       <!--左右下角-->
       <div class="side-container">
-        <!-- 曲线折线图_左下角 -->
+        <!-- 折线图_左下角 -->
         <div id="lineChart"/>
         <!-- 折线图_面积图_右下角 -->
         <div id="areaChart"/>
@@ -40,6 +43,7 @@ export default {
     this.background();
     this.barChart();
     this.Big_pieChart();
+    this.loveChart();
     this.lineChart();
     this.areaChart();
   },
@@ -113,7 +117,7 @@ export default {
       }, 1000);
     },
 
-    // 饼状图图
+    //饼状图图
     Big_pieChart() {
       // 获取 echarts 实例
       let Big_pieChart = echarts.init(document.getElementById("Big_pieChart"));
@@ -218,6 +222,52 @@ export default {
       setTimeout(function () {
         areaChart.setOption(option);
       }, 1000);
+    },
+
+    //爱心图
+    loveChart() {
+      // 获取 echarts 实例
+      let loveChart = echarts.init(document.getElementById("loveChart"));
+
+      let data = [];
+      for (let i = 0; i <= 100; i++) {
+        let theta = (i / 100) * 360;
+        let r = 5 * (1 + Math.sin((theta / 180) * Math.PI));
+        data.push([r, theta]);
+      }
+
+      let option = {
+        title: {
+          text: ''
+        },
+        legend: {
+          data: ['line']
+        },
+        polar: {},
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          }
+        },
+        angleAxis: {
+          type: 'value',
+          startAngle: 0
+        },
+        radiusAxis: {},
+        series: [
+          {
+            coordinateSystem: 'polar',
+            name: 'line',
+            type: 'line',
+            data: data
+          }
+        ]
+      };
+
+      setTimeout(function () {
+        loveChart.setOption(option);
+      }, 1000);
     }
   }
 };
@@ -239,7 +289,7 @@ export default {
   align-items: center; /* 垂直居中 */
 }
 
-#barChart, #lineChart, #Big_pieChart, #areaChart {
+#barChart, #lineChart, #Big_pieChart, #areaChart, #loveChart {
   width: 500px;
   height: 300px;
 }

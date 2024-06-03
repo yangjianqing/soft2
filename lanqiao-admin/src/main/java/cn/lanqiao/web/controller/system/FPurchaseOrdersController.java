@@ -2,6 +2,10 @@ package cn.lanqiao.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import cn.lanqiao.system.domain.FGoods;
+import cn.lanqiao.system.service.IFGoodsService;
+import cn.lanqiao.system.service.impl.FGoodsServiceImpl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +37,16 @@ public class FPurchaseOrdersController extends BaseController
 {
     @Autowired
     private IFPurchaseOrdersService fPurchaseOrdersService;
+    @Autowired
+    private IFGoodsService fGoodsService;
 
+    @PreAuthorize("@ss.hasPermi('system:orders:list')")
+    @GetMapping("/goodsListAll")
+    public  List<FGoods> goodsListAll(FGoods fGoods)
+    {
+        List<FGoods> list = fGoodsService.selectFGoodsList(fGoods);
+        return list;
+    }
     /**
      * 查询采购信息列表
      */

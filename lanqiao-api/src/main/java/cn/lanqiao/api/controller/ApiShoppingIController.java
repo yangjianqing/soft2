@@ -1,6 +1,5 @@
 package cn.lanqiao.api.controller;
 
-import cn.lanqiao.common.annotation.Anonymous;
 import cn.lanqiao.common.constant.CacheConstants;
 import cn.lanqiao.common.constant.Constants;
 import cn.lanqiao.common.core.controller.BaseController;
@@ -11,14 +10,8 @@ import cn.lanqiao.common.utils.MyClass;
 import cn.lanqiao.common.utils.SecurityUtils;
 import cn.lanqiao.common.utils.SendSms;
 import cn.lanqiao.common.utils.uuid.IdUtils;
-import cn.lanqiao.system.domain.FGoods;
-import cn.lanqiao.system.domain.FOrdeers;
-import cn.lanqiao.system.domain.FOrderPartslist;
-import cn.lanqiao.system.domain.FUsers;
-import cn.lanqiao.system.service.IFGoodsService;
-import cn.lanqiao.system.service.IFOrdeersService;
-import cn.lanqiao.system.service.IFOrderPartslistService;
-import cn.lanqiao.system.service.IFUsersService;
+import cn.lanqiao.system.domain.*;
+import cn.lanqiao.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -42,6 +36,8 @@ public class ApiShoppingIController extends BaseController {
     private IFUsersService ifUsersService;
     @Autowired
     private RedisCache redisCache;
+    @Autowired
+    private IFPurchaseOrdersService ifPurchaseOrdersService;
     /**
      * 查询商品列表
      */
@@ -93,6 +89,7 @@ public class ApiShoppingIController extends BaseController {
         List<FGoods> fGoodstype = fGoodsService.selectGoodsType(goodsType);
         return AjaxResult.success().put("goodsTpye",fGoodstype);
     }
+
 
     /**
      * 根据电话号码获取用户手机app会员信息
@@ -157,8 +154,9 @@ public class ApiShoppingIController extends BaseController {
     @PostMapping("/Login")
     public AjaxResult Login(String usersPhone, String usersPassword)
     {
-        if (ifUsersService.selectUsersusersPhone(usersPhone) != null) {
-            if (SecurityUtils.matchesPassword(usersPassword, ifUsersService.selectUsersusersPhone(usersPhone).getUsersPassword())) {
+        FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
+        if (fUsers != null) {
+            if (SecurityUtils.matchesPassword(usersPassword,fUsers.getUsersPassword())) {
                 return AjaxResult.error("登录成功");
             } else {
                 return AjaxResult.error("登录失败,密码错误");
@@ -167,5 +165,7 @@ public class ApiShoppingIController extends BaseController {
             return AjaxResult.error("登录失败,用户账号不存在");
         }
     }
+
+
 
 }

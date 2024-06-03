@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="goodsNum"    column="goods_num"    />
     </resultMap>
 
+
     <sql id="selectFOrderPartslistVo">
         select id, goods_id, order_id, goods_num from f_order_partslist
     </sql>
@@ -23,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="goodsNum != null "> and goods_num = #{goodsNum}</if>
         </where>
     </select>
-    
+
     <select id="selectFOrderPartslistById" parameterType="Long" resultMap="FOrderPartslistResult">
         <include refid="selectFOrderPartslistVo"/>
         where id = #{id}

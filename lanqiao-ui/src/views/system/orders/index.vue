@@ -51,7 +51,6 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:orders:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -168,8 +167,25 @@
     <!-- 添加或修改采购信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="商品名称" prop="goodsId">
-          <el-input v-model="form.goodsId" placeholder="请输入商品Id" />
+        <el-form-item label="商品id" prop="goodsId">
+          <el-input disabled v-model="form.goodsId" placeholder="请输入供应商" />
+        </el-form-item>
+        <el-form-item label="商品名称">
+          <el-autocomplete
+            class="inline-input"
+            v-model="state"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入内容"
+            :trigger-on-focus="false"
+            @select="handleSelect"
+          >
+            <template slot-scope="{ item }">
+              <div class="name">{{ item.name }}</div>
+<!--              <span class="addr">{{ item.id }}</span>-->
+            </template>
+
+          </el-autocomplete>
+
         </el-form-item>
         <el-form-item label="供应商" prop="supplier">
           <el-input v-model="form.supplier" placeholder="请输入供应商" />
@@ -235,7 +251,8 @@
 </template>
 
 <script>
-import { listOrders, getOrders, delOrders, addOrders, updateOrders } from "@/api/system/orders";
+import { listOrders, getOrders, delOrders, addOrders, updateOrders ,goodsListAll } from "@/api/system/orders";
+import alert from "element-ui/packages/alert";
 export default {
   name: "Orders",
   dicts: ['f_sales_way', 'f_sales_status'],
@@ -299,53 +316,33 @@ export default {
           { required: true, message: "状态不能为空", trigger: "blur" },
         ],
       },
-      watch:{
-        "form.netType": function (val){
-        //付款方式
-          if (val=="1"){
-            this.showPaymentTerms=true;
-            this.showPaymentTerms=false;
-            Object.assign(this.rules,{
-              paymentTerms
-            });
-            //点击提交按钮触发
-          //   this.$refs.form.validateField(["paymentTerms"]]);
-          //   this.$refs.form.clearValidate(["paymentTerms"]]);
-            //添加验证，立即触发校验
-            setTimeout(()=>{
-              this.$refs.form.validateField(["paymentTerms"]);
-              this.$refs.form.cleaValidate(["paymentTerms"]);
-            },1);
-          };
-          //状态
-          if (val=="1"){
-            this.showStatus=true;
-            this.showStatus=false;
-            Object.assign(this.rules,{
-              paymentTerms
-            });
-            //点击提交按钮触发
-            //   this.$refs.form.validateField(["status"]]);
-            //   this.$refs.form.clearValidate(["status"]]);
-            //添加验证，立即触发校验
-            setTimeout(()=>{
-              this.$refs.form.validateField(["status"]);
-              this.$refs.form.cleaValidate(["status"]);
-            },1);
-          };
-        }
-      }
+      state: ''
     };
   },
   created() {
     this.getList();
   },
-  computed: {
-    calculatedTotalAmount() {
-      return this.form.quantity * this.form.unitPrice;
-    }
-  },
+
   methods: {
+    querySearch(queryString, cb) {
+      goodsListAll({name:queryString}).then(res=>{
+        cb(res);
+      })
+    },
+
+
+
+    handleSelect(item) {
+      this.form.goodsId=item.id
+      console.log(item);
+      this.state=item.name;
+    },
+    /** 新增按钮操作 */
+    handleAdd() {
+      this.reset();
+      this.open = true;
+      this.title = "添加采购信息";
+    },
     /** 查询采购信息列表 */
     getList() {
       this.loading = true;
@@ -355,6 +352,7 @@ export default {
         this.loading = false;
       });
     },
+
     // 取消按钮
     cancel() {
       this.open = false;
@@ -394,12 +392,7 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加采购信息";
-    },
+
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
@@ -447,6 +440,47 @@ export default {
         ...this.queryParams
       }, `orders_${new Date().getTime()}.xlsx`)
     }
-  }
+  },
+  computed: {
+    calculatedTotalAmount() {
+      return this.form.quantity * this.form.unitPrice;
+    }
+  },
+  watch:{
+    "form.netType": function (val){
+      //付款方式
+      if (val=="1"){
+        this.showPaymentTerms=true;
+        this.showPaymentTerms=false;
+        Object.assign(this.rules,{
+          paymentTerms
+        });
+        //点击提交按钮触发
+        //   this.$refs.form.validateField(["paymentTerms"]]);
+        //   this.$refs.form.clearValidate(["paymentTerms"]]);
+        //添加验证，立即触发校验
+        setTimeout(()=>{
+          this.$refs.form.validateField(["paymentTerms"]);
+          this.$refs.form.cleaValidate(["paymentTerms"]);
+        },1);
+      };
+      //状态
+      if (val=="1"){
+        this.showStatus=true;
+        this.showStatus=false;
+        Object.assign(this.rules,{
+          paymentTerms
+        });
+        //点击提交按钮触发
+        //   this.$refs.form.validateField(["status"]]);
+        //   this.$refs.form.clearValidate(["status"]]);
+        //添加验证，立即触发校验
+        setTimeout(()=>{
+          this.$refs.form.validateField(["status"]);
+          this.$refs.form.cleaValidate(["status"]);
+        },1);
+      };
+    }
+  },
 };
 </script>
