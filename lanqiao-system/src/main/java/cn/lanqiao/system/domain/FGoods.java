@@ -129,7 +129,7 @@ public class FGoods extends BaseEntity
 
     /** 商品数量 */
     @Excel(name = "商品数量")
-    private Integer num;
+    private long num;
 
     /** 结账商品数量 */
     @Excel(name = "结账商品数量")
@@ -143,11 +143,11 @@ public class FGoods extends BaseEntity
         this.quantity = quantity;
     }
 
-    public Integer getNum() {
+    public long getNum() {
         return num;
     }
 
-    public void setNum(Integer num) {
+    public void setNum(long num) {
         this.num = num;
     }
 
@@ -208,7 +208,7 @@ public class FGoods extends BaseEntity
     {
         return description;
     }
-    public void setStatus(Long status) 
+    public void setStatus(Long status)
     {
         this.status = status;
     }
@@ -286,4 +286,6 @@ public class FGoods extends BaseEntity
                 ", categoryList=" + categoryList +
                 '}';
     }
+
+
 }

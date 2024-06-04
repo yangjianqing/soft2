@@ -5,15 +5,15 @@ import java.util.*;
 import cn.lanqiao.common.core.domain.entity.SysUser;
 import cn.lanqiao.common.utils.DateUtils;
 import cn.lanqiao.common.utils.OrderNumberGenerator;
-import cn.lanqiao.system.domain.FAddress;
-import cn.lanqiao.system.domain.FUsers;
+import cn.lanqiao.system.domain.*;
 import cn.lanqiao.system.mapper.FAddressMapper;
 import cn.lanqiao.system.mapper.FUsersMapper;
 import cn.lanqiao.system.mapper.SysUserMapper;
+import cn.lanqiao.system.service.ICategoryService;
+import cn.lanqiao.system.service.IFGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.lanqiao.system.mapper.FOrdeersMapper;
-import cn.lanqiao.system.domain.FOrdeers;
 import cn.lanqiao.system.service.IFOrdeersService;
 
 /**
@@ -33,6 +33,15 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
     @Autowired
     private SysUserMapper sysUserMapper;
+    @Autowired
+    private IFGoodsService fGoodsService;
+
+
+    @Autowired
+    private IFOrdeersService fOrdeersService;
+
+    @Autowired
+    private FOrderPartslistServiceImpl fOrderPartslistService;
     /**
      * 查询订单管理
      * 
@@ -163,5 +172,31 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     public int deleteFOrdeersByOrdersId(Long ordersId)
     {
         return fOrdeersMapper.deleteFOrdeersByOrdersId(ordersId);
+    }
+
+    @Override
+    public void settle(List<FGoods> fGoods) {
+        if (fGoods != null) {
+            //创建订单
+            String OrderNu = OrderNumberGenerator.generateOrderNumber();
+            FOrdeers ordeers = new FOrdeers();
+            ordeers.setOrdersNumber(OrderNu);
+            ordeers.setOrdersPayMethod(2L);
+            ordeers.setOrdersPayStatuds(0L);
+            ordeers.setOrdersStatus(2L);
+            fOrdeersService.insertFOrdeers(ordeers);
+            //保存订单详情
+            for (FGoods fGood : fGoods) {
+                FGoods fGoods1 = fGoodsService.selectGoodsList(fGood.getId());
+                    FOrderPartslist fOrderPartslist = new FOrderPartslist();
+                    fOrderPartslist.setGoodsId(fGoods1.getId());
+                    fOrderPartslist.setOrderId(OrderNu);
+                    fOrderPartslist.setGoodsNum(fGood.getQuantity());
+                    fOrderPartslistService.insertFOrderPartslist(fOrderPartslist);
+                fGoods1.setNum(fGoods1.getNum()-fGood.getQuantity());
+                fGoodsService.updateFGoods(fGoods1);
+            }
+        }
+
     }
 }

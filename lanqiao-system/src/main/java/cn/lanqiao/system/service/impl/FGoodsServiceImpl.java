@@ -212,15 +212,19 @@ public class FGoodsServiceImpl implements IFGoodsService
 
 
     @Override
-    public List<FGoods> selectGoodsList(Long coding) {
-        return fGoodsMapper.selectGoodsList(coding);
+    public FGoods selectGoodsList(Long coding) {
+        FGoods fGoods = fGoodsMapper.selectGoodsList(coding);
+        //判断商品库存是否为0
+        if(fGoods.getNum()==0){
+            return null;
+        }
+        return fGoods;
     }
 
     @Override
-    public Integer selectGoodsCoding(Long coding) {
-        Integer i = fGoodsMapper.selectGoodsCoding(coding);
-
-        return i;
+    public int UpdateGoodsNum(FGoods fGoods) {
+        // 调用更新方法，只更新num字段
+        return fGoodsMapper.UpdateGoodsNum(fGoods);
     }
 
     /**

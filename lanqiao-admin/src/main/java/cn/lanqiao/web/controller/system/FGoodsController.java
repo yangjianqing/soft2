@@ -13,6 +13,9 @@ import cn.lanqiao.system.domain.FOrderPartslist;
 import cn.lanqiao.system.service.ICategoryService;
 import cn.lanqiao.system.service.IFOrdeersService;
 import cn.lanqiao.system.service.impl.FOrderPartslistServiceImpl;
+import io.swagger.models.auth.In;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -135,35 +138,30 @@ public class FGoodsController extends BaseController
     @GetMapping(value = "/Goods/{coding}")
     public AjaxResult getGoodsList(@PathVariable("coding") Long coding)
     {
-        return AjaxResult.success().put("GoodsList",fGoodsService.selectGoodsList(coding));
+        FGoods fGoods = fGoodsService.selectGoodsList(coding);
+        if(fGoods==null){
+          return  AjaxResult.error("该商品已售完 请添加商品");
+        }
+        return AjaxResult.success().put("GoodsList",fGoods);
     }
 
     /**
      * 收银结算
      */
     @PostMapping(value = "/addGoodsList")
-    public void addGoodsList(@RequestBody List<FGoods> fGoods)
+    public AjaxResult addGoodsList(@RequestBody List<FGoods> fGoods)
     {
-        String OrderNu = OrderNumberGenerator.generateOrderNumber();
-        FOrdeers ordeers = new FOrdeers();
-        ordeers.setOrdersNumber(OrderNu);
-        ordeers.setOrdersPayMethod(2L);
-        ordeers.setOrdersPayStatuds(0L);
-        ordeers.setOrdersStatus(2L);
-        fOrdeersService.insertFOrdeers(ordeers);
-        for (FGoods fGood : fGoods) {
-            List<FGoods> fGoods1 = fGoodsService.selectGoodsList(fGood.getId());
-            for (FGoods goods : fGoods1) {
-                FOrderPartslist fOrderPartslist = new FOrderPartslist();
-                fOrderPartslist.setGoodsId(goods.getId());
-                fOrderPartslist.setOrderId(OrderNu);
-                fOrderPartslist.setGoodsNum(fGood.getQuantity());
-                fOrderPartslistService.insertFOrderPartslist(fOrderPartslist);
-                Integer i = fGoodsService.selectGoodsCoding(fGood.getCoding());
-
-            }
-
+        try {
+            fOrdeersService.settle(fGoods);
+            return  AjaxResult.success();
+        }catch (Exception ex){
+            ex.getMessage();
+            return AjaxResult.error();
         }
     }
+
+
+
+
 
 }

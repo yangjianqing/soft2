@@ -121,7 +121,7 @@ export default {
     },
     handleBarcodeInput() {
       getGoodsList(this.barcode).then(response => {
-        var product = response.GoodsList[0];
+        var product = response.GoodsList;
         if (product) {
           //商品已加入购物车
           const existingProduct = this.productsInCart.find(item => item.id === product.coding);
@@ -138,7 +138,7 @@ export default {
           }
           this.barcode = ''; // 清空条形码输入
         } else {
-          this.$message.error('未找到该商品');
+          this.$message.error(response.msg);
         }
       });
     },

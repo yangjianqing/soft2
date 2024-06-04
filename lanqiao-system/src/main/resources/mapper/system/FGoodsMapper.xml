@@ -198,12 +198,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select  *  from f_goods where name like concat('%', #{goodsName}, '%');
     </select>
 
-    <select id="selectGoodsList" resultType="FGoods">
+    <select id="selectGoodsList" resultType="cn.lanqiao.system.domain.FGoods">
         <include refid="selectFGoodsVo"/>
         WHERE  coding = #{coding}
     </select>
-    <select id="selectGoodsCoding" parameterType="Long">
-        select num from f_goods where  coding = #{coding}
-    </select>
+
+
+    <!--    修改库存与状态-->
+    <update id="UpdateGoodsNum" parameterType="FGoods">
+        update f_goods
+        <set>
+            <if test="num != null">num = #{num},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        where coding = #{coding}
+    </update>
+
 
 </mapper>
