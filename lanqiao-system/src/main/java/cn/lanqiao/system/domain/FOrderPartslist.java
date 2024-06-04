@@ -69,8 +69,6 @@ public class FOrderPartslist extends BaseEntity
         return goodsId;
     }
 
-
-
     public void setGoodsNum(Long goodsNum) 
     {
         this.goodsNum = goodsNum;
@@ -79,6 +77,15 @@ public class FOrderPartslist extends BaseEntity
     public Long getGoodsNum() 
     {
         return goodsNum;
+    }
+
+    public FOrderPartslist( Long goodsId, String orderId, Long goodsNum) {
+        this.goodsId = goodsId;
+        this.orderId = orderId;
+        this.goodsNum = goodsNum;
+    }
+
+    public FOrderPartslist() {
     }
 
     @Override

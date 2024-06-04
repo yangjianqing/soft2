@@ -111,7 +111,9 @@ public interface FGoodsMapper
      * @param coding
      * @return
      */
-    public   List<FGoods> selectGoodsList(Long coding); /**
+    public   List<FGoods> selectGoodsList(Long coding);
+
+    /**
      *根据商品编码增减数量
      * @param coding
      * @return

@@ -133,36 +133,48 @@ public class FGoodsController extends BaseController
      * 根据编号获取商品详细信息
      */
     @GetMapping(value = "/Goods/{coding}")
-    public AjaxResult getGoodsList(@PathVariable("coding") Long coding)
+    public AjaxResult getGoodsList(@PathVariable("coding") String coding)
     {
-        return AjaxResult.success().put("GoodsList",fGoodsService.selectGoodsList(coding));
+        return AjaxResult.success().put("GoodsList",fGoodsService.selectGoodsList(Long.parseLong(coding)));
     }
 
     /**
      * 收银结算
      */
     @PostMapping(value = "/addGoodsList")
-    public void addGoodsList(@RequestBody List<FGoods> fGoods)
+    public AjaxResult addGoodsList(@RequestBody List<FGoods> fGoods)
     {
-        String OrderNu = OrderNumberGenerator.generateOrderNumber();
-        FOrdeers ordeers = new FOrdeers();
-        ordeers.setOrdersNumber(OrderNu);
-        ordeers.setOrdersPayMethod(2L);
-        ordeers.setOrdersPayStatuds(0L);
-        ordeers.setOrdersStatus(2L);
-        fOrdeersService.insertFOrdeers(ordeers);
-        for (FGoods fGood : fGoods) {
-            List<FGoods> fGoods1 = fGoodsService.selectGoodsList(fGood.getId());
-            for (FGoods goods : fGoods1) {
-                FOrderPartslist fOrderPartslist = new FOrderPartslist();
-                fOrderPartslist.setGoodsId(goods.getId());
-                fOrderPartslist.setOrderId(OrderNu);
-                fOrderPartslist.setGoodsNum(fGood.getQuantity());
-                fOrderPartslistService.insertFOrderPartslist(fOrderPartslist);
-                Integer i = fGoodsService.selectGoodsCoding(fGood.getCoding());
-
+        //判断前端传的购物车是否为空
+        if (fGoods.size() != 0) {
+            //调用随机生成订单号工具类
+            String OrderNu = OrderNumberGenerator.generateOrderNumber();
+            //创建订单对象进行赋值
+            FOrdeers ordeers = new FOrdeers();
+            ordeers.setOrdersNumber(OrderNu);//订单编号
+            ordeers.setOrdersPayMethod(2L);//支付方式：现金
+            ordeers.setOrdersPayStatuds(0L);//支付状态：已支付
+            ordeers.setOrdersStatus(2L);//订单状态：已完成
+            //调用订单新增方法，新增订单数据
+            fOrdeersService.insertFOrdeers(ordeers);
+            //利用for循环遍历出购物车内容(订单号:id,price:单价,Quantity:商品数量)
+            for (FGoods fGood : fGoods) {
+                //调用查询商品详情方法，查询商品详情
+                List<FGoods> fGoods1 = fGoodsService.selectGoodsList(fGood.getId());
+                //遍历出商品全部数据
+                for (FGoods goods : fGoods1) {
+                    //调用订单详情新增方法，新增订单详情数据
+                    fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(
+                            goods.getId(),//商品id
+                            OrderNu,//订单编号
+                            fGood.getQuantity()//商品数量
+                    ));
+                }
             }
-
+            //返回结账成功提示信息
+            return AjaxResult.success("结账成功");
+        } else {
+            //返回结账异常提示信息
+            return AjaxResult.error("结账异常");
         }
     }
 
