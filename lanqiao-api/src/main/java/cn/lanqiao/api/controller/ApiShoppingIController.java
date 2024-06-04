@@ -54,6 +54,7 @@ public class ApiShoppingIController extends BaseController {
     /**
      * 查询订单管理列表
      */
+    @ApiOperation("查询订单管理列表")
     @GetMapping("/ordeersList")
     public TableDataInfo list(FOrdeers fOrdeers)
     {
@@ -64,6 +65,7 @@ public class ApiShoppingIController extends BaseController {
     /**
      * 查询订单明细列表
      */
+    @ApiOperation("查询订单明细列表")
     @GetMapping("/orderPartsList")
     public TableDataInfo list(FOrderPartslist fOrderPartslist)
     {
@@ -74,6 +76,8 @@ public class ApiShoppingIController extends BaseController {
     /**
      * 根据商品名称查询
      */
+
+    @ApiOperation("根据商品名称查询")
     @GetMapping("/goods/{goodsName}")
     public AjaxResult goodsName( @PathVariable("goodsName")String goodsName)
     {
@@ -84,6 +88,7 @@ public class ApiShoppingIController extends BaseController {
     /**
      * 根据商品分类查询
      */
+    @ApiOperation("根据商品分类查询")
     @GetMapping("/goodsTpye/{goodsType}")
     public AjaxResult goodsType( @PathVariable("goodsType")String goodsType)
     {
@@ -96,6 +101,7 @@ public class ApiShoppingIController extends BaseController {
     /**
      * 根据电话号码获取用户手机app会员信息
      */
+    @ApiOperation("根据电话号码获取用户手机app会员信息")
     @GetMapping("/users/{usersPhone}")
     public AjaxResult getUsers( @PathVariable("usersPhone") String usersPhone)
     {
@@ -105,6 +111,7 @@ public class ApiShoppingIController extends BaseController {
     /**
      * 验证码接口
      */
+    @ApiOperation("验证码接口")
     @GetMapping("/sendCode")
     public AjaxResult sendCode() throws Exception {
         try {
@@ -126,6 +133,7 @@ public class ApiShoppingIController extends BaseController {
     /**
      * 根据电话注册手机app会员账号
      */
+    @ApiOperation("根据电话注册手机app会员账号")
     @PostMapping("/registered")
     public AjaxResult Registered(String usersPhone, String usersPassword, String code, String uuid)
     {
@@ -153,6 +161,7 @@ public class ApiShoppingIController extends BaseController {
     /**
      * 根据电话注册手机app登录会员账号
      */
+    @ApiOperation("根据电话注册手机app登录会员账号")
     @PostMapping("/Login")
     public AjaxResult Login(String usersPhone, String usersPassword)
     {
