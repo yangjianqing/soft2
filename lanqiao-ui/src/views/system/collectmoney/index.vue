@@ -126,7 +126,7 @@ export default {
       this.timer = setTimeout(() => {
       if (this.barcode !== '') {//判断用户输入订单编号是否为null
         getGoodsList(this.barcode).then(response => {//发送订单编号查询数据
-          var product = response.GoodsList[0];
+          var product = response.GoodsList;
           //判断商品数据是否查询为null
           if (product) {
             const existingProduct = this.productsInCart.find(item => item.id === product.coding);

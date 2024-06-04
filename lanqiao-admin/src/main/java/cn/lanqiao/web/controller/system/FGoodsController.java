@@ -13,6 +13,9 @@ import cn.lanqiao.system.domain.FOrderPartslist;
 import cn.lanqiao.system.service.ICategoryService;
 import cn.lanqiao.system.service.IFOrdeersService;
 import cn.lanqiao.system.service.impl.FOrderPartslistServiceImpl;
+import io.swagger.models.auth.In;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -133,9 +136,13 @@ public class FGoodsController extends BaseController
      * 根据编号获取商品详细信息
      */
     @GetMapping(value = "/Goods/{coding}")
-    public AjaxResult getGoodsList(@PathVariable("coding") String coding)
+    public AjaxResult getGoodsList(@PathVariable("coding") Long coding)
     {
-        return AjaxResult.success().put("GoodsList",fGoodsService.selectGoodsList(Long.parseLong(coding)));
+        FGoods fGoods = fGoodsService.selectGoodsList(coding);
+        if(fGoods==null){
+          return  AjaxResult.error("该商品已售完 请添加商品");
+        }
+        return AjaxResult.success().put("GoodsList",fGoods);
     }
 
     /**
@@ -144,37 +151,12 @@ public class FGoodsController extends BaseController
     @PostMapping(value = "/addGoodsList")
     public AjaxResult addGoodsList(@RequestBody List<FGoods> fGoods)
     {
-        //判断前端传的购物车是否为空
-        if (fGoods.size() != 0) {
-            //调用随机生成订单号工具类
-            String OrderNu = OrderNumberGenerator.generateOrderNumber();
-            //创建订单对象进行赋值
-            FOrdeers ordeers = new FOrdeers();
-            ordeers.setOrdersNumber(OrderNu);//订单编号
-            ordeers.setOrdersPayMethod(2L);//支付方式：现金
-            ordeers.setOrdersPayStatuds(0L);//支付状态：已支付
-            ordeers.setOrdersStatus(2L);//订单状态：已完成
-            //调用订单新增方法，新增订单数据
-            fOrdeersService.insertFOrdeers(ordeers);
-            //利用for循环遍历出购物车内容(订单号:id,price:单价,Quantity:商品数量)
-            for (FGoods fGood : fGoods) {
-                //调用查询商品详情方法，查询商品详情
-                List<FGoods> fGoods1 = fGoodsService.selectGoodsList(fGood.getId());
-                //遍历出商品全部数据
-                for (FGoods goods : fGoods1) {
-                    //调用订单详情新增方法，新增订单详情数据
-                    fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(
-                            goods.getId(),//商品id
-                            OrderNu,//订单编号
-                            fGood.getQuantity()//商品数量
-                    ));
-                }
-            }
-            //返回结账成功提示信息
+        try {
+            fOrdeersService.settle(fGoods);
             return AjaxResult.success("结账成功");
-        } else {
-            //返回结账异常提示信息
-            return AjaxResult.error("结账异常");
+        }catch (Exception ex){
+            ex.getMessage();
+            return AjaxResult.error();
         }
     }
 

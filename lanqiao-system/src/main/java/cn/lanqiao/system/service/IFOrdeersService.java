@@ -1,6 +1,8 @@
 package cn.lanqiao.system.service;
 
 import java.util.List;
+
+import cn.lanqiao.system.domain.FGoods;
 import cn.lanqiao.system.domain.FOrdeers;
 
 /**
@@ -58,4 +60,10 @@ public interface IFOrdeersService
      * @return 结果
      */
     public int deleteFOrdeersByOrdersId(Long ordersId);
+
+    /**
+     * 结算
+     * @param fGoods
+     */
+    void settle(List<FGoods> fGoods);
 }

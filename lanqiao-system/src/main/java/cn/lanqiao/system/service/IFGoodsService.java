@@ -79,11 +79,11 @@ public interface IFGoodsService
      * @param coding
      * @return
      */
-    public   List<FGoods> selectGoodsList(Long coding);   /**
+    public   FGoods selectGoodsList(Long coding);   /**
      *根据商品名称查询
-     * @param coding
+     * @param FGoods
      * @return
      */
-    public   Integer selectGoodsCoding(Long coding);
+    public   int UpdateGoodsNum(FGoods FGoods );
 
 }

@@ -12,6 +12,8 @@ import cn.lanqiao.common.utils.SendSms;
 import cn.lanqiao.common.utils.uuid.IdUtils;
 import cn.lanqiao.system.domain.*;
 import cn.lanqiao.system.service.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
+@Api
 @RestController
 @RequestMapping("/api/fresh")
 public class ApiShoppingIController extends BaseController {
@@ -41,7 +43,7 @@ public class ApiShoppingIController extends BaseController {
     /**
      * 查询商品列表
      */
-
+    @ApiOperation("Add User")
     @GetMapping("/goodsList")
     public TableDataInfo list(FGoods fGoods)
     {
@@ -165,7 +167,5 @@ public class ApiShoppingIController extends BaseController {
             return AjaxResult.error("登录失败,用户账号不存在");
         }
     }
-
-
 
 }
