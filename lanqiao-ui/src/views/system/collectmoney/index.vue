@@ -23,9 +23,9 @@
           </el-row>
         </div>
         <div class="warp_info wrap_table" >
-          <el-table :data="productsInCart" style="width: 100%"  >
-            <el-table-column prop="name" label="商品名称"></el-table-column>
-            <el-table-column prop="price" label="价格"></el-table-column>
+          <el-table :data="productsInCart" style="width: 100%" >
+            <el-table-column prop="name" label="商品名称" />
+            <el-table-column prop="price" label="价格" />
             <el-table-column prop="quantity" label="数量">
               <template slot-scope="scope">
                 <el-button
@@ -67,7 +67,7 @@
       </el-col>
       <el-dialog :visible.sync="showQR" title="扫描二维码支付">
         <div class="code_img_div">
-        <img :src="currentQRCode" alt="支付二维码" class="code_img"/>
+        <img :src="currentQRCode" alt="支付二维码"  class="code_img"/>
         </div>
       </el-dialog>
     </el-row>
@@ -180,7 +180,7 @@ export default {
 <style scoped>
 h1 {
   font-family: '黑体', '微软雅黑', sans-serif; /* 使用黑体或微软雅黑字体，如果找不到则使用无衬线字体 */
-  font-size: 48px; /* 设置字体大小 */
+  font-size: 55px; /* 设置字体大小 */
   color: #0099ff; /* 设置字体颜色为红色 */
   text-align: center; /* 文本居中显示 */
   text-shadow: 2px 2px 4px rgba(173, 115, 53, 0.5); /* 设置文本阴影 */
@@ -197,9 +197,9 @@ h1 {
 }
 
 .warp{
-  width: 80%;
-  height: 600px;
-  margin: 0 16rem;
+  width: 100%;
+  height: 100%;
+  margin: 0 9rem;
 }
 
 .warp_info{

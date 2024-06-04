@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 @Api
 @RestController
@@ -38,8 +36,6 @@ public class ApiShoppingIController extends BaseController {
     private IFUsersService ifUsersService;
     @Autowired
     private RedisCache redisCache;
-    @Autowired
-    private IFPurchaseOrdersService ifPurchaseOrdersService;
     /**
      * 查询商品列表
      */
@@ -166,6 +162,15 @@ public class ApiShoppingIController extends BaseController {
         } else {
             return AjaxResult.error("登录失败,用户账号不存在");
         }
+    }
+
+    /**
+     * 手机购物车结算
+     */
+    @PostMapping(value = "/addGoodsList")
+    public AjaxResult addGoodsList(@RequestBody List<FGoods> fGoods)
+    {
+       return null;
     }
 
 }

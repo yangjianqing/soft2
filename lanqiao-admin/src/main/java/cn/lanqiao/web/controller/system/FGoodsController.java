@@ -53,8 +53,6 @@ public class FGoodsController extends BaseController
     @Autowired
     private IFOrdeersService fOrdeersService;
 
-    @Autowired
-    private FOrderPartslistServiceImpl fOrderPartslistService;
     /**
      * 查询商品列表
      */
@@ -138,11 +136,10 @@ public class FGoodsController extends BaseController
     @GetMapping(value = "/Goods/{coding}")
     public AjaxResult getGoodsList(@PathVariable("coding") Long coding)
     {
-        FGoods fGoods = fGoodsService.selectGoodsList(coding);
-        if(fGoods==null){
+        if(fGoodsService.selectGoodsList(coding) == null){
           return  AjaxResult.error("该商品已售完 请添加商品");
         }
-        return AjaxResult.success().put("GoodsList",fGoods);
+        return AjaxResult.success().put("GoodsList",fGoodsService.selectGoodsList(coding));
     }
 
     /**
@@ -154,9 +151,9 @@ public class FGoodsController extends BaseController
         try {
             fOrdeersService.settle(fGoods);
             return AjaxResult.success("结账成功");
-        }catch (Exception ex){
+        } catch (Exception ex){
             ex.getMessage();
-            return AjaxResult.error();
+            return AjaxResult.error("结账异常");
         }
     }
 
