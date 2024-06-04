@@ -179,6 +179,9 @@
         <el-form-item label="单位" prop="unit">
               <el-input v-model="form.unit" placeholder="请输入单位" />
         </el-form-item>
+        <el-form-item label="规格" prop="specification">
+              <el-input v-model="form.specification" placeholder="请输入单位" />
+        </el-form-item>
         <el-form-item label="编码" prop="coding">
               <el-input v-model="form.coding" placeholder="请输入编码" />
         </el-form-item>
@@ -358,6 +361,7 @@ export default {
         categoryId: null,
         price: null,
         unit: null,
+        specification: null,
         coding: null,
         image: null,
         description: null,

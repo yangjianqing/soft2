@@ -5,7 +5,7 @@ import axios from 'axios'
 //1. 创建新的axios实例，
 const service = axios.create({
     // 公共接口--这里注意后面会讲
-    baseURL: "http://127.0.0.1:8089/api/",
+    baseURL: process.env.VUE_APP_BASE_API,
     // 超时时间 单位是ms，这里设置了3s的超时时间
     timeout: 3 * 1000
 })
@@ -62,7 +62,7 @@ service.interceptors.response.use(
                     break;
                 case 404:
                     error.message = '请求错误,未找到该资源'
-                    // window.location.href = "/NotFound"
+                    window.location.href = "/NotFound"
                     break;
                 case 405:
                     error.message = '请求方法未允许'

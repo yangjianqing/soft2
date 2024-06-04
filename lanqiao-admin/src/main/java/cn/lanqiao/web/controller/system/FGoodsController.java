@@ -159,7 +159,10 @@ public class FGoodsController extends BaseController
                 fOrderPartslist.setOrderId(OrderNu);
                 fOrderPartslist.setGoodsNum(fGood.getQuantity());
                 fOrderPartslistService.insertFOrderPartslist(fOrderPartslist);
+                Integer i = fGoodsService.selectGoodsCoding(fGood.getCoding());
+
             }
+
         }
     }
 

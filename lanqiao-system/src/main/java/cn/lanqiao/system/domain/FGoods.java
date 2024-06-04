@@ -26,6 +26,18 @@ public class FGoods extends BaseEntity
     @Excel(name = "商品名称")
     private String name;
 
+    public String getSpecification() {
+        return specification;
+    }
+
+    public void setSpecification(String specification) {
+        this.specification = specification;
+    }
+
+    /** 商品规格 */
+    @Excel(name = "商品规格")
+    private String specification;
+
     /** 类别 */
     @Excel(name = "类别")
     private Long categoryId;
@@ -130,18 +142,6 @@ public class FGoods extends BaseEntity
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
-
-    public String getSpecifications() {
-        return specifications;
-    }
-
-    public void setSpecifications(String specifications) {
-        this.specifications = specifications;
-    }
-
-    /** 规格 */
-    @Excel(name = "规格")
-    private String specifications;
 
     public Integer getNum() {
         return num;
@@ -248,6 +248,23 @@ public class FGoods extends BaseEntity
 
     @Override
     public String toString() {
+//        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+//            .append("id", getId())
+//            .append("name", getName())
+//            .append("categoryId", getCategoryId())
+//            .append("price", getPrice())
+//            .append("unit", getUnit())
+//            .append("coding", getCoding())
+//            .append("image", getImage())
+//            .append("description", getDescription())
+//            .append("status", getStatus())
+//            .append("createTime", getCreateTime())
+//            .append("updateTime", getUpdateTime())
+//            .append("createUser", getCreateUser())
+//            .append("createUser", getSpecification())
+//            .append("updateUser", getUpdateUser())
+//            .append("categoryList", getCategoryList())
+//            .toString();
         return "FGoods{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
@@ -265,7 +282,7 @@ public class FGoods extends BaseEntity
                 ", updateUserName='" + updateUserName + '\'' +
                 ", num=" + num +
                 ", quantity=" + quantity +
-                ", specifications='" + specifications + '\'' +
+                ", specifications='" + specification + '\'' +
                 ", categoryList=" + categoryList +
                 '}';
     }
