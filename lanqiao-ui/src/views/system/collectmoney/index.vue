@@ -60,11 +60,16 @@
       </el-col>
       <el-col :span="6">
         <div class="pay_img">
-          <img src="@/assets/images/collectmoney/wechat.png" alt="微信支付" />
-          <img src="@/assets/images/collectmoney/alipay.png" alt="支付宝支付" />
+          <img src="@/assets/images/collectmoney/wechat.png" alt="微信支付" @click="showQRCode('wechat')" />
+          <img src="@/assets/images/collectmoney/alipay.png" alt="支付宝支付" @click="showQRCode('alipay')" />
           <img src="@/assets/images/collectmoney/cash.png" alt="现金支付" />
         </div>
       </el-col>
+      <el-dialog :visible.sync="showQR" title="扫描二维码支付">
+        <div class="code_img_div">
+        <img :src="currentQRCode" alt="支付二维码" class="code_img"/>
+        </div>
+      </el-dialog>
     </el-row>
   </div>
 </template>
@@ -78,13 +83,29 @@ export default {
     return {
       //条码
       barcode: '',
-      productsInCart: []
+      productsInCart: [],
+      showQR: false,
+      currentQRCode: ''
     };
   },
   created() {
 
   },
   methods: {
+    showQRCode(paymentMethod) {
+      // 根据不同的支付方式设置相应的二维码路径
+      switch(paymentMethod) {
+        case 'wechat':
+          this.currentQRCode = require('@/assets/images/collectmoney/weChatCode.jpg');
+          break;
+        case 'alipay':
+          this.currentQRCode = require('@/assets/images/collectmoney/alipayCode.jpg');
+          break;
+        default:
+          this.currentQRCode = '';
+      }
+      this.showQR = true; // 显示对话框
+    },
     removeFromCart(index){
       this.productsInCart.splice(index,1);
     },
@@ -161,8 +182,7 @@ h1 {
 .warp{
   width: 80%;
   height: 600px;
-  margin: 30px auto;
-
+  margin: 0 16rem;
 }
 
 .warp_info{
@@ -187,5 +207,17 @@ h1 {
   margin-top: 12rem;
   width: 64px;
   height: 64px;
+}
+
+.code_img {
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+}
+
+.code_img_div {
+  width: 500px;
+  height: 600px;
+  margin: 0 auto;
 }
 </style>
