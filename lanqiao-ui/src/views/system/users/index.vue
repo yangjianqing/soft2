@@ -89,7 +89,7 @@
 
     <el-table v-loading="loading" :data="usersList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="用户id" align="center" prop="usersId" />
+      <el-table-column label="用户ID" align="center" prop="usersId" />
       <el-table-column label="用户姓名" align="center" prop="usersName" />
       <el-table-column label="用户性别" align="center" prop="usersSex">
         <template slot-scope="scope">

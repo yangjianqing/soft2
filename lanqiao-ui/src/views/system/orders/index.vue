@@ -90,7 +90,7 @@
 
     <el-table v-loading="loading" :data="ordersList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="订单Id" align="center" prop="orderId" />
+      <el-table-column label="采购ID" align="center" prop="orderId" />
       <el-table-column label="商品名称" align="center" prop="goodsName" />
       <el-table-column label="供应商" align="center" prop="supplier" />
       <el-table-column label="数量" align="center" prop="quantity" />
