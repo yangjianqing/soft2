@@ -295,7 +295,7 @@ export default {
       rules: {
         goodsId: [
           { required: true, message: "商品名称不能为空", trigger: "blur" },
-          { pattern: /^[\u4e00-\u9fa5]+$/, message: "商品名称必须为中文", trigger: "blur" }
+          // { pattern: /^[\u4e00-\u9fa5]+$/, message: "商品名称必须为中文", trigger: "blur" }
         ],
         supplier: [
           { required: true, message: "供应商不能为空", trigger: "blur" },
