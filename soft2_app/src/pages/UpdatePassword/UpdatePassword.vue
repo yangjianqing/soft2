@@ -7,7 +7,7 @@
   />
   <div style="display: flex;flex-direction: column;
     align-items: center;
-    justify-content: center;height: 200px">
+    justify-content: center;height: 30px">
   </div>
 
   <van-cell-group inset style="margin-bottom: 10px">

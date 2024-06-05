@@ -8,6 +8,7 @@
               v-model="value"
               shape="round"
               placeholder="请输入搜索关键词"
+             `  @click-left="onClickLeft"
           />
         </template>
       </van-nav-bar>
@@ -19,6 +20,7 @@
 </template>
 
 <script >
+const onClickLeft = () => history.back();
 export default {
   setup() {
     const onClickLeft = () => history.back();

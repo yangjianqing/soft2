@@ -1,17 +1,21 @@
 <template>
+<!--  <div class="nav_img">-->
+<!--    <img src="@/assets/img/img.png" alt="">-->
+<!--  </div>-->
   <div style="display: flex;justify-content: center;
     align-items: center;height: 300px">
-    <div class="nav_img">
-      <img src="@/assets/img/img.png" alt="">
-    </div>
+     <div class="nav_img">
+    <img src="@/assets/img/vegetables/vegetable_2.jpg" alt="">
   </div>
-<p style="font-size: 28px;">生鲜绿源水果蔬菜超市</p>
+  </div>
+  <p style="font-size: 28px;">生鲜绿源水果蔬菜超市</p>
+  <div class="nav_bottom">
   <van-cell-group inset style="margin-bottom: 10px;margin-top: 30px;">
     <van-field
         v-model="user.username"
         label="电话号码"
         left-icon="phone-circle"
-        style="background-color:rgb(208,224,212);height: 50px;display: flex;align-items: center;"
+        style="background-color:rgb(214,223,211);height: 50px;display: flex;align-items: center;"
     />
 
   </van-cell-group>
@@ -22,7 +26,7 @@
       type="password"
       label="密码"
       left-icon="lock"
-      style="background-color:rgb(208,224,212);height: 50px;display: flex;align-items: center;"
+      style="background-color:rgb(214,223,211);height: 50px;display: flex;align-items: center;"
   />
   </van-cell-group>
   <div style="display: flex;justify-content: space-around;
@@ -33,7 +37,7 @@
   </div>
   <div style="margin: 16px;">
 <!--    -->
-    <van-button round block  type="primary" color="rgb(47,135,112)" native-type="submit">
+    <van-button round block  type="primary" color="rgb(47,135,112)" native-type="submit" @click="handleLogin">
       登录
     </van-button>
   </div>
@@ -44,6 +48,7 @@
       <p style="color: green" >点这里</p>
     </router-link>
     </div>
+  </div>
   </div>
 </template>
 
@@ -68,16 +73,17 @@
 <style scoped>
 .nav_img{
   border-radius: 3%;
-  height: 83px;
 }
 .nav_img img{
   border-radius: 3%;
-  height: 92px;
-  width: 106px;
+  height: 300px;
 }
 
 .search-icon {
   font-size: 16px;
   line-height: inherit;
+}
+.nav_bottom{
+  border-radius: 3%;
 }
 </style>

@@ -4,6 +4,13 @@
       <span>盒马生鲜</span>
       <span style="color: #FFB366">购买成功</span>
     </div>
+    <van-checkbox
+      v-model="isCheckAll"
+      :indeterminate="isIndeterminate"
+      @change="checkAllChange"
+    >
+      全选
+    </van-checkbox>
     <div class="content">
 
       <div class="img_info">
@@ -21,12 +28,20 @@
     </div>
     <p class="total">合计：3343元</p>
     <div class="bottom_btn">
-      <van-button plain hairline round  type="primary" size="mini">再次购买</van-button>
-      <van-button plain hairline round  type="danger" size="mini">评价</van-button>
+      <van-checkbox-group v-model="checkedResult" @change="checkedResultChange">
+        <van-checkbox>
+
+        </van-checkbox>
+      </van-checkbox-group>
+      <div>
+        <van-button plain hairline round  type="primary" size="mini">再次购买</van-button>
+        <van-button plain hairline round  type="danger" size="mini">评价</van-button>
+      </div>
     </div>
   </div>
 </template>
 <script >
+
 export default {
   name: "OrderInfo",
 }
@@ -84,5 +99,7 @@ export default {
 .bottom_btn{
   text-align: right;
   margin: 2% 5%;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

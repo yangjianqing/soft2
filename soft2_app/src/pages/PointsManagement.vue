@@ -7,18 +7,20 @@
        left-arrow
        @click-left="onClickLeft"
    />
-   <van-cell-group v-for="list in 3">
-     <van-cell title="{{list.name}}" value="{{list.valuephone}}" />
-   </van-cell-group>
+   <PointsManagements>
+
+   </PointsManagements>
  </div>
 </template>
 
 <script>
 
 
+import PointsManagements from "@/components/pointsmanagement/PointsManagement.vue";
 
 export default {
     name:"PointsManagement",
+  components: {PointsManagements},
      computed: {  },
     data(){
       return {

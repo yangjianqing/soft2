@@ -157,14 +157,6 @@ const routes = [
         }
     },
     {
-        path:"/mine/poma",
-        component:PointsManagement,
-        name:"poma",
-        meta: {
-            title: "积分管理页面",
-        }
-    },
-    {
         path:"/mine/history",
         component:HistoryInfo,
         name:"history",
@@ -172,6 +164,15 @@ const routes = [
             title: "历史记录",
         }
     },
+    {
+        path:"/mine/poma",
+        component:PointsManagement,
+        name:"poma",
+        meta: {
+            title: "积分管理页面",
+        }
+    },
+
 ];
 
 // 4. 使用 createRouter 方法创建一个路由实例 router

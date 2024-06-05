@@ -5,7 +5,7 @@
     <h1>欢迎</h1>
     <p style="font-size: 28px;">创建你的个人账号或者登录</p>
   </div>
-  <van-cell-group inset style="margin-bottom: 10px;margin-top: 30px;">
+  <van-cell-group inset style="margin-bottom: 10px;margin-top: 5px;">
     <van-field
         v-model="user.username"
         label="用户名"

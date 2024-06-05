@@ -22,7 +22,7 @@
 <style scoped>
 .nav{
   height: 277px;
-  background: linear-gradient(to bottom, rgb(48,136,113), white);
+  background-color: rgb(239,250,252);
   padding-top: 1px;
 }
 .no_shopping{

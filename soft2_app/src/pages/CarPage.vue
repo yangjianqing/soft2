@@ -26,7 +26,10 @@
       </div>
       </van-pull-refresh>
     </div>
-
+  <van-action-bar safe-area-inset-bottom style="bottom: 48px">
+    <van-action-bar-icon icon="cart-o" text="加入购物车" @click="onClickIcon" />
+    <van-action-bar-button type="danger" text="立即购买" @click="onClickButton" />
+  </van-action-bar>
 </template>
 
 <script>
@@ -46,7 +49,7 @@ const onRefresh = () => {
     count.value++;
   }, 1000);
 };
-let value = 0;
+let value = 1;
 const hasItemsInCart = ref(value); // 假设这是从购物车服务获取的
   // fetchCartItems().then(items => {
   //   hasItemsInCart.value = items.length > 0;

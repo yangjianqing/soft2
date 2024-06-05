@@ -21,11 +21,11 @@
     <div class="management-box">
       <div style="width: 100px" @click="ReturnPoMa"><p style="font-size: 10px">532</p>
         <p style="text-align:center;font-size: 12px;color: #808080">积分</p></div>
-      <router-link to="/mine/history">
-        <div style="width: 100px"><p style="font-size: 10px">32</p>
-          <p style="text-align:center;font-size: 12px;color: #808080">历史记录</p>
+
+        <div style="width: 100px" @click="RetrunHistory"><p style="font-size: 10px">32</p>
+          <p style="text-align:center;font-size: 12px;color: #808080" >历史记录</p>
         </div>
-      </router-link>
+
     </div>
   </div>
 
@@ -88,28 +88,24 @@
     >
       猜你喜欢
     </van-divider>
-  <div style="display: flex;flex-wrap: wrap;">
-      <MerchandiseInfo v-for="list in 10" v-on:click="Retrunshopping">
 
-      </MerchandiseInfo>
-  </div>
-
-  <div v-for="goods in 9">
-    <van-list
-        v-model:loading="loading"
-        :finished="finished"
-        finished-text="没有数据了"
-        @load="onLoad"
-    >
-      <!--        @load:满足加载条件时执行-->
-
-      <template v-for="item in merList">
-        <!-- 商家组件-->
-        <MerchandiseInfo :merchantInfo="item"></MerchandiseInfo>
-      </template>
-    </van-list>
-
-  </div>
+ <div  style="display: flex;flex-wrap: wrap">
+   <MerchandiseInfo v-for="list in 10" @click="ReturnOrShopping">
+   </MerchandiseInfo>
+ </div>
+  <van-list
+    v-model:loading="loading"
+    :finished="finished"
+    finished-text="没有数据了"
+    @load="onLoad"
+  >
+    <template v-for="item in merList" :key="item.id" style="display: flex;flex-wrap: wrap;">
+      <router-link :to="'/cart/shoppinggement'+item.id">
+        <MerchandiseInfo  :merchandiseInfo="item">
+        </MerchandiseInfo>
+      </router-link>
+    </template>
+  </van-list>
 
 
 </div>
@@ -132,7 +128,6 @@
       components: {MerchandiseInfo, MerchantInfo, NavTitle, ShoppingCard},
       data() {
         return{
-
           show,
           actions,
           onSelect,
@@ -154,19 +149,22 @@
       },
       methods:{
         //加载名字
-
         ReturnPoMa(){
           router.push({ path: '/mine/poma' });
         },
         ReturnOrMa(){
+          router.push({ path: '/mine/ordermanagement' });
+        },
+        ReturnOrShopping(){
           router.push({ path: '/mine/ordermanagement' });
         }
         ,
         ReturnSetting(){
           router.push({ path: '/mine/setting' });
         },
-        Retrunshopping(){
-          router.push({ path: '/cart/shoppinggement' });
+
+        RetrunHistory(){
+          router.push({ path: '/mine/history' });
         },
         onLoad(){
           // 开启loading
@@ -199,7 +197,6 @@
       }
     };
     // 导入插件样式返回
-
     const show = ref(false);
     const actions = [
       { name: '选项一' },
@@ -246,7 +243,6 @@
   flex-direction: row-reverse;
   width: 100%;
   justify-content: flex-end;
-
 }
 .management-box{
   display: flex;
@@ -257,11 +253,9 @@
 .goods-card__title {
   order: 5; /* 将标题移至最后 */
 }
-
 .goods-card__price {
   order: 3; /* 将价格移至上方 */
 }
-
 .goods-card__desc {
   order: 0; /* 将描述保持在中间 */
 }
