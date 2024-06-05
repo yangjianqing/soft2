@@ -3,11 +3,9 @@
 <template>
   <div class="big_box">
     <div class="shopping_img">
-      <img src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" alt="">
+      <img :src="this.baseUrl+goodsInfo.image" alt="">
     </div >
-      <p >洁柔厨房纸中(抽取式) 2
-        层75抽4
-      </p>
+      <p>{{goodsInfo.name}}</p>
     <div class="dis_box">
       <div class="span_box1">
         <span class="span1">自 营</span>
@@ -34,9 +32,14 @@ export default {
   name: "MerchandiseInfo",
   data() {
     return {
-
+      baseUrl:""
     };
   },
+  props:['goodsInfo'],
+  created() {
+    this.baseUrl=process.env.VUE_APP_BASE_API;
+  }
+
 }
 
 </script>

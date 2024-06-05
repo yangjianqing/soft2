@@ -118,7 +118,7 @@
     import axios from "axios";
     import ShoppingCard from "@/components/card/ShoppingCard.vue";
     import NavTitle from "@/components/Navtitle/NavTitle.vue";
-    import {listMembers} from "@/api/members";
+    import {listMembers} from "@/api/merchant";
     import MerchantList from "@/components/MerchantInfo.vue";
     import MerchantInfo from "@/components/MerchantInfo.vue";
     import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
