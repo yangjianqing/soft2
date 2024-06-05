@@ -91,7 +91,13 @@
     <el-table v-loading="loading" :data="ordersList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="采购ID" align="center" prop="orderId" />
-      <el-table-column label="商品名称" align="center" prop="goodsName" />
+      <el-table-column label="商品名称" align="center" prop="goodsName"  class-name="goods-shippingAddress":show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span :title="scope.row.goodsName">
+            {{scope.row.goodsName}}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="供应商" align="center" prop="supplier" />
       <el-table-column label="数量" align="center" prop="quantity" />
       <el-table-column label="单价" align="center" prop="unitPrice" />
@@ -105,7 +111,13 @@
           <dict-tag :options="dict.type.f_sales_way" :value="scope.row.paymentTerms"/>
         </template>
       </el-table-column>
-      <el-table-column label="发货地" align="center" prop="shippingAddress" />
+      <el-table-column label="发货地" align="center" prop="shippingAddress" class-name="goods-shippingAddress":show-overflow-tooltip="true" >
+        <template slot-scope="scope">
+          <span :title="scope.row.shippingAddress">
+            {{scope.row.shippingAddress}}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.f_sales_status" :value="scope.row.status"/>
@@ -121,17 +133,9 @@
           <span>{{ parseTime(scope.row.requiredDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="orderComments" >
+      <el-table-column label="备注" align="center" prop="orderComments" class-name="goods-orderComments":show-overflow-tooltip="true" >
         <template slot-scope="scope">
-          <span
-            :title="scope.row.orderComments"
-            style="
-            display: block;
-            width: 120px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            text-align:left;">
+          <span :title="scope.row.orderComments">
             {{scope.row.orderComments}}
           </span>
         </template>
@@ -249,6 +253,15 @@
     </el-dialog>
   </div>
 </template>
+
+<!--样式-->
+<style scoped>
+.address-cell {
+  white-space: nowrap; /* 文本不换行 */
+  overflow: hidden; /* 溢出部分隐藏 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+}
+</style>
 
 <script>
 import { listOrders, getOrders, delOrders, addOrders, updateOrders ,goodsListAll } from "@/api/system/orders";

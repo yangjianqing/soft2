@@ -99,7 +99,13 @@
       <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="商品ID" align="center" prop="id" />
-        <el-table-column label="商品名称" align="center" prop="name" />
+        <el-table-column label="商品名称" align="center" prop="name"  class-name="goods-name":show-overflow-tooltip="true" >
+          <template slot-scope="scope">
+          <span :title="scope.row.name">
+            {{scope.row.name}}
+          </span>
+          </template>
+        </el-table-column>
         <el-table-column label="类别" align="center" prop="categoryName" />
         <el-table-column label="商品价格" align="center" prop="price" />
         <el-table-column label="单位" align="unit" prop="unit" />
