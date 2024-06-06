@@ -114,15 +114,20 @@
       <!--<el-table-column label="买家姓名" align="center" prop="address.addressName" />-->
       <el-table-column label="买家姓名" align="center" prop="address.addressName">
         <template slot-scope="scope">
-          <div v-if="scope.row.ordersUsersId !== null" class="buyer-name">{{ scope.row.address.addressName }}</div>
+          <div v-if="scope.row.ordersUsersId !== null" class="buyer-name">
+            {{ scope.row.ordersSysuserName === null ? scope.row.fUsers.usersName : scope.row.address.addressName }}
+          </div>
           <div v-else class="buyer-name">游客</div>
         </template>
       </el-table-column>
 
+
       <!--<el-table-column label="联系方式" align="center" prop="address.addressPhone" />-->
       <el-table-column label="联系方式" align="center" prop="address.addressPhone">
         <template slot-scope="scope">
-          <div v-if="scope.row.ordersUsersId !== null" class="buyer-name">{{ scope.row.address.addressPhone }}</div>
+          <div v-if="scope.row.ordersUsersId !== null" class="buyer-name">
+            {{ scope.row.ordersSysuserName === null ? scope.row.fUsers.usersPhone : scope.row.address.addressPhone }}
+          </div>
           <div v-else class="buyer-name">无</div>
         </template>
       </el-table-column>
@@ -152,7 +157,9 @@
       </el-table-column>
       <el-table-column label="收货地址" align="center" prop="address.addressDetail" class-name="address-column" :show-overflow-tooltip="true">
         <template slot-scope="scope">
-          <div v-if="scope.row.ordersSysuserName !== null" class="address-cell">{{ scope.row.address.addressDetail }}</div>
+          <div v-if="scope.row.ordersSysuserName !== null" class="address-cell">
+            {{ scope.row.ordersSysuserName === null ? scope.row.fUsers.addressDetail : scope.row.address.addressDetail }}
+          </div>
           <div v-else class="address-cell">无</div>
         </template>
       </el-table-column>

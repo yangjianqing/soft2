@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="用户姓名" prop="usersName">
+      <el-form-item label="会员姓名" prop="usersName">
         <el-input
           v-model="queryParams.usersName"
-          placeholder="请输入用户姓名"
+          placeholder="请输入会员姓名"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -89,24 +89,24 @@
 
     <el-table v-loading="loading" :data="usersList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="用户ID" align="center" prop="usersId" />
-      <el-table-column label="用户姓名" align="center" prop="usersName" />
-      <el-table-column label="用户性别" align="center" prop="usersSex">
+      <el-table-column label="会员ID" align="center" prop="usersId" />
+      <el-table-column label="会员姓名" align="center" prop="usersName" />
+      <el-table-column label="会员性别" align="center" prop="usersSex">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.usersSex"/>
         </template>
       </el-table-column>
       <el-table-column label="联系方式" align="center" prop="usersPhone" />
-      <!--<el-table-column label="用户密码" type="password" align="center" prop="usersPassword" />-->
-      <el-table-column label="用户头像" align="center" prop="usersAvatar" width="100">
+      <!--<el-table-column label="会员密码" type="password" align="center" prop="usersPassword" />-->
+      <el-table-column label="会员头像" align="center" prop="usersAvatar" width="100">
         <template slot-scope="scope">
           <image-preview :src="scope.row.usersAvatar" :width="50" :height="50"/>
         </template>
       </el-table-column>
-      <el-table-column label="用户地址" align="center" class-name="address-column" :show-overflow-tooltip="true">
+      <el-table-column label="会员地址" align="center" class-name="address-column" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <router-link :to="'/system/users-data/index?usersId='+ scope.row.usersId" class="link-type">
-            <div class="address-cell">用户地址</div>
+            <div class="address-cell">会员地址</div>
           </router-link>
         </template>
       </el-table-column>
@@ -149,14 +149,14 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改用户管理对话框 -->
+    <!-- 添加或修改会员管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户姓名" prop="usersName">
-          <el-input v-model="form.usersName" placeholder="请输入用户姓名" />
+        <el-form-item label="会员姓名" prop="usersName">
+          <el-input v-model="form.usersName" placeholder="请输入会员姓名" />
         </el-form-item>
-        <el-form-item label="用户性别" prop="usersSex">
-          <el-select v-model="form.usersSex" placeholder="请选择用户性别">
+        <el-form-item label="会员性别" prop="usersSex">
+          <el-select v-model="form.usersSex" placeholder="请选择会员性别">
             <el-option
               v-for="dict in dict.type.sys_user_sex"
               :key="dict.value"
@@ -168,14 +168,14 @@
         <el-form-item label="联系方式" prop="usersPhone">
           <el-input v-model="form.usersPhone" placeholder="请输入联系方式" prefix-icon="el-icon-phone-outline" />
         </el-form-item>
-        <el-form-item label="用户密码" prop="usersPassword">
-          <el-input v-model="form.usersPassword" :type="showPassword ? 'text' : 'password'" placeholder="请输入用户密码" prefix-icon="el-icon-lock">
+        <el-form-item label="会员密码" prop="usersPassword">
+          <el-input v-model="form.usersPassword" :type="showPassword ? 'text' : 'password'" placeholder="请输入会员密码" prefix-icon="el-icon-lock">
             <template #append>
               <el-button icon="el-icon-view" @click="showPassword = !showPassword" circle></el-button>
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item label="用户头像">
+        <el-form-item label="会员头像">
           <image-upload  v-model="form.usersAvatar"/>
         </el-form-item>
         <el-form-item label="会员积分" prop="memberTotal">

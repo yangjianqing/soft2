@@ -55,7 +55,7 @@
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
       <el-table-column label="分类名称" align="center" prop="deptName" />
-      <el-table-column label="父级id" prop="parentId" />
+      <el-table-column label="父级ID" prop="parentId" />
       <el-table-column label="祖级列表" align="center" prop="ancestors" />
       <el-table-column label="显示顺序" align="center" prop="orderNum" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
