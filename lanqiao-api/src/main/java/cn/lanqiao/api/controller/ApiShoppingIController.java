@@ -7,7 +7,10 @@ import cn.lanqiao.common.core.domain.AjaxResult;
 import cn.lanqiao.common.core.domain.entity.Category;
 import cn.lanqiao.common.core.page.TableDataInfo;
 import cn.lanqiao.common.core.redis.RedisCache;
+import cn.lanqiao.common.utils.MyClass;
+import cn.lanqiao.common.utils.OrderNumberGenerator;
 import cn.lanqiao.common.utils.SecurityUtils;
+import cn.lanqiao.common.utils.SendSms;
 import cn.lanqiao.common.utils.uuid.IdUtils;
 
 //import cn.lanqiao.system.Category;
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 @Api
@@ -107,18 +112,21 @@ public class ApiShoppingIController extends BaseController {
 
     /**
      * 根据电话号码获取用户手机app会员信息
+     * @param usersPhone 电话号码
+     *
      */
-    @ApiOperation("根据电话号码获取用户手机app会员信息")
+    @ApiOperation("手机端个人详情页面接口")
     @GetMapping("/users/{usersPhone}")
-    public AjaxResult getUsers( @PathVariable("usersPhone") String usersPhone)
+    public AjaxResult getUsers(@PathVariable("usersPhone") String usersPhone)
     {
         return AjaxResult.success().put("users",ifUsersService.selectUsersusersPhone(usersPhone));
     }
 
     /**
      * 验证码接口
+     *
      */
-    @ApiOperation("验证码接口")
+    @ApiOperation("手机端发送验证码接口")
     @GetMapping("/sendCode")
     public AjaxResult sendCode() throws Exception {
         try {
@@ -139,10 +147,14 @@ public class ApiShoppingIController extends BaseController {
 
     /**
      * 根据电话注册手机app会员账号
+     * @param usersPhone 用户账号(电话号码)
+     * @param usersPassword 用户密码
+     * @param code 验证码
+     * @param uuid 验证码信息
      */
-    @ApiOperation("根据电话注册手机app会员账号")
+    @ApiOperation("根据电话注册手机端会员账号")
     @PostMapping("/registered")
-    public AjaxResult Registered(String usersPhone, String usersPassword, String code, String uuid)
+    public AjaxResult Registered(@PathVariable("usersPhone") String usersPhone, @PathVariable("usersPassword") String usersPassword, @PathVariable("code") String code, @PathVariable("uuid") String uuid)
     {
         String verKey = CacheConstants.PHONE_CODE_KEY + uuid;
         Object cacheObject = redisCache.getCacheObject(verKey);//获取redis缓存的验证码
@@ -155,7 +167,7 @@ public class ApiShoppingIController extends BaseController {
                 fUsers.setUsersPhone(usersPhone);
                 fUsers.setUsersPassword(SecurityUtils.encryptPassword(usersPassword));
                 fUsers.setMemberGrade(0L);
-                fUsers.setMemberTotal(0L);
+                fUsers.setMemberTotal(new BigDecimal(0));
                 return toAjax(ifUsersService.insertFUsers(fUsers));
             } else {
                 return AjaxResult.error("注册失败");
@@ -167,10 +179,13 @@ public class ApiShoppingIController extends BaseController {
 
     /**
      * 根据电话注册手机app登录会员账号
+     *
+     * @param usersPhone 用户账号(电话号码)
+     * @param usersPassword 用户密码
      */
-    @ApiOperation("根据电话注册手机app登录会员账号")
+    @ApiOperation("根据电话注册手机端登录会员账号")
     @PostMapping("/Login")
-    public AjaxResult Login(String usersPhone, String usersPassword)
+    public AjaxResult Login(@PathVariable("usersPhone") String usersPhone, @PathVariable("usersPassword") String usersPassword)
     {
         FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
         if (fUsers != null) {
@@ -185,12 +200,25 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
-     * 手机购物车结算
+     * 手机端结算
+     *
+     * @param usersPhone 用户电话号码
+     * @param ordersPayMethod 支付方式
+     * @param ordersPayStatuds 支付状态
+     * @param ordersRemark 订单备注信息
+     * @param GoodsList 订单集合
      */
-    @PostMapping(value = "/addGoodsList")
-    public AjaxResult addGoodsList(@RequestBody List<FGoods> fGoods)
+    @ApiOperation("手机端购物车结算")
+    @PostMapping  (value = "/insertShopping")
+    public AjaxResult insertShopping(@PathVariable("usersPhone") String usersPhone, @PathVariable("ordersPayMethod") Long ordersPayMethod, @PathVariable("ordersPayStatuds") Long ordersPayStatuds, @PathVariable("ordersRemark") String ordersRemark, @RequestBody List<FGoods> GoodsList)
     {
-       return null;
+        try {
+            fOrdeersService.insertShopping(usersPhone,ordersPayMethod,ordersPayStatuds,ordersRemark,GoodsList);
+            return AjaxResult.success("付款成功");
+        } catch (Exception ex){
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
+        }
     }
 
 

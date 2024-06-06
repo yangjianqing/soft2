@@ -114,4 +114,17 @@ public class FUsersController extends BaseController
         FUsers fUsers = fUsersService.selectFUsersByUsersId(usersId);
         return AjaxResult.success().put("usersList",fUsers);
     }
+
+    /**
+     * 根据电话号码获取用户信息
+     */
+    @GetMapping(value = "/member/{memberPhone}")
+    public AjaxResult selectMemberName(@PathVariable("memberPhone") String memberPhone)
+    {
+        FUsers fUsers = fUsersService.selectUsersusersPhone(memberPhone);
+        if (fUsers == null || fUsers.getUsersName() == null || fUsers.getMemberTotal() == null) {
+            return AjaxResult.error("查无此会员 请重新输入");
+        }
+        return AjaxResult.success(fUsers);
+    }
 }

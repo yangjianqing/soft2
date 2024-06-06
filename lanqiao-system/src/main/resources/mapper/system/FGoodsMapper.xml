@@ -208,7 +208,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE  coding = #{coding}
     </select>
 
-
     <!--    修改库存与状态-->
     <update id="UpdateGoodsNum" parameterType="FGoods">
         update f_goods

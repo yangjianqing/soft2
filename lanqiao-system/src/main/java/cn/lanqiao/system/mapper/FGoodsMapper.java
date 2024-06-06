@@ -1,7 +1,6 @@
 package cn.lanqiao.system.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import cn.lanqiao.common.core.domain.entity.Category;
 import cn.lanqiao.system.domain.FGoods;
@@ -107,16 +106,18 @@ public interface FGoodsMapper
     public   List<FGoods> selectGoodsType(String gooodsType);
 
     /**
-     *根据商品名称查询
+     *根据商品编码查询
      * @param coding
      * @return
      */
-    public   FGoods selectGoodsList(Long coding); /**
+    public  FGoods selectGoodsList(Long coding);
+
+    /**
      *根据商品编码增减数量
      * @param fGoods
      * @return
      */
-    public   int  UpdateGoodsNum(FGoods fGoods);
+    public  int  UpdateGoodsNum(FGoods fGoods);
 
     /**
      * 查询优惠并排序

@@ -23,9 +23,9 @@
         <el-select v-model="queryParams.ordersSysuserId" :data="Delivery" clearable placeholder="请输入配送员" @keyup.enter.native="handleQuery" filterable>
           <el-option
             v-for="item in Delivery"
-            :key="item.deptId"
+            :key="item.userId"
             :label="item.nickName"
-            :value="item.deptId"
+            :value="item.userId"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -111,15 +111,15 @@
           </router-link>
         </template>
       </el-table-column>
-<!--      <el-table-column label="买家姓名" align="center" prop="address.addressName" />-->
+      <!--<el-table-column label="买家姓名" align="center" prop="address.addressName" />-->
       <el-table-column label="买家姓名" align="center" prop="address.addressName">
         <template slot-scope="scope">
           <div v-if="scope.row.ordersUsersId !== null" class="buyer-name">{{ scope.row.address.addressName }}</div>
-          <div v-else class="buyer-name">客户</div>
+          <div v-else class="buyer-name">游客</div>
         </template>
       </el-table-column>
 
-<!--      <el-table-column label="联系方式" align="center" prop="address.addressPhone" />-->
+      <!--<el-table-column label="联系方式" align="center" prop="address.addressPhone" />-->
       <el-table-column label="联系方式" align="center" prop="address.addressPhone">
         <template slot-scope="scope">
           <div v-if="scope.row.ordersUsersId !== null" class="buyer-name">{{ scope.row.address.addressPhone }}</div>
@@ -127,10 +127,10 @@
         </template>
       </el-table-column>
 
-<!--      <el-table-column label="配送员" align="center" prop="ordersSysuserName" />-->
+      <!--<el-table-column label="配送员" align="center" prop="ordersSysuserName" />-->
       <el-table-column label="配送员" align="center" prop="ordersSysuserName">
         <template slot-scope="scope">
-          <div v-if="scope.row.ordersUsersId !== null" class="buyer-name">{{ scope.row.ordersSysuserName }}</div>
+          <div v-if="scope.row.ordersSysuserName !== null" class="buyer-name">{{ scope.row.ordersSysuserName }}</div>
           <div v-else class="buyer-name">无</div>
         </template>
       </el-table-column>
@@ -152,7 +152,7 @@
       </el-table-column>
       <el-table-column label="收货地址" align="center" prop="address.addressDetail" class-name="address-column" :show-overflow-tooltip="true">
         <template slot-scope="scope">
-          <div v-if="scope.row.ordersUsersId !== null" class="address-cell">{{ scope.row.address.addressDetail }}</div>
+          <div v-if="scope.row.ordersSysuserName !== null" class="address-cell">{{ scope.row.address.addressDetail }}</div>
           <div v-else class="address-cell">无</div>
         </template>
       </el-table-column>
@@ -162,10 +162,10 @@
         </template>
       </el-table-column>
 
-<!--      <el-table-column label="备注信息" align="center" prop="ordersRemark" />-->
+      <!--<el-table-column label="备注信息" align="center" prop="ordersRemark" />-->
       <el-table-column label="备注信息" align="center" prop="ordersRemark">
         <template slot-scope="scope">
-          <div v-if="scope.row.ordersUsersId !== null" class="buyer-name">{{ scope.row.ordersRemark }}</div>
+          <div v-if="scope.row.ordersSysuserName !== null" class="buyer-name">{{ scope.row.ordersRemark }}</div>
           <div v-else class="buyer-name">线下购买</div>
         </template>
       </el-table-column>
@@ -307,20 +307,21 @@ export default {
   },
   created() {
     this.getList();
-    // this.getDelivery();
+    this.getDelivery();
   },
   methods: {
     // 页面加载初始化数据
-    // getDelivery(){
-    //   listDelivery().then(response => {
-    //     this.Delivery = response.Delivery;
-    //   });
-    // },
+    getDelivery(){
+      listDelivery().then(response => {
+        this.Delivery = response.Delivery;
+      });
+    },
     /** 查询订单管理列表 */
     getList() {
       this.loading = true;
       listOrdeers(this.queryParams).then(response => {
         this.ordeersList = response.rows;
+        console.log(this.ordeersList);
         this.total = response.total;
         this.loading = false;
       });

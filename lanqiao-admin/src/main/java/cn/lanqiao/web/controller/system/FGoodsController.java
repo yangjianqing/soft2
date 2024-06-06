@@ -1,5 +1,6 @@
 package cn.lanqiao.web.controller.system;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import cn.lanqiao.common.core.domain.entity.SysDept;
 import cn.lanqiao.common.utils.OrderNumberGenerator;
 import cn.lanqiao.system.domain.FOrdeers;
 import cn.lanqiao.system.domain.FOrderPartslist;
+import cn.lanqiao.system.domain.FormData;
 import cn.lanqiao.system.service.ICategoryService;
 import cn.lanqiao.system.service.IFOrdeersService;
 import cn.lanqiao.system.service.impl.FOrderPartslistServiceImpl;
@@ -144,16 +146,22 @@ public class FGoodsController extends BaseController
 
     /**
      * 收银结算
+     *
      */
     @PostMapping(value = "/addGoodsList")
-    public AjaxResult addGoodsList(@RequestBody List<FGoods> fGoods)
+    public AjaxResult addGoodsList(@RequestBody FormData formData)
     {
         try {
-            fOrdeersService.settle(fGoods);
+            // 获取前端发送的数据
+            String memberPhone = formData.getMemberPhone();
+            BigDecimal totalPrice = formData.getTotalPrice();
+            BigDecimal memberJian = formData.getMemberJian();
+            List<FGoods> productsInCart = formData.getProductsInCart();
+            fOrdeersService.settle(memberPhone,totalPrice,memberJian,productsInCart);
             return AjaxResult.success("结账成功");
         } catch (Exception ex){
             ex.getMessage();
-            return AjaxResult.error("结账异常");
+            return AjaxResult.error("系统异常");
         }
     }
 

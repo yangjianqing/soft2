@@ -28,23 +28,17 @@ public class FOrdeers extends BaseEntity
     @Excel(name = "买家姓名")
     private Long ordersUsersId;
 
+    /** 买家姓名 */
+    @Excel(name = "买家姓名")
+    private Long ordersaddressId;
+
+    /** 地址实体类 */
+    @Excel(name = "地址实体类")
     private FAddress address;
 
-    public FAddress getAddress() {
-        return address;
-    }
-
-    public void setAddress(FAddress address) {
-        this.address = address;
-    }
-
-    public String getOrdersSysuserName() {
-        return ordersSysuserName;
-    }
-
-    public void setOrdersSysuserName(String ordersSysuserName) {
-        this.ordersSysuserName = ordersSysuserName;
-    }
+    /** 用户实体类 */
+    @Excel(name = "用户实体类")
+    private FUsers fUsers;
 
     /** 配送员 */
     @Excel(name = "配送员")
@@ -75,7 +69,67 @@ public class FOrdeers extends BaseEntity
     @Excel(name = "备注信息")
     private String ordersRemark;
 
-    public void setOrdersId(Long ordersId) 
+    public FOrdeers() {
+    }
+
+    public FOrdeers(String ordersNumber, Long ordersPayMethod, Long ordersPayStatuds, Long ordersStatus) {
+        this.ordersNumber = ordersNumber;
+        this.ordersPayMethod = ordersPayMethod;
+        this.ordersPayStatuds = ordersPayStatuds;
+        this.ordersStatus = ordersStatus;
+    }
+
+    public FOrdeers(String ordersNumber,Long ordersUsersId, Long ordersPayMethod, Long ordersPayStatuds, Long ordersStatus) {
+        this.ordersNumber = ordersNumber;
+        this.ordersUsersId = ordersUsersId;
+        this.ordersPayMethod = ordersPayMethod;
+        this.ordersPayStatuds = ordersPayStatuds;
+        this.ordersStatus = ordersStatus;
+    }
+
+    public FOrdeers(String ordersNumber, Long ordersUsersId, Long ordersSysuserId, Long ordersPayMethod, Long ordersPayStatuds, Long ordersStatus, String ordersRemark) {
+        this.ordersNumber = ordersNumber;
+        this.ordersUsersId = ordersUsersId;
+        this.ordersSysuserId = ordersSysuserId;
+        this.ordersPayMethod = ordersPayMethod;
+        this.ordersPayStatuds = ordersPayStatuds;
+        this.ordersStatus = ordersStatus;
+        this.ordersRemark = ordersRemark;
+    }
+
+    public FUsers getfUsers() {
+        return fUsers;
+    }
+
+    public void setfUsers(FUsers fUsers) {
+        this.fUsers = fUsers;
+    }
+
+    public FAddress getAddress() {
+        return address;
+    }
+
+    public void setAddress(FAddress address) {
+        this.address = address;
+    }
+
+    public String getOrdersSysuserName() {
+        return ordersSysuserName;
+    }
+
+    public void setOrdersSysuserName(String ordersSysuserName) {
+        this.ordersSysuserName = ordersSysuserName;
+    }
+
+    public Long getOrdersaddressId() {
+        return ordersaddressId;
+    }
+
+    public void setOrdersaddressId(Long ordersaddressId) {
+        this.ordersaddressId = ordersaddressId;
+    }
+
+    public void setOrdersId(Long ordersId)
     {
         this.ordersId = ordersId;
     }
@@ -159,16 +213,20 @@ public class FOrdeers extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("ordersId", getOrdersId())
-            .append("ordersNumber", getOrdersNumber())
-            .append("ordersUsersId", getOrdersUsersId())
-            .append("ordersSysuserId", getOrdersSysuserId())
-            .append("ordersPayMethod", getOrdersPayMethod())
-            .append("ordersPayStatuds", getOrdersPayStatuds())
-            .append("ordersStatus", getOrdersStatus())
-            .append("ordersCreattime", getOrdersCreattime())
-            .append("ordersRemark", getOrdersRemark())
-            .toString();
+        return "FOrdeers{" +
+                "ordersId=" + ordersId +
+                ", ordersNumber='" + ordersNumber + '\'' +
+                ", ordersUsersId=" + ordersUsersId +
+                ", ordersaddressId=" + ordersaddressId +
+                ", address=" + address +
+                ", fUsers=" + fUsers +
+                ", ordersSysuserId=" + ordersSysuserId +
+                ", ordersSysuserName='" + ordersSysuserName + '\'' +
+                ", ordersPayMethod=" + ordersPayMethod +
+                ", ordersPayStatuds=" + ordersPayStatuds +
+                ", ordersStatus=" + ordersStatus +
+                ", ordersCreattime=" + ordersCreattime +
+                ", ordersRemark='" + ordersRemark + '\'' +
+                '}';
     }
 }

@@ -1,7 +1,6 @@
 package cn.lanqiao.system.service;
 
 import java.util.List;
-import java.util.Map;
 
 import cn.lanqiao.system.domain.FGoods;
 
@@ -75,11 +74,13 @@ public interface IFGoodsService
     public List<FGoods> selectGoodsType(String goodsType);
 
     /**
-     *根据商品名称查询
+     *根据商品编码查询
      * @param coding
      * @return
      */
-    public   FGoods selectGoodsList(Long coding);   /**
+    public   FGoods selectGoodsList(Long coding);
+
+    /**
      *根据商品名称查询
      * @param FGoods
      * @return

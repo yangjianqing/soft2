@@ -46,4 +46,9 @@ public class CacheConstants
      * 手机验证码 redis key
      */
     public static final String PHONE_CODE_KEY = "phone_codes:";
+
+    /**
+     * 购物车数据 redis key
+     */
+    public static final String Query_Shopping_KEY = "query_shopping:";
 }

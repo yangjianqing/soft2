@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import cn.lanqiao.common.annotation.Excel;
 import cn.lanqiao.common.core.domain.BaseEntity;
 
+import java.math.BigDecimal;
+
 /**
  * 用户管理对象 f_users
  *
@@ -45,7 +47,7 @@ public class FUsers extends BaseEntity
 
     /** 会员积分 */
     @Excel(name = "会员积分")
-    private Long memberTotal;
+    private BigDecimal memberTotal;
 
     public void setUsersId(Long usersId)
     {
@@ -111,12 +113,12 @@ public class FUsers extends BaseEntity
     {
         return memberGrade;
     }
-    public void setMemberTotal(Long memberTotal)
+    public void setMemberTotal(BigDecimal memberTotal)
     {
         this.memberTotal = memberTotal;
     }
 
-    public Long getMemberTotal()
+    public BigDecimal getMemberTotal()
     {
         return memberTotal;
     }

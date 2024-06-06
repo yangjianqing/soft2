@@ -206,10 +206,10 @@ public interface ISysUserService
 
     /**
      * 根据用户ids 获取信息
-     * @param depTid
+     * @param userIds
      * @return
      */
-    List<SysUser> selectUsersListdeliveryIds(List<Long> depTid);
+    List<SysUser> selectUsersListuserIds(List<Long> userIds);
 
     /**
      * 查询所有配送员信息

@@ -70,6 +70,11 @@ public class Constants
     public static final Integer CAPTCHA_EXPIRATION = 2;
 
     /**
+     * 购物车数据有效期（24小时）
+     */
+    public static final Integer Query_Shopping = 24;
+
+    /**
      * 令牌
      */
     public static final String TOKEN = "token";

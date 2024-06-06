@@ -4,19 +4,57 @@
       <el-col :span="18">
         <h1>收银台</h1>
         <div class="warp_info">
-          <el-row :gutter="5" align="middle">
-            <el-col :span="4">
+          <el-row :gutter="3" align="middle">
+            <el-col :span="2">
               <p style="height: 40px;line-height: 40px">
                 商品条码：
               </p>
             </el-col>
-            <el-col :span="18">
+            <el-col :span="4">
               <p style="height: 40px;line-height: 40px">
                 <el-input
                   v-model="barcode"
                   placeholder="请扫描商品条形码"
                   @input="handleBarcodeInput"
                   @keyup.enter.native="checkout"
+                ></el-input>
+              </p>
+            </el-col>
+            <el-col :span="2">
+              <p style="height: 40px;line-height: 40px;">
+                会员账号：
+              </p>
+            </el-col>
+            <el-col :span="4">
+              <p style="height: 40px;line-height: 40px">
+                <el-input
+                  v-model="member.memberPhone"
+                  placeholder="请输入会员账号"
+                  @input="handleMemberAccountInput"
+                ></el-input>
+              </p>
+            </el-col>
+            <el-col :span="3">
+              <div v-if="member.memberName !== undefined && member.memberName !== null" class="member-info">
+                <p style="height: 40px;line-height: 40px">会员名称：{{ member.memberName }}</p>
+              </div>
+            </el-col>
+            <el-col :span="3">
+              <div v-if="member.memberTotal !== undefined && member.memberTotal !== null" class="member-info">
+                <p style="height: 40px;line-height: 40px">会员积分：{{ member.memberTotal }}</p>
+              </div>
+            </el-col>
+            <el-col :span="2">
+              <p style="height: 40px;line-height: 40px">
+                抵扣积分：
+              </p>
+            </el-col>
+            <el-col :span="4">
+              <p style="height: 40px;line-height: 40px">
+                <el-input
+                  v-model="member.memberJian"
+                  placeholder="请输入抵扣积分"
+                  @input="handleMemberTotal"
                 ></el-input>
               </p>
             </el-col>
@@ -54,7 +92,7 @@
           </el-table>
         </div >
         <div class="warp_info warp_bottom">
-          <p>总价：{{ calculateTotalPrice }}</p>
+          <p>总价：{{ this.calculateTotalPrice() }}</p>
           <el-button type="success" size="medium" @click="checkout">结账</el-button>
         </div>
       </el-col>
@@ -75,7 +113,7 @@
 </template>
 
 <script>
-import { getGoodsList, addGoodsList } from "@/api/system/collectmoney";
+import { getGoodsList, addGoodsList, selectMemberName } from "@/api/system/collectmoney";
 
 export default {
 
@@ -85,6 +123,12 @@ export default {
       productsInCart: [], //购物车
       showQR: false,// 是否显示对话框
       currentQRCode: '', //二维码地址
+      member: {
+        memberPhone: '', // 会员账号
+        memberName: '', // 会员名称
+        memberTotal: '', //会员积分
+        memberJian: '', //抵扣积分
+      },
     };
   },
   created() {
@@ -114,12 +158,18 @@ export default {
       this.productsInCart[index].quantity++;
       this.calculateTotalPrice();
     },
+    //计算总金额
+    calculateTotalPrice() {
+      const total = this.productsInCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      return total.toFixed(2); // 保留两位小数
+    },
     handleDecrease(index) {
       if (this.productsInCart[index].quantity > 1) {
         this.productsInCart[index].quantity--;
         this.calculateTotalPrice();
       }
     },
+    //购物车功能
     handleBarcodeInput() {
       clearTimeout(this.timer);// 清除之前的定时器
       // 设置延迟时间为 500 毫秒
@@ -150,30 +200,77 @@ export default {
       }
       }, 500); // 设置延迟时间为 500 毫秒
     },
+
+    //会员功能
+    handleMemberAccountInput() {
+      // 在此处处理会员账号输入框输入事件，可以进行实时校验、查询等操作
+      clearTimeout(this.timer);// 清除之前的定时器
+      // 设置延迟时间为 500 毫秒
+      this.timer = setTimeout(() => {
+          if (this.member.memberPhone !== '') {//判断用户输入会员账号是否为null
+            selectMemberName(this.member.memberPhone).then(response => {
+              console.log(response);
+              if (response.code === 200) {
+                this.member.memberName = response.data.usersName;
+                this.member.memberTotal = response.data.memberTotal;
+              } else {
+                this.$message.success("网络异常");
+              }
+            });
+          } else {
+            this.member.memberName = '';
+            this.member.memberTotal= '';
+            this.member.memberJian= '';
+          }
+      }, 1000);
+    },
+
+    //抵扣积分判断功能
+    handleMemberTotal() {
+      // 在此处处理会员账号输入框输入事件，可以进行实时校验、查询等操作
+      clearTimeout(this.timer);// 清除之前的定时器
+      // 设置延迟时间为 500 毫秒
+      this.timer = setTimeout(() => {
+        if (this.member.memberJian !== '') {
+          if (this.member.memberJian > this.member.memberTotal && this.member.memberTotal !=='') {
+            this.$message.error("抵扣积分不能大于会员积分");
+          }
+        }
+        }, 1000);
+    },
+
+    //结算功能
     checkout() {
       if (this.productsInCart.length !== 0) {//判断购物车是否为null
-        addGoodsList(this.productsInCart).then(response => {//发送购物车数据给后端
+        const formData = {
+          // 获取计算属性的值
+          memberPhone: this.member.memberPhone,
+          totalPrice: this.calculateTotalPrice()/10,
+          memberJian: this.member.memberJian/10,
+          productsInCart: this.productsInCart
+        };
+        addGoodsList(formData).then(response => {//发送购物车数据给后端
           // 实现结账逻辑，新增后返回状态码进行判断
           if (response.code === 200) {
-            this.$message.success(response.msg);//新增成功
+            this.$message.success(response.msg);//结账成功
           } else if (response.code === 500) {
-            this.$message.success(response.msg);//新增失败
+            this.$message.error(response.msg);//系统异常
           } else {
-            this.$message.success("系统异常");
+            this.$message.error("网络异常");
           }
         });
-        this.clearCart(); // 调用清空购物车方法
+        this.clearCart(); // 调用清空购物车+会员方法
       }
     },
+    //清空购物车+会员
     clearCart() {
-      this.productsInCart = [];//重置购物车数据
-    }
+      this.productsInCart = []; //重置购物车数据
+      this.member= {}; //重置会员数据
+    },
   },
-  computed:{
-    calculateTotalPrice(){
-      return  this.productsInCart.reduce((sum, item) => sum + item.price * item.quantity, 0);//进行总金额计算
-    }
-  },
+  computed: {
+
+  }
 };
 </script>
 

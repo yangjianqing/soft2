@@ -1,5 +1,6 @@
 package cn.lanqiao.system.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import cn.lanqiao.system.domain.FGoods;
@@ -62,8 +63,19 @@ public interface IFOrdeersService
     public int deleteFOrdeersByOrdersId(Long ordersId);
 
     /**
-     * 结算
-     * @param fGoods
+     * 电脑端结算
+     * @param productsInCart
      */
-    void settle(List<FGoods> fGoods);
+    public void settle(String memberPhone, BigDecimal totalPrice, BigDecimal memberJian, List<FGoods> productsInCart);
+
+    /**
+     * 手机端结算
+     *
+     * @param usersPhone 用户电话号码
+     * @param ordersPayMethod 支付方式
+     * @param ordersPayStatuds 支付状态
+     * @param ordersRemark 订单备注信息
+     * @param GoodsList 订单集合
+     */
+    public void insertShopping(String usersPhone,Long ordersPayMethod,Long ordersPayStatuds,String ordersRemark,List<FGoods> GoodsList);
 }

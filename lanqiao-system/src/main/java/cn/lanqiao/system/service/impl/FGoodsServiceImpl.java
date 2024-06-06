@@ -209,8 +209,11 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.selectGoodsType(goodsType);
     }
 
-
-
+    /**
+     *根据商品编码查询
+     * @param coding
+     * @return
+     */
     @Override
     public FGoods selectGoodsList(Long coding) {
         FGoods fGoods = fGoodsMapper.selectGoodsList(coding);
@@ -227,9 +230,11 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.UpdateGoodsNum(fGoods);
     }
 
+
+
     /**
      * 新增商品分类信息
-     * 
+     *
      * @param fGoods 商品对象
      */
     public void insertCategory(FGoods  fGoods)
