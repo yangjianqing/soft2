@@ -8,6 +8,9 @@ import cn.lanqiao.system.mapper.FGoodsMapper;
 import cn.lanqiao.system.service.IFShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -22,12 +25,14 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService {
     @Autowired
     private RedisCache redisCache;
 
+    @Autowired
+    private FGoodsMapper fGoodsMapper;
     /**
-     * 手机端添加购物车数据到Redis
+     * 手机端添加购物车数据到redis
      *
-     * @param usersPhone 用户手机号
-     * @param coding     商品编号
-     * @param quantity   商品数量
+     * @param usersPhone 用户号码
+     * @param coding 商品编码(根据商品编码查询商品数据)
+     * 商品数量(每次添加数据到redis同一商品的数量)
      */
     @Override
     public void insertShopData(String usersPhone, Long coding,Long quantity) {
@@ -44,6 +49,38 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService {
         shoppingCart.put(coding,quantity);
         // 将购物车数据存储到 Redis
         redisCache.setShoppingCart(verKey,shoppingCart,Constants.Query_Shopping,TimeUnit.HOURS);
+    }
+
+
+    /**
+     * 手机端购物车页面数据
+     *
+     * @param usersPhone 用户号码
+     */
+    @Override
+    public List<FGoods> selectShopData(String usersPhone) {
+        //创建购物车列表数据
+        List<FGoods> shoppingList = new ArrayList<>();
+        // 生成唯一标识 Key
+        String verKey = CacheConstants.Query_Shopping_KEY + usersPhone;
+        // 获取已存入的购物车数据
+        Map<Long, Long> shoppingCart = redisCache.getShoppingCart(verKey);
+        //判断redis的数据是否为null
+        if (shoppingCart != null && !shoppingCart.isEmpty()) {
+            // 遍历购物车中的每个商品编码，查询对应的商品数据并添加到列表中
+            for (Map.Entry<Long, Long> entry : shoppingCart.entrySet()) {
+                Long coding = entry.getKey();
+                Long quantity = entry.getValue();
+                // 根据商品编码查询商品数据
+                FGoods fGoods = fGoodsMapper.selectGoodsList(coding);
+                if (fGoods != null) {
+                    // 设置商品数量
+                    fGoods.setQuantity(quantity);
+                    shoppingList.add(fGoods);
+                }
+            }
+        }
+        return shoppingList;
     }
 
 }

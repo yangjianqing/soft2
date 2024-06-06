@@ -241,10 +241,25 @@ public class ApiShoppingIController extends BaseController {
     {
         try {
             ifShoppingCartService.insertShopData(usersPhone,coding,1L);
-            return AjaxResult.success();
+            return AjaxResult.success("加入购物车成功");
         } catch (Exception ex){
             ex.getMessage();
             return AjaxResult.error("系统异常");
         }
     }
+
+    /**
+     * 手机端购物车页面数据
+     *
+     * @param usersPhone 用户号码
+     */
+    @ApiOperation("手机端购物车页面数据")
+    @GetMapping("/selectShopData/{usersPhone}")
+    public AjaxResult selectShopData(@PathVariable("usersPhone") String usersPhone)
+    {
+        List<FGoods> fGoods = ifShoppingCartService.selectShopData(usersPhone);
+        System.out.println(fGoods);
+        return AjaxResult.success(fGoods);
+    }
+
 }
