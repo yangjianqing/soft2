@@ -5,9 +5,10 @@
       left-arrow
       @click-left="onClickLeft"
   />
+<!--  <MerchandiseInfo></MerchandiseInfo>-->
   <van-swipe :autoplay="3000" lazy-render>
-    <van-swipe-item v-for="image in images" :key="image">
-      <img :src="image" class="custom-image-size"/>
+    <van-swipe-item v-for="(goodsInfo,index) in goodsList">
+      <img :src="this.baseUrl+goodsInfo.image" class="custom-image-size" alt=""/>
     </van-swipe-item>
   </van-swipe>
   <van-cell-group>
@@ -27,13 +28,15 @@
     猜你喜欢
   </van-divider>
   <div style="display: flex;flex-wrap: wrap;">
-    <MerchandiseInfo v-for="list in 10" v-on:click="Retrunshopping">
-    </MerchandiseInfo>
+    <template v-for="(goodsInfo,index) in goodsList">
+      <div class="total_box" v-if="index%2===1">
+        <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+        <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+      </div>
+    </template>
   </div>
   <van-action-bar>
-    <van-action-bar-icon icon="chat-o" text="客服" @click="onClickIcon" />
-    <van-action-bar-icon icon="cart-o" text="购物车" @click="onClickIcon" />
-    <van-action-bar-icon icon="shop-o" text="店铺" @click="onClickIcon" />
+    <van-action-bar-icon icon="cart-o" text="加入购物车" @click="onClickIcon" />
     <van-action-bar-button type="danger" text="立即购买" @click="onClickButton" />
   </van-action-bar>
 </template>
@@ -41,24 +44,40 @@
 import { showToast } from 'vant';
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 import router from "@/router";
+import {listShopping} from "@/api/merchant";
 const onClickLeft = () => history.back();
 const onClickIcon = () => showToast('已添加购物车');
-const onClickButton = () => showToast('点击按钮');
+const onClickButton = () => showToast('立即购买');
 export default {
   components: {MerchandiseInfo},
+  props:['goodsInfo'],
   data(){
     return{
       onClickLeft,
       images,
       onClickIcon,
       onClickButton,
+      goodsList:[],
+      baseUrl:"",
     }
   },
   methods:{
     Retrunshopping(){
       router.push({ path: '/cart/shoppinggement' });
     },
-  }
+    getGoodsList(){
+      listShopping().then(res=>{
+        console.log(res.data.rows);
+        this.goodsList=res.data.rows;
+      })
+    },
+  },
+  created() {
+    //获取商品列表
+    this.baseUrl=process.env.VUE_APP_BASE_API;
+    this.getGoodsList();
+
+  },
 }
 const images = [
   'https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg',

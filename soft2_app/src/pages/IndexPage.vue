@@ -212,8 +212,6 @@ export default {
   height:150px;
   border-radius: 5px;
 }
-
-
 .Classification{
   height: 100%;
 }

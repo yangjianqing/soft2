@@ -90,8 +90,12 @@
     </van-divider>
 
  <div  style="display: flex;flex-wrap: wrap">
-   <MerchandiseInfo v-for="list in 10" @click="ReturnOrShopping">
-   </MerchandiseInfo>
+   <template v-for="(goodsInfo,index) in goodsList">
+     <div class="total_box" v-if="index%2===1">
+       <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+       <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+     </div>
+   </template>
  </div>
   <van-list
     v-model:loading="loading"
@@ -118,7 +122,7 @@
     import axios from "axios";
     import ShoppingCard from "@/components/card/ShoppingCard.vue";
     import NavTitle from "@/components/Navtitle/NavTitle.vue";
-    import {listMembers} from "@/api/merchant";
+    import {listShopping} from "@/api/merchant.js"
     import MerchantList from "@/components/MerchantInfo.vue";
     import MerchantInfo from "@/components/MerchantInfo.vue";
     import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
@@ -133,6 +137,7 @@
           onSelect,
           count,
           onRefresh,
+          goodsList:[],
           finished:false,//false还有数据  true 已经是最后一条数据了
           loading:false, //是否显示加载中
           merList:[
@@ -156,7 +161,7 @@
           router.push({ path: '/mine/ordermanagement' });
         },
         ReturnOrShopping(){
-          router.push({ path: '/mine/ordermanagement' });
+          router.push({ path: '/cart/shoppinggement' });
         }
         ,
         ReturnSetting(){
@@ -166,35 +171,42 @@
         RetrunHistory(){
           router.push({ path: '/mine/history' });
         },
-        onLoad(){
-          // 开启loading
-          this.loading = true;
-          //加载商家列表的数据
-          listMembers(this.queryParams).then(res=>{
-            var rows = res.data.rows;
-            if(rows){ //判断列表中是否有数据
-              rows.forEach(data=>{ //循环将数据添加到 merList列表中
-                this.merList.push(data);
-              })
-            }else{
-              //接口中已经没有数据
-              this.finished=true;
-            }
-            //当total的数值等于 merList的长度的时候标识数据加载完了
-            if(res.data.total===this.merList.length){
-              this.finished=true;
-            }
-
-            this.loading = false;
-          }).catch(error=>{
-            console.log(error)
+        // onLoad(){
+        //   // 开启loading
+        //   this.loading = true;
+        //   //加载商家列表的数据
+        //   listMembers(this.queryParams).then(res=>{
+        //     var rows = res.data.rows;
+        //     if(rows){ //判断列表中是否有数据
+        //       rows.forEach(data=>{ //循环将数据添加到 merList列表中
+        //         this.merList.push(data);
+        //       })
+        //     }else{
+        //       //接口中已经没有数据
+        //       this.finished=true;
+        //     }
+        //     //当total的数值等于 merList的长度的时候标识数据加载完了
+        //     if(res.data.total===this.merList.length){
+        //       this.finished=true;
+        //     }
+        //
+        //     this.loading = false;
+        //   }).catch(error=>{
+        //     console.log(error)
+        //   })
+        //   this.queryParams.pageNum++;
+        // },
+        getGoodsList(){
+          listShopping().then(res=>{
+            console.log(res.data.rows);
+            this.goodsList=res.data.rows;
           })
-          this.queryParams.pageNum++;
-        }
+        },
       },
       created() {
-
-      }
+        //获取商品列表
+        this.getGoodsList();
+      },
     };
     // 导入插件样式返回
     const show = ref(false);

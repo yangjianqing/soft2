@@ -30,7 +30,8 @@ export default {
       },
         onClickLeft,
       };
-    }
+    },
+
 }
 const onClickLeft = () => history.back();
 </script>

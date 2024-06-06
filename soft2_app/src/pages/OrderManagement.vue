@@ -18,7 +18,12 @@
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
 
         <div style="display: flex;flex-wrap: wrap;">
-          <MerchandiseInfo v-for="list in 9"></MerchandiseInfo>
+          <template v-for="(goodsInfo,index) in goodsList">
+            <div class="total_box" v-if="index%2===1">
+              <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+              <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+            </div>
+          </template>
         </div>
       </van-tab>
       <van-tab title="待付款"> <van-cell  title="用户名"/>
@@ -29,7 +34,12 @@
         </van-swipe-cell>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
         <div style="display: flex;flex-wrap: wrap;">
-          <MerchandiseInfo v-for="list in 9"></MerchandiseInfo>
+          <template v-for="(goodsInfo,index) in goodsList">
+            <div class="total_box" v-if="index%2===1">
+              <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+              <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+            </div>
+          </template>
         </div>
       </van-tab>
       <van-tab title="待发货">
@@ -47,13 +57,27 @@
         </van-swipe-cell>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
         <div style="display: flex;flex-wrap: wrap;">
-          <MerchandiseInfo v-for="list in 9"></MerchandiseInfo>
+          <template v-for="(goodsInfo,index) in goodsList">
+            <div class="total_box" v-if="index%2===1">
+              <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+              <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+            </div>
+          </template>
         </div>
       </van-tab>
       <van-tab title="评价">
       <AssessMent>
 
       </AssessMent>
+        <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
+        <div style="display: flex;flex-wrap: wrap;">
+          <template v-for="(goodsInfo,index) in goodsList">
+            <div class="total_box" v-if="index%2===1">
+              <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+              <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+            </div>
+          </template>
+        </div>
       </van-tab>
     </van-tabs>
 
@@ -74,12 +98,22 @@ export default {
       onRefresh,
       onClickLeft,
       active,
-      actives
+      actives,
+      goodsList:[],
     }
-  }, methods:{
-
   },
-
+  methods:{
+    getGoodsList(){
+      listShopping().then(res=>{
+        console.log(res.data.rows);
+        this.goodsList=res.data.rows;
+      })
+    }
+  },
+  created() {
+    //获取商品列表
+    this.getGoodsList();
+  },
 }
 import {ref} from "vue";
 import {showToast} from "vant";
@@ -87,6 +121,7 @@ import AddressGement from "@/components/address/AddressGement.vue";
 import ShoppingCard from "@/components/card/ShoppingCard.vue";
 import OrderInfo from "@/components/OrderInfo.vue";
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
+import {listShopping} from "@/api/merchant";
 const actives = ref(1);
 const count = ref(0);
 const loading = ref(false);

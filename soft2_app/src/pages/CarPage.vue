@@ -3,12 +3,10 @@
       <van-nav-bar   title="购物车"></van-nav-bar>
       <van-pull-refresh v-model="loading" @refresh="onRefresh">
         <div v-if="hasItemsInCart">
-          <router-link to="/cart/shoppinggement">
           <OrderInfo ></OrderInfo>
-      </router-link>
         </div>
         <div v-else>
-          <NoShopping >
+          <NoShopping>
 
           </NoShopping>
         </div>
@@ -17,18 +15,21 @@
         >
           猜你喜欢
         </van-divider>
-
-
       <div style="display: flex;flex-wrap: wrap;">
-        <MerchandiseInfo v-for="list in 10" v-on:click="Retrunshopping">
-
-        </MerchandiseInfo>
+        <template v-for="(goodsInfo,index) in goodsList">
+          <div class="total_box" v-if="index%2===1">
+            <MerchandiseInfo @click="Retrunshopping" :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+            <MerchandiseInfo @click="Retrunshopping" :goodsInfo="goodsList[index]"></MerchandiseInfo>
+          </div>
+        </template>
       </div>
       </van-pull-refresh>
     </div>
-  <van-action-bar safe-area-inset-bottom style="bottom: 48px">
-    <van-action-bar-icon icon="cart-o" text="加入购物车" @click="onClickIcon" />
-    <van-action-bar-button type="danger" text="立即购买" @click="onClickButton" />
+  <van-action-bar  safe-area-inset-bottom style="bottom: 48px">
+    <van-action-bar-icon icon="gold-coin-o" text="总金额" />
+    <van-action-bar-button color="#be99ff" type="warning" text="加入购物车" :click="addToCar"/>
+      <van-action-bar-button color="#7232dd" type="danger" text="去付款" @click="Retrunshoppings" />
+
   </van-action-bar>
 </template>
 
@@ -39,6 +40,8 @@ import OrderInfo from "@/components/OrderInfo.vue";
 import NoShopping from "@/components/NoShopping/NoShopping.vue";
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 import router from "@/router";
+import {listShopping} from "@/api/merchant";
+import Goods from "@/components/good/goods.vue";
 
 const count = ref(0);
 const loading = ref(false);
@@ -57,20 +60,39 @@ const hasItemsInCart = ref(value); // 假设这是从购物车服务获取的
 
     export default {
         name: "CarPage",
-        components: {MerchandiseInfo, NoShopping, OrderInfo},
+        components: {Goods, MerchandiseInfo, NoShopping, OrderInfo},
+        props:['goods'],
         data(){
           return {
             count,
             loading,
             onRefresh,
-            hasItemsInCart
+            hasItemsInCart,
+            goodsList:[],
           }
         },
       methods:{
         Retrunshopping(){
           router.push({ path: '/cart/shoppinggement' });
         },
+        Retrunshoppings(){
+          router.push({ path: '/mine/ordermanagement' });
+        },
+        //金额
+        addToCar(){
+            alert("你好")
+        },
+        //图片
+        getGoodsList(){
+          listShopping().then(res=>{
+            console.log(res.data.rows);
+            this.goodsList=res.data.rows;
+          })
+        },
       },
+      created() {
+          this.getGoodsList()
+      }
     }
 
 </script>
