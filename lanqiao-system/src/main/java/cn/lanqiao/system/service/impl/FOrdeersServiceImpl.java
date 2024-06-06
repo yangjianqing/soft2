@@ -6,14 +6,11 @@ import cn.lanqiao.common.core.domain.entity.SysUser;
 import cn.lanqiao.common.utils.DateUtils;
 import cn.lanqiao.common.utils.OrderNumberGenerator;
 import cn.lanqiao.system.domain.*;
-import cn.lanqiao.system.mapper.FAddressMapper;
-import cn.lanqiao.system.mapper.FUsersMapper;
-import cn.lanqiao.system.mapper.SysUserMapper;
+import cn.lanqiao.system.mapper.*;
 import cn.lanqiao.system.service.IFGoodsService;
 import cn.lanqiao.system.service.IFUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.lanqiao.system.mapper.FOrdeersMapper;
 import cn.lanqiao.system.service.IFOrdeersService;
 
 /**
@@ -38,6 +35,9 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
     @Autowired
     private FUsersMapper fUsersMapper;
+
+    @Autowired
+    private FOrderPartslistMapper fOrderPartslistMapper;
 
     @Autowired
     private IFOrdeersService fOrdeersService;
@@ -258,5 +258,91 @@ public class FOrdeersServiceImpl implements IFOrdeersService
                 fGoodsService.updateFGoods(fGoods1);
             }
         }
+    }
+
+    /**
+     * 手机端用户全部订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    @Override
+    public List<FOrderPartslist> selectOrders(String usersPhone) {
+        FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
+        List<FOrdeers> fOrdeers = fOrdeersMapper.selectOrders(fUsers.getUsersId());
+        List<FOrderPartslist> fOrderPartslist = new ArrayList<>();
+        for (FOrdeers fOrdeer : fOrdeers) {
+            List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());
+            fOrderPartslist.addAll(fOrderPartslists);
+        }
+        return fOrderPartslist;
+    }
+
+    /**
+     * 手机端用户待付款订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    @Override
+    public List<FOrderPartslist> selectpaymentOrders(String usersPhone) {
+        FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
+        List<FOrdeers> fOrdeers = fOrdeersMapper.selectpaymentOrders(fUsers.getUsersId());
+        List<FOrderPartslist> fOrderPartslist = new ArrayList<>();
+        for (FOrdeers fOrdeer : fOrdeers) {
+            List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());
+            fOrderPartslist.addAll(fOrderPartslists);
+        }
+        return fOrderPartslist;
+    }
+
+
+    /**
+     * 手机端用户待发货订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    @Override
+    public List<FOrderPartslist> selectwaitingOrders(String usersPhone) {
+        FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
+        List<FOrdeers> fOrdeers = fOrdeersMapper.selectwaitingOrders(fUsers.getUsersId());
+        List<FOrderPartslist> fOrderPartslist = new ArrayList<>();
+        for (FOrdeers fOrdeer : fOrdeers) {
+            List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());
+            fOrderPartslist.addAll(fOrderPartslists);
+        }
+        return fOrderPartslist;
+    }
+
+    /**
+     * 手机端用户待收货订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    @Override
+    public List<FOrderPartslist> selectReceiveOrders(String usersPhone) {
+        FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
+        List<FOrdeers> fOrdeers = fOrdeersMapper.selectReceiveOrders(fUsers.getUsersId());
+        List<FOrderPartslist> fOrderPartslist = new ArrayList<>();
+        for (FOrdeers fOrdeer : fOrdeers) {
+            List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());
+            fOrderPartslist.addAll(fOrderPartslists);
+        }
+        return fOrderPartslist;
+    }
+
+    /**
+     * 手机端用户待评价订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    @Override
+    public List<FOrderPartslist> selectevaluateOrders(String usersPhone) {
+        FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
+        List<FOrdeers> fOrdeers = fOrdeersMapper.selectevaluateOrders(fUsers.getUsersId());
+        List<FOrderPartslist> fOrderPartslist = new ArrayList<>();
+        for (FOrdeers fOrdeer : fOrdeers) {
+            List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());
+            fOrderPartslist.addAll(fOrderPartslists);
+        }
+        return fOrderPartslist;
     }
 }

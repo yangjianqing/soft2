@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import cn.lanqiao.common.annotation.Excel;
 import cn.lanqiao.common.core.domain.BaseEntity;
 
+import java.math.BigDecimal;
+
 /**
  * 订单明细对象 f_order_partslist
  * 
@@ -34,6 +36,17 @@ public class FOrderPartslist extends BaseEntity
         this.orderId = orderId;
     }
 
+    /** 主键 */
+    private Long goodsid;
+
+    public Long getGoodsid() {
+        return goodsid;
+    }
+
+    public void setGoodsid(Long goodsid) {
+        this.goodsid = goodsid;
+    }
+
     /** 商品数量 */
     @Excel(name = "商品数量")
     private Long goodsNum;
@@ -41,6 +54,65 @@ public class FOrderPartslist extends BaseEntity
     /** 商品数量 */
     @Excel(name = "商品对象")
     private FGoods goods;
+
+    /** 商品名称 */
+    @Excel(name = "商品名称")
+    private String name;
+
+    /** 商品规格 */
+    @Excel(name = "商品规格")
+    private String specification;
+
+    /** 商品价格 */
+    @Excel(name = "商品价格")
+    private BigDecimal price;
+
+    @Excel(name = "编码")
+    private Long coding;
+
+    /** 图片 */
+    @Excel(name = "图片")
+    private String image;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getCoding() {
+        return coding;
+    }
+
+    public void setCoding(Long coding) {
+        this.coding = coding;
+    }
+
+    public String getSpecification() {
+        return specification;
+    }
+
+    public void setSpecification(String specification) {
+        this.specification = specification;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public FGoods getGoods() {
         return goods;
@@ -90,11 +162,18 @@ public class FOrderPartslist extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("goodsId", getGoodsId())
-            .append("orderId", getOrderId())
-            .append("goodsNum", getGoodsNum())
-            .toString();
+        return "FOrderPartslist{" +
+                "id=" + id +
+                ", goodsId=" + goodsId +
+                ", orderId='" + orderId + '\'' +
+                ", goodsid=" + goodsid +
+                ", goodsNum=" + goodsNum +
+                ", goods=" + goods +
+                ", name='" + name + '\'' +
+                ", specification='" + specification + '\'' +
+                ", price=" + price +
+                ", coding=" + coding +
+                ", image='" + image + '\'' +
+                '}';
     }
 }

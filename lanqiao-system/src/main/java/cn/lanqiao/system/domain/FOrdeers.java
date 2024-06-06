@@ -1,6 +1,8 @@
 package cn.lanqiao.system.domain;
 
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -39,6 +41,10 @@ public class FOrdeers extends BaseEntity
     /** 用户实体类 */
     @Excel(name = "用户实体类")
     private FUsers fUsers;
+
+    /** 用户实体类 */
+    @Excel(name = "用户实体类")
+    private List<FOrderPartslist> fOrderPartslist;
 
     /** 配送员 */
     @Excel(name = "配送员")
@@ -95,6 +101,14 @@ public class FOrdeers extends BaseEntity
         this.ordersPayStatuds = ordersPayStatuds;
         this.ordersStatus = ordersStatus;
         this.ordersRemark = ordersRemark;
+    }
+
+    public List<FOrderPartslist> getfOrderPartslist() {
+        return fOrderPartslist;
+    }
+
+    public void setfOrderPartslist(List<FOrderPartslist> fOrderPartslist) {
+        this.fOrderPartslist = fOrderPartslist;
     }
 
     public FUsers getfUsers() {

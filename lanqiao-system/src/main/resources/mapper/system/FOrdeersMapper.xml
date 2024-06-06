@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFOrdeersVo"/>
         where orders_id = #{ordersId}
     </select>
-        
+
     <insert id="insertFOrdeers" parameterType="FOrdeers" useGeneratedKeys="true" keyProperty="ordersId">
         insert into f_ordeers
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -85,4 +85,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{ordersId}
         </foreach>
     </delete>
+
+    <select id="selectOrders" parameterType="FOrdeers" resultMap="FOrdeersResult">
+        <include refid="selectFOrdeersVo"/>
+        where orders_users_id = #{usersId} AND orders_sysuser_id IS NOT NULL
+    </select>
+
+    <select id="selectpaymentOrders" resultType="FOrdeers" resultMap="FOrdeersResult">
+        <include refid="selectFOrdeersVo"/>
+        where orders_users_id = #{usersId} AND orders_sysuser_id IS NOT NULL and orders_pay_statuds = 1
+    </select>
+
+    <select id="selectwaitingOrders" resultType="FOrdeers" resultMap="FOrdeersResult">
+        <include refid="selectFOrdeersVo"/>
+        where orders_users_id = #{usersId} AND orders_sysuser_id IS NOT NULL and orders_status = 0
+    </select>
+
+    <select id="selectReceiveOrders" resultType="FOrdeers" resultMap="FOrdeersResult">
+        <include refid="selectFOrdeersVo"/>
+        where orders_users_id = #{usersId} AND orders_sysuser_id IS NOT NULL and orders_status = 1
+    </select>
+
+    <select id="selectevaluateOrders" resultType="FOrdeers" resultMap="FOrdeersResult">
+        <include refid="selectFOrdeersVo"/>
+        where orders_users_id = #{usersId} AND orders_sysuser_id IS NOT NULL and orders_status = 2
+    </select>
 </mapper>

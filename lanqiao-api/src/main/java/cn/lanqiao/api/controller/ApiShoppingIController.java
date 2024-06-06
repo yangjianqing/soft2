@@ -207,28 +207,6 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
-     * 手机端结算
-     *
-     * @param usersPhone 用户电话号码
-     * @param ordersPayMethod 支付方式
-     * @param ordersPayStatuds 支付状态
-     * @param ordersRemark 订单备注信息
-     * @param GoodsList 订单集合
-     */
-    @ApiOperation("手机端购物车结算")
-    @PostMapping  (value = "/insertSettlement")
-    public AjaxResult insertSettlement(@PathVariable("usersPhone") String usersPhone, @PathVariable("ordersPayMethod") Long ordersPayMethod, @PathVariable("ordersPayStatuds") Long ordersPayStatuds, @PathVariable("ordersRemark") String ordersRemark, @RequestBody List<FGoods> GoodsList)
-    {
-        try {
-            fOrdeersService.insertShopping(usersPhone,ordersPayMethod,ordersPayStatuds,ordersRemark,GoodsList);
-            return AjaxResult.success("付款成功");
-        } catch (Exception ex){
-            ex.getMessage();
-            return AjaxResult.error("系统异常");
-        }
-    }
-
-    /**
      * 手机端添加购物车数据到redis
      *
      * @param usersPhone 用户号码
@@ -262,4 +240,90 @@ public class ApiShoppingIController extends BaseController {
         return AjaxResult.success(fGoods);
     }
 
+    /**
+     * 手机端结算
+     *
+     * @param usersPhone 用户电话号码
+     * @param ordersPayMethod 支付方式
+     * @param ordersPayStatuds 支付状态
+     * @param ordersRemark 订单备注信息
+     * @param GoodsList 订单集合
+     */
+    @ApiOperation("手机端购物车结算")
+    @PostMapping  (value = "/insertSettlement")
+    public AjaxResult insertSettlement(@PathVariable("usersPhone") String usersPhone, @PathVariable("ordersPayMethod") Long ordersPayMethod, @PathVariable("ordersPayStatuds") Long ordersPayStatuds, @PathVariable("ordersRemark") String ordersRemark, @RequestBody List<FGoods> GoodsList)
+    {
+        try {
+            fOrdeersService.insertShopping(usersPhone,ordersPayMethod,ordersPayStatuds,ordersRemark,GoodsList);
+            return AjaxResult.success("付款成功");
+        } catch (Exception ex){
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
+        }
+    }
+
+    /**
+     * 手机端用户全部订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    @ApiOperation("手机端用户全部订单接口")
+    @GetMapping  (value = "/selectOrders/{usersPhone}")
+    public AjaxResult selectOrders(@PathVariable("usersPhone") String usersPhone)
+    {
+        List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectOrders(usersPhone);
+        return AjaxResult.success(fOrderPartslists);
+    }
+
+    /**
+     * 手机端用户待付款订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    @ApiOperation("手机端用户待付款订单接口")
+    @GetMapping  (value = "/selectpaymentOrders/{usersPhone}")
+    public AjaxResult selectpaymentOrders(@PathVariable("usersPhone") String usersPhone)
+    {
+        List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectpaymentOrders(usersPhone);
+        return AjaxResult.success(fOrderPartslists);
+    }
+
+    /**
+     * 手机端用户待发货订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    @ApiOperation("手机端用户待发货订单")
+    @GetMapping  (value = "/selectwaitingOrders/{usersPhone}")
+    public AjaxResult selectwaitingOrders(@PathVariable("usersPhone") String usersPhone)
+    {
+        List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectwaitingOrders(usersPhone);
+        return AjaxResult.success(fOrderPartslists);
+    }
+
+    /**
+     * 手机端用户待收货订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    @ApiOperation("手机端用户待收货订单接口")
+    @GetMapping  (value = "/selectReceiveOrders/{usersPhone}")
+    public AjaxResult selectReceiveOrders(@PathVariable("usersPhone") String usersPhone)
+    {
+        List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectReceiveOrders(usersPhone);
+        return AjaxResult.success(fOrderPartslists);
+    }
+
+    /**
+     * 手机端用户待评价订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    @ApiOperation("手机端用户待评价订单接口")
+    @GetMapping  (value = "/selectevaluateOrders/{usersPhone}")
+    public AjaxResult selectevaluateOrders(@PathVariable("usersPhone") String usersPhone)
+    {
+        List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectevaluateOrders(usersPhone);
+        return AjaxResult.success(fOrderPartslists);
+    }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import cn.lanqiao.system.domain.FGoods;
 import cn.lanqiao.system.domain.FOrdeers;
+import cn.lanqiao.system.domain.FOrderPartslist;
 
 /**
  * 订单管理Service接口
@@ -78,4 +79,39 @@ public interface IFOrdeersService
      * @param GoodsList 订单集合
      */
     public void insertShopping(String usersPhone,Long ordersPayMethod,Long ordersPayStatuds,String ordersRemark,List<FGoods> GoodsList);
+
+    /**
+     * 手机端用户全部订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    public List<FOrderPartslist> selectOrders(String usersPhone);
+
+    /**
+     * 手机端用户待付款订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    public List<FOrderPartslist> selectpaymentOrders(String usersPhone);
+
+    /**
+     * 手机端用户待发货订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    public List<FOrderPartslist> selectwaitingOrders(String usersPhone);
+
+    /**
+     * 手机端用户待收货订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    public List<FOrderPartslist> selectReceiveOrders(String usersPhone);
+
+    /**
+     * 手机端用户待评价订单
+     *
+     * @param usersPhone 用户电话号码
+     */
+    public List<FOrderPartslist> selectevaluateOrders(String usersPhone);
 }

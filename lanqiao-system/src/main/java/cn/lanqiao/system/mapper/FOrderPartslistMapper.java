@@ -58,4 +58,11 @@ public interface FOrderPartslistMapper
      * @return 结果
      */
     public int deleteFOrderPartslistByIds(Long[] ids);
+
+    /**
+     * 根据订单编号获取商品数据
+     *
+     * @param orderId 订单编号
+     */
+    public List<FOrderPartslist> selectFOrderPartslist(String orderId);
 }
