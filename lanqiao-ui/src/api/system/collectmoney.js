@@ -24,3 +24,12 @@ export function selectMemberName(memberPhone) {
     method: 'get'
   })
 }
+
+// 新增会员
+export function addUsers(data) {
+  return request({
+    url: '/system/users',
+    method: 'post',
+    data: data
+  })
+}

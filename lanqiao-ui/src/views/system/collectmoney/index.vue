@@ -98,6 +98,7 @@
       </el-col>
       <el-col :span="6">
         <div class="pay_img">
+          <img src="@/assets/images/collectmoney/addusers.png" alt="新增会员"  @click="handleAdd" />
           <img src="@/assets/images/collectmoney/wechat.png" alt="微信支付" @click="showQRCode('wechat')" />
           <img src="@/assets/images/collectmoney/alipay.png" alt="支付宝支付" @click="showQRCode('alipay')" />
           <img src="@/assets/images/collectmoney/cash.png" alt="现金支付" @click="checkout" />
@@ -109,16 +110,69 @@
         </div>
       </el-dialog>
     </el-row>
+    <!-- 添加或修改会员管理对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="会员姓名" prop="usersName">
+          <el-input v-model="form.usersName" placeholder="请输入会员姓名" />
+        </el-form-item>
+        <el-form-item label="会员性别" prop="usersSex">
+          <el-select v-model="form.usersSex" placeholder="请选择会员性别">
+            <el-option
+              v-for="dict in dict.type.sys_user_sex"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="联系方式" prop="usersPhone">
+          <el-input v-model="form.usersPhone" placeholder="请输入联系方式" prefix-icon="el-icon-phone-outline" />
+        </el-form-item>
+        <el-form-item label="会员密码" prop="usersPassword">
+          <el-input v-model="form.usersPassword" :type="showPassword ? 'text' : 'password'" placeholder="请输入会员密码" prefix-icon="el-icon-lock">
+            <template #append>
+              <el-button icon="el-icon-view" @click="showPassword = !showPassword" circle></el-button>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="会员头像">
+          <image-upload  v-model="form.usersAvatar"/>
+        </el-form-item>
+        <el-form-item label="会员积分" prop="memberTotal">
+          <el-input v-model="form.memberTotal" placeholder="请输入会员积分" />
+        </el-form-item>
+        <el-form-item label="会员级别" prop="memberGrade">
+          <el-select v-model="form.memberGrade" placeholder="请选择会员级别">
+            <el-option
+              v-for="dict in dict.type.f_membership_grade"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getGoodsList, addGoodsList, selectMemberName } from "@/api/system/collectmoney";
+import { getGoodsList, addGoodsList, selectMemberName, addUsers } from "@/api/system/collectmoney";
 
 export default {
-
+  name: "collectmoney",
+  dicts: ['f_membership_grade', 'sys_user_sex'],
   data() {
     return {
+      // 新增会员对话框相关数据
+      title: '新增会员',
+      open: false,
+      showPassword: false,
       barcode: '', //条形码
       productsInCart: [], //购物车
       showQR: false,// 是否显示对话框
@@ -129,10 +183,50 @@ export default {
         memberTotal: '', //会员积分
         memberJian: '', //抵扣积分
       },
+      // 表单参数
+      form: {
+        usersId: '',
+        usersName: '',
+        usersSex: '',
+        usersPhone: '',
+        usersPassword: '',
+        usersAvatar: '',
+        memberGrade: '',
+        memberTotal: '',
+        createTime: ''
+      },
+      // 表单校验
+      rules: {
+        usersName: [
+          { required: true, message: "用户姓名不能为空", trigger: "blur" },
+          { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]{2,10}$/, message: "2-10位中文、英文、英文数字组合", trigger: "blur" }
+        ],
+        usersPhone: [
+          { required: true, message: "联系方式不能为空", trigger: "blur" },
+          { pattern: /^((0\d{2,3}-\d{7,8})|(1[34578]\d{9}))$/, message: "电话号码无效", trigger: "blur" }
+        ],
+        usersPassword: [
+          { required: true, message: "用户密码不能为空", trigger: "blur" },
+          { pattern:/^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$)([^\u4e00-\u9fa5\s]){6,20}$/, message: "6-20位英文数字组合", trigger: "blur" }
+        ],
+        memberTotal: [
+          { required: true, message: "会员积分不能为空", trigger: "blur" },
+          { pattern: /^(0|[1-9]\d*)$/, message: "请输入非负整数", trigger: "blur" }
+        ]
+      }
     };
   },
   created() {
 
+  },
+  watch: {
+    'form.memberTotal': function(value) {
+      if (value == null || value < 100) {
+        this.form.memberGrade = 0;
+      } else if (value >= 100) {
+        this.form.memberGrade = 1;
+      }
+    }
   },
   methods: {
     showQRCode(paymentMethod) {//传参
@@ -262,6 +356,42 @@ export default {
         this.clearCart(); // 调用清空购物车+会员方法
       }
     },
+
+    //新增会员用户功能
+    /** 新增按钮操作 */
+    handleAdd() {
+      this.reset();
+      this.open = true;
+      this.title = "新增会员";
+    },
+    // 提交表单方法
+    submitForm() {
+      addUsers(this.form).then(response => {
+        this.$modal.msgSuccess("新增成功");
+        this.open = false;
+        this.reset();
+      });
+    },
+    // 取消按钮
+    cancel() {
+      this.open = false;
+      this.reset();
+    },
+    // 表单重置
+    reset() {
+      this.form = {
+        usersId: null,
+        usersName: null,
+        usersSex: null,
+        usersPhone: null,
+        usersPassword: null,
+        usersAvatar: null,
+        memberGrade: 0,
+        memberTotal: null,
+        createTime: null
+      };
+      this.resetForm("form");
+    },
     //清空购物车+会员
     clearCart() {
       this.productsInCart = []; //重置购物车数据
@@ -318,7 +448,7 @@ h1 {
 }
 
 .pay_img {
-  margin-top: 12rem;
+  margin-top: 8rem;
   width: 64px;
   height: 64px;
 }
@@ -333,5 +463,17 @@ h1 {
   width: 500px;
   height: 600px;
   margin: 0 auto;
+}
+
+.pay_img img {
+  cursor: pointer; /* 更改光标样式以指示可点击 */
+  transition: opacity 0.3s ease; /* 添加过渡效果 */
+  opacity: 1; /* 默认不透明 */
+  width: 60px;
+  height: 60px;
+}
+
+.pay_img img:hover {
+  opacity: 0.7; /* 鼠标悬停时降低不透明度 */
 }
 </style>

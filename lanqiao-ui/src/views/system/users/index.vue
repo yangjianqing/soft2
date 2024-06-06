@@ -274,7 +274,6 @@ export default {
     'form.memberTotal': function(value) {
       if (value == null || value < 100) {
         this.form.memberGrade = 0;
-        this.form.usersSex= 2;
       } else if (value >= 100) {
         this.form.memberGrade = 1;
       }
@@ -304,7 +303,7 @@ export default {
         usersPhone: null,
         usersPassword: null,
         usersAvatar: null,
-        memberGrade: null,
+        memberGrade: 0,
         memberTotal: null,
         createTime: null
       };
