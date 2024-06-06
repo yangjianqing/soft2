@@ -1,10 +1,6 @@
 package cn.lanqiao.common.core.redis;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundSetOperations;
@@ -48,6 +44,24 @@ public class RedisCache
     {
         redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
     }
+
+    /**
+     * 缓存基本的对象，Integer、String、实体类等，并存储商品数量
+     *
+     * @param key 缓存的键值
+     * @param value 缓存的值
+     * @param quantity 商品数量
+     * @param timeout 缓存的超时时间
+     * @param timeUnit 时间单位
+     */
+    public <T> void setDataObject(final String key, final T value, Long quantity, final Integer timeout, final TimeUnit timeUnit) {
+        // 将商品数量和值一起存入Redis
+        redisTemplate.opsForHash().put(key, "value", value);
+        redisTemplate.opsForHash().put(key, "quantity", quantity);
+        // 设置超时时间
+        redisTemplate.expire(key, timeout, timeUnit);
+    }
+
 
     /**
      * 设置有效时间
@@ -205,6 +219,42 @@ public class RedisCache
     {
         return redisTemplate.opsForHash().entries(key);
     }
+
+    /**
+     * 将购物车数据存储到 Redis
+     *
+     * @param key
+     * @param dataMap
+     * @param expireTime
+     * @param timeUnit
+     */
+    public void setShoppingCart(final String key, final Map<Long, Long> dataMap, long expireTime, TimeUnit timeUnit) {
+        Map<String, String> stringMap = new HashMap<>();
+        for (Map.Entry<Long, Long> entry : dataMap.entrySet()) {
+            stringMap.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
+        }
+        redisTemplate.opsForHash().putAll(key, stringMap);
+        redisTemplate.expire(key, expireTime, timeUnit);
+    }
+
+
+    /**
+     * 获得缓存的Map
+     *
+     * @param key
+     * @return
+     */
+    public Map<Long, Long> getShoppingCart(final String key) {
+        Map<String, String> stringMap = redisTemplate.opsForHash().entries(key);
+        Map<Long, Long> resultMap = new HashMap<>();
+        for (Map.Entry<String, String> entry : stringMap.entrySet()) {
+            Long mapKey = Long.parseLong(entry.getKey());
+            Long mapValue = Long.parseLong(entry.getValue());
+            resultMap.put(mapKey, mapValue);
+        }
+        return resultMap;
+    }
+
 
     /**
      * 往Hash中存入数据

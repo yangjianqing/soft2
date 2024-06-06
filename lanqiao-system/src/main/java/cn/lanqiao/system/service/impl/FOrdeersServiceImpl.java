@@ -2,19 +2,13 @@ package cn.lanqiao.system.service.impl;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-
-import cn.lanqiao.common.constant.CacheConstants;
-import cn.lanqiao.common.constant.Constants;
 import cn.lanqiao.common.core.domain.entity.SysUser;
-import cn.lanqiao.common.core.redis.RedisCache;
 import cn.lanqiao.common.utils.DateUtils;
 import cn.lanqiao.common.utils.OrderNumberGenerator;
 import cn.lanqiao.system.domain.*;
 import cn.lanqiao.system.mapper.FAddressMapper;
 import cn.lanqiao.system.mapper.FUsersMapper;
 import cn.lanqiao.system.mapper.SysUserMapper;
-import cn.lanqiao.system.service.ICategoryService;
 import cn.lanqiao.system.service.IFGoodsService;
 import cn.lanqiao.system.service.IFUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +44,6 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
     @Autowired
     private FOrderPartslistServiceImpl fOrderPartslistService;
-
-    @Autowired
-    private RedisCache redisCache;
 
     @Autowired
     private IFUsersService ifUsersService;
@@ -266,11 +257,6 @@ public class FOrdeersServiceImpl implements IFOrdeersService
                 fGoods1.setNum(fGoods1.getNum()-fGoods.getQuantity());
                 fGoodsService.updateFGoods(fGoods1);
             }
-
-            // TODO: 进行将购物车数据存储到redis操作
-            String verKey = CacheConstants.Query_Shopping_KEY + fUsers.getUsersId();//根据当用户id生成唯一标识Key
-            //将verKey添加到redis
-            redisCache.setCacheObject(verKey,GoodsList,Constants.Query_Shopping,TimeUnit.HOURS);
         }
     }
 }

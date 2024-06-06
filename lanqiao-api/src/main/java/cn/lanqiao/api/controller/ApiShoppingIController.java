@@ -4,6 +4,7 @@ import cn.lanqiao.common.constant.CacheConstants;
 import cn.lanqiao.common.constant.Constants;
 import cn.lanqiao.common.core.controller.BaseController;
 import cn.lanqiao.common.core.domain.AjaxResult;
+import cn.lanqiao.common.core.domain.R;
 import cn.lanqiao.common.core.domain.entity.Category;
 import cn.lanqiao.common.core.page.TableDataInfo;
 import cn.lanqiao.common.core.redis.RedisCache;
@@ -16,8 +17,10 @@ import cn.lanqiao.common.utils.uuid.IdUtils;
 //import cn.lanqiao.system.Category;
 import cn.lanqiao.system.domain.*;
 import cn.lanqiao.system.service.*;
+import cn.lanqiao.system.service.impl.IFShoppingCartServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +45,10 @@ public class ApiShoppingIController extends BaseController {
     private IFUsersService ifUsersService;
     @Autowired
     private ICategoryService ifCategoryService;
+
+    @Autowired
+    private IFShoppingCartServiceImpl ifShoppingCartService;
+
     @Autowired
     private RedisCache redisCache;
     /**
@@ -209,8 +216,8 @@ public class ApiShoppingIController extends BaseController {
      * @param GoodsList 订单集合
      */
     @ApiOperation("手机端购物车结算")
-    @PostMapping  (value = "/insertShopping")
-    public AjaxResult insertShopping(@PathVariable("usersPhone") String usersPhone, @PathVariable("ordersPayMethod") Long ordersPayMethod, @PathVariable("ordersPayStatuds") Long ordersPayStatuds, @PathVariable("ordersRemark") String ordersRemark, @RequestBody List<FGoods> GoodsList)
+    @PostMapping  (value = "/insertSettlement")
+    public AjaxResult insertSettlement(@PathVariable("usersPhone") String usersPhone, @PathVariable("ordersPayMethod") Long ordersPayMethod, @PathVariable("ordersPayStatuds") Long ordersPayStatuds, @PathVariable("ordersRemark") String ordersRemark, @RequestBody List<FGoods> GoodsList)
     {
         try {
             fOrdeersService.insertShopping(usersPhone,ordersPayMethod,ordersPayStatuds,ordersRemark,GoodsList);
@@ -221,5 +228,23 @@ public class ApiShoppingIController extends BaseController {
         }
     }
 
-
+    /**
+     * 手机端添加购物车数据到redis
+     *
+     * @param usersPhone 用户号码
+     * @param coding 商品编码(根据商品编码查询商品数据)
+     * 商品数量(每次添加数据到redis同一商品的数量)
+     */
+    @ApiOperation("手机端添加购物车数据到redis")
+    @GetMapping(value = "/insertShopData/{usersPhone}/{coding}")
+    public AjaxResult insertShopData(@PathVariable("usersPhone") String usersPhone, @PathVariable("coding") Long coding)
+    {
+        try {
+            ifShoppingCartService.insertShopData(usersPhone,coding,1L);
+            return AjaxResult.success();
+        } catch (Exception ex){
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
+        }
+    }
 }
