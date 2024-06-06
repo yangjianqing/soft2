@@ -199,6 +199,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectGoodsList" resultType="cn.lanqiao.system.domain.FGoods">
+
+
+    </select>
+
+    <select id="selectProfit" resultType="cn.lanqiao.system.domain.FGoods">
         <include refid="selectFGoodsVo"/>
         WHERE  coding = #{coding}
     </select>

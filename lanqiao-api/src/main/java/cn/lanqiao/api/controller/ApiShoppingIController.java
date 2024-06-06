@@ -4,12 +4,13 @@ import cn.lanqiao.common.constant.CacheConstants;
 import cn.lanqiao.common.constant.Constants;
 import cn.lanqiao.common.core.controller.BaseController;
 import cn.lanqiao.common.core.domain.AjaxResult;
+import cn.lanqiao.common.core.domain.entity.Category;
 import cn.lanqiao.common.core.page.TableDataInfo;
 import cn.lanqiao.common.core.redis.RedisCache;
-import cn.lanqiao.common.utils.MyClass;
 import cn.lanqiao.common.utils.SecurityUtils;
-import cn.lanqiao.common.utils.SendSms;
 import cn.lanqiao.common.utils.uuid.IdUtils;
+
+//import cn.lanqiao.system.Category;
 import cn.lanqiao.system.domain.*;
 import cn.lanqiao.system.service.*;
 import io.swagger.annotations.Api;
@@ -35,11 +36,13 @@ public class ApiShoppingIController extends BaseController {
     @Autowired
     private IFUsersService ifUsersService;
     @Autowired
+    private ICategoryService ifCategoryService;
+    @Autowired
     private RedisCache redisCache;
     /**
      * 查询商品列表
      */
-    @ApiOperation("Add User")
+    @ApiOperation("按大分类查询商品   /api/fresh/goodsList?pageNum=1&pageSize=10&categoryId=1000")
     @GetMapping("/goodsList")
     public TableDataInfo list(FGoods fGoods)
     {
@@ -47,6 +50,15 @@ public class ApiShoppingIController extends BaseController {
         List<FGoods> list = fGoodsService.selectFGoodsList(fGoods);
         return getDataTable(list);
     }
+    @ApiOperation("查询父类 ")
+    @GetMapping("/categoryList")
+    public TableDataInfo list(Category category)
+    {
+        startPage();
+        List<Category> list = ifCategoryService.selectMacroclassification(category);
+        return getDataTable(list);
+    }
+
     /**
      * 查询订单管理列表
      */
@@ -81,17 +93,16 @@ public class ApiShoppingIController extends BaseController {
         List<FGoods> fGoodsName = fGoodsService.selectGoodsName(goodsName);
         return AjaxResult.success().put("goods",fGoodsName);
     }
-    /**
-     * 根据商品分类查询
-     */
-    @ApiOperation("根据商品分类查询")
-    @GetMapping("/goodsTpye/{goodsType}")
-    public AjaxResult goodsType( @PathVariable("goodsType")String goodsType)
+
+    @ApiOperation("根据商品id查询")
+    @GetMapping("/goodsId/{id}")
+    public AjaxResult goodsListCoding( @PathVariable("id")Long goodsListCoding)
     {
         startPage();
-        List<FGoods> fGoodstype = fGoodsService.selectGoodsType(goodsType);
-        return AjaxResult.success().put("goodsTpye",fGoodstype);
+        FGoods fGoodsName = fGoodsService.selectFGoodsById(goodsListCoding);
+        return AjaxResult.success().put("id",fGoodsName);
     }
+
 
 
     /**
@@ -181,5 +192,6 @@ public class ApiShoppingIController extends BaseController {
     {
        return null;
     }
+
 
 }

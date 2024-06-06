@@ -215,6 +215,16 @@ public class CategoryServiceImpl implements ICategoryService
         return UserConstants.UNIQUE;
     }
 
+    /**
+     * 查询父部门的信息
+     * @param category
+     * @return
+     */
+    @Override
+    public List<Category> selectMacroclassification(Category category) {
+      return categoryMapper.selectMacroclassification(category);
+    }
+
 //结束
 
 

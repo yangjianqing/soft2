@@ -54,6 +54,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectChildrenDeptById" parameterType="Long" resultMap="CategoryResult">
         select * from category where find_in_set(#{deptId}, ancestors)
     </select>
+    <!--    查询所有父部门-->
+    <select id="selectMacroclassification" parameterType="Long" resultMap="CategoryResult">
+        select * from category where find_in_set(100, ancestors)
+    </select>
 <!--    根据id查询所有正常状态子部门-->
     <select id="selectNormalChildrenDeptById" parameterType="Long" resultType="int">
         select count(*) from category where c_flag = '0' and find_in_set(#{deptId}, ancestors)

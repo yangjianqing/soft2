@@ -132,7 +132,11 @@ public interface ICategoryService
      */
     public String checkDeptNameUnique(Category dept);
 
-
-
+    /**
+     * 查询父部门
+     * @param category
+     * @return
+     */
+    List<Category>selectMacroclassification(Category category);
 
 }

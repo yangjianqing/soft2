@@ -129,5 +129,6 @@ public interface CategoryMapper
      * @return 结果
      */
     public Category checkDeptNameUnique(@Param("deptName") String deptName, @Param("parentId") Long parentId);
+    List<Category> selectMacroclassification(Category category);
 
 }

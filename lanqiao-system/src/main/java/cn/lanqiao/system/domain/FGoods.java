@@ -70,6 +70,18 @@ public class FGoods extends BaseEntity
     @Excel(name = "商品价格")
     private BigDecimal price;
 
+    /** 商品优惠 */
+    @Excel(name = "商品优惠")
+    private BigDecimal profit;
+
+    public BigDecimal getProfit() {
+        return profit;
+    }
+
+    public void setProfit(BigDecimal profit) {
+        this.profit = profit;
+    }
+
     public String getUnit() {
         return unit;
     }
@@ -273,6 +285,7 @@ public class FGoods extends BaseEntity
                 ", categoryName='" + categoryName + '\'' +
                 ", price=" + price +
                 ", unit='" + unit + '\'' +
+                ",profit'"+profit+'\''+
                 ", image='" + image + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +

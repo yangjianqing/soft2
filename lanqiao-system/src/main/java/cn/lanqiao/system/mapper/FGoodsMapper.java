@@ -118,4 +118,11 @@ public interface FGoodsMapper
      */
     public   int  UpdateGoodsNum(FGoods fGoods);
 
+    /**
+     * 查询优惠并排序
+     * @param fGoods
+     * @return
+     */
+     List<FGoods> selectProfit(FGoods fGoods);
+
 }
