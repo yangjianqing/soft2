@@ -74,6 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
     </select>
+
 <!--    根据部门大分类查询-->
     <select id="selectFGoodsByParentId" parameterType="FGoods" resultMap="FGoodsResult">
         SELECT g.id,g.name, g.category_id,g.price,g.unit,g.image,g.description, g.status,g.coding,g.create_time,g.update_time,g.num, g.specification, g.profit
@@ -83,6 +84,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             g.category_id IN (SELECT dept_id FROM category WHERE parent_id =#{deptId} )
         </where>
     </select>
+
+    <!--    查询超盒算-->
+    <select id="selectFGoodsByFavorable" parameterType="FGoods" resultMap="FGoodsResult">
+        SELECT g.id, g.name, g.category_id, g.price, g.unit, g.image, g.description, g.status, g.coding, g.create_time, g.update_time, g.num, g.specification, g.profit
+        FROM f_goods g
+                 INNER JOIN f_purchase_orders p ON g.id = p.goods_id
+        WHERE (g.price - p.unit_price) BETWEEN 1 AND 2
+        ORDER BY (g.price - p.unit_price)
+    </select>
+
 <!--    查询商品价格小于10元的数据-->
      <select id="selectFGoodsLessTen" parameterType="FGoods" resultMap="FGoodsResult">
          SELECT id, name,category_id, price,unit,coding,specification, image, num,description,num,status, create_time, update_time, create_user, update_user
@@ -99,6 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join category b on b.dept_id = a.id
         where a.id = #{id}
     </select>
+
     <select id="selectRecommended" parameterType="FGoods" resultMap="FGoodsResult">
         SELECT g.id, g.name, g.category_id, g.price, g.unit, g.image, g.description, g.status, g.coding, g.create_time, g.update_time, g.num, g.specification, g.profit
         FROM f_goods g

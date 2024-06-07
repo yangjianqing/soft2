@@ -112,6 +112,17 @@ public class ApiShoppingIController extends BaseController {
         List<FOrderPartslist> list = fOrderPartslistService.selectFOrderPartslistList(fOrderPartslist);
         return getDataTable(list);
     }
+    /**
+     * 查询超盒算
+     */
+    @ApiOperation("查询超盒算")
+    @GetMapping("/favorableList")
+    public TableDataInfo selectFGoodsByFavorable(FGoods fGoods)
+    {
+        startPage();
+        List<FGoods> favorableList = fGoodsService.selectFGoodsByFavorable(fGoods);
+        return getDataTable(favorableList);
+    }
 
     /**
      * 查询推荐列表
@@ -125,7 +136,7 @@ public class ApiShoppingIController extends BaseController {
         if (sortNum ==1 ){
             List<FGoods> fGoods1 = fGoodsService.selectRecommended(fGoods);
             fGoods2=fGoods1;
-        }else if(sortNum==3) {
+        } else if(sortNum==3) {
             List<FGoods> fGoods1 = fGoodsService.selectFGoodsLessTen(fGoods);
             fGoods2=fGoods1;
         }else {

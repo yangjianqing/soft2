@@ -172,7 +172,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="商品id" prop="goodsId">
-          <el-input disabled v-model="form.goodsId" placeholder="请输入供应商" />
+          <el-input disabled v-model="form.goodsId" placeholder="默认值" />
         </el-form-item>
         <el-form-item label="商品名称">
           <el-autocomplete
@@ -187,7 +187,6 @@
               <div class="name">{{ item.name }}</div>
 <!--              <span class="addr">{{ item.id }}</span>-->
             </template>
-
           </el-autocomplete>
 
         </el-form-item>

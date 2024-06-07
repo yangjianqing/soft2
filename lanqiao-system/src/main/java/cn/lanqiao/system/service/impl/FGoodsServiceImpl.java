@@ -261,6 +261,16 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.selectFGoodsLessTen(fGoods);
     }
 
+    /**
+     * 查询超盒算
+     * @param fGoods
+     * @return
+     */
+    @Override
+    public List<FGoods> selectFGoodsByFavorable(FGoods fGoods) {
+        return fGoodsMapper.selectFGoodsByFavorable(fGoods);
+    }
+
 
     /**
      * 新增商品分类信息

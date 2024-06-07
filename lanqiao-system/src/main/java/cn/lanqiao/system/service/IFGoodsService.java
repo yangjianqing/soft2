@@ -105,5 +105,11 @@ public interface IFGoodsService
      * @return
      */
     List<FGoods> selectFGoodsLessTen(FGoods fGoods);
+    /**
+     * 查询超盒算
+     * @param fGoods
+     * @return
+     */
+    List<FGoods> selectFGoodsByFavorable(FGoods fGoods);
 
 }
