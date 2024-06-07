@@ -27,6 +27,13 @@ public interface IFGoodsService
      * @return 商品集合
      */
     public List<FGoods> selectFGoodsList(FGoods fGoods);
+    /**
+     * 查询商品父类列表
+     *
+     * @param fGoods 商品
+     * @return 商品集合
+     */
+    public List<FGoods> selectFGoodsByParentId(Long   fGoods);
 
     /**
      * 新增商品

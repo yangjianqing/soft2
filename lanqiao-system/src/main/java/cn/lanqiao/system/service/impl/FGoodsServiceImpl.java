@@ -129,6 +129,17 @@ public class FGoodsServiceImpl implements IFGoodsService
 
 
     /**
+     * 根据父级分类查询
+     * @param fGoods 商品
+     * @return
+     */
+    @Override
+    public List<FGoods> selectFGoodsByParentId(Long fGoods) {
+        return fGoodsMapper.selectFGoodsByParentId(fGoods);
+    }
+
+
+    /**
      * 新增商品
      * 
      * @param fGoods 商品

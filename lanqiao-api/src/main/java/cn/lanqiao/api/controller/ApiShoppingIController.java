@@ -11,6 +11,7 @@ import cn.lanqiao.common.core.redis.RedisCache;
 import cn.lanqiao.common.utils.MyClass;
 import cn.lanqiao.common.utils.OrderNumberGenerator;
 import cn.lanqiao.common.utils.SecurityUtils;
+import cn.lanqiao.common.utils.poi.ExcelUtil;
 import cn.lanqiao.common.utils.SendSms;
 import cn.lanqiao.common.utils.uuid.IdUtils;
 
@@ -20,13 +21,14 @@ import cn.lanqiao.system.service.*;
 import cn.lanqiao.system.service.impl.IFShoppingCartServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -54,7 +56,7 @@ public class ApiShoppingIController extends BaseController {
     /**
      * 查询商品列表
      */
-    @ApiOperation("按大分类查询商品   /api/fresh/goodsList?pageNum=1&pageSize=10&categoryId=1000")
+    @ApiOperation("查询商品")
     @GetMapping("/goodsList")
     public TableDataInfo list(FGoods fGoods)
     {
@@ -62,6 +64,23 @@ public class ApiShoppingIController extends BaseController {
         List<FGoods> list = fGoodsService.selectFGoodsList(fGoods);
         return getDataTable(list);
     }
+    /**
+     * 查询商品列表2
+     */
+    @ApiOperation("按大分类查询商品")
+    @GetMapping("/goodsList2/{deptId}")
+    public AjaxResult list2( @PathVariable("deptId") Long  fGoods)
+    {
+        startPage();
+        List<FGoods> fGoods1 = fGoodsService.selectFGoodsByParentId(fGoods);
+        return AjaxResult.success().put("deptId",fGoods1);
+    }
+
+    /**
+     * 查询分类父类
+      * @param category
+     * @return
+     */
     @ApiOperation("查询父类 ")
     @GetMapping("/categoryList")
     public TableDataInfo list(Category category)
@@ -106,6 +125,12 @@ public class ApiShoppingIController extends BaseController {
         return AjaxResult.success().put("goods",fGoodsName);
     }
 
+
+    /**
+     * 根据商品id查询
+     * @param goodsListCoding
+     * @return
+     */
     @ApiOperation("根据商品id查询")
     @GetMapping("/goodsId/{id}")
     public AjaxResult goodsListCoding( @PathVariable("id")Long goodsListCoding)
@@ -114,6 +139,14 @@ public class ApiShoppingIController extends BaseController {
         FGoods fGoodsName = fGoodsService.selectFGoodsById(goodsListCoding);
         return AjaxResult.success().put("id",fGoodsName);
     }
+//    @ApiOperation("查询分类数据")
+//    @PostMapping("/export")
+//    public void export(HttpServletResponse response, Category category)
+//    {
+//        List<Category> list = categoryService.selectCategoryList(category);
+//        ExcelUtil<Category> util = new ExcelUtil<Category>(Category.class);
+//        util.exportExcel(response, list, "商品分类数据");
+//    }
 
 
 
