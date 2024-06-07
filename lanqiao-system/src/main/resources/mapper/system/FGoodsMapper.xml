@@ -83,6 +83,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             g.category_id IN (SELECT dept_id FROM category WHERE parent_id =#{deptId} )
         </where>
     </select>
+<!--    查询商品价格小于10元的数据-->
+     <select id="selectFGoodsLessTen" parameterType="FGoods" resultMap="FGoodsResult">
+         SELECT id, name,category_id, price,unit,coding,specification, image, num,description,num,status, create_time, update_time, create_user, update_user
+         FROM f_goods
+        <where>
+            price = 10
+        </where>
+    </select>
 
     <select id="selectFGoodsById" parameterType="Long" resultMap="FGoodsCategoryResult">
         select a.id, a.name, a.category_id, a.price,a.unit,a.coding,a.specification,a.image, a.description, a.num,a.status,a.create_time, a.update_time, a.create_user, a.update_user,
@@ -91,6 +99,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join category b on b.dept_id = a.id
         where a.id = #{id}
     </select>
+    <select id="selectRecommended" parameterType="FGoods" resultMap="FGoodsResult">
+        SELECT g.id, g.name, g.category_id, g.price, g.unit, g.image, g.description, g.status, g.coding, g.create_time, g.update_time, g.num, g.specification, g.profit
+        FROM f_goods g
+                 INNER JOIN (
+            SELECT goodsId, COUNT(*) as count
+            FROM f_appraise
+            WHERE rating IN ('5', '4')
+            GROUP BY goodsId
+            HAVING count > 0
+        ) a ON g.id = a.goodsId
+        ORDER BY a.count DESC
+    </select>
+
         
     <insert id="insertFGoods" parameterType="FGoods" useGeneratedKeys="true" keyProperty="id">
         insert into f_goods

@@ -23,7 +23,7 @@ import cn.lanqiao.system.service.IFGoodsService;
  * @date 2024-05-15
  */
 @Service
-public class FGoodsServiceImpl implements IFGoodsService 
+public class FGoodsServiceImpl implements IFGoodsService
 {
     @Autowired
     private FGoodsMapper fGoodsMapper;
@@ -241,6 +241,25 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.UpdateGoodsNum(fGoods);
     }
 
+    /**
+     * 查询推荐
+     * @param fGoods
+     * @return
+     */
+    @Override
+    public List<FGoods> selectRecommended(FGoods fGoods) {
+        return fGoodsMapper.selectRecommended(fGoods);
+    }
+
+    /**
+     * 查询商品小于等于10元
+     * @param fGoods
+     * @return
+     */
+    @Override
+    public List<FGoods> selectFGoodsLessTen(FGoods fGoods) {
+        return fGoodsMapper.selectFGoodsLessTen(fGoods);
+    }
 
 
     /**

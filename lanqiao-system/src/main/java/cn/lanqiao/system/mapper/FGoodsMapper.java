@@ -135,5 +135,17 @@ public interface FGoodsMapper
      * @return
      */
      List<FGoods> selectProfit(FGoods fGoods);
+     /**
+     * 查询推荐
+     * @param fGoods
+     * @return
+     */
+     List<FGoods> selectRecommended(FGoods fGoods);
+     /**
+     * 查询小于等于10元的商品
+     * @param fGoods
+     * @return
+     */
+     List<FGoods> selectFGoodsLessTen(FGoods fGoods);
 
 }

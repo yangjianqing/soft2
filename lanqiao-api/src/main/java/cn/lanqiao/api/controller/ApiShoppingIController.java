@@ -95,7 +95,7 @@ public class ApiShoppingIController extends BaseController {
      */
     @ApiOperation("查询订单管理列表")
     @GetMapping("/ordeersList")
-    public TableDataInfo list(FOrdeers fOrdeers)
+    public TableDataInfo ordeersList(FOrdeers fOrdeers)
     {
         startPage();
         List<FOrdeers> list = fOrdeersService.selectFOrdeersList(fOrdeers);
@@ -106,16 +106,38 @@ public class ApiShoppingIController extends BaseController {
      */
     @ApiOperation("查询订单明细列表")
     @GetMapping("/orderPartsList")
-    public TableDataInfo list(FOrderPartslist fOrderPartslist)
+    public TableDataInfo orderPartsList(FOrderPartslist fOrderPartslist)
     {
         startPage();
         List<FOrderPartslist> list = fOrderPartslistService.selectFOrderPartslistList(fOrderPartslist);
         return getDataTable(list);
     }
+
+    /**
+     * 查询推荐列表
+     */
+    @ApiOperation("查询推荐列表")
+    @GetMapping("/recommendedList/{sortNum}")
+    public TableDataInfo recommendedList(@PathVariable("sortNum") int sortNum, FGoods fGoods)
+    {
+        startPage();
+        List<FGoods> fGoods2=null;
+        if (sortNum ==1 ){
+            List<FGoods> fGoods1 = fGoodsService.selectRecommended(fGoods);
+            fGoods2=fGoods1;
+        }else if(sortNum==3) {
+            List<FGoods> fGoods1 = fGoodsService.selectFGoodsLessTen(fGoods);
+            fGoods2=fGoods1;
+        }else {
+            fGoods2=null;
+        }
+//        List<FGoods> fGoods1 = fGoodsService.selectRecommended(fGoods);
+        return getDataTable(fGoods2);
+    }
+
     /**
      * 根据商品名称查询
      */
-
     @ApiOperation("根据商品名称查询")
     @GetMapping("/goods/{goodsName}")
     public AjaxResult goodsName( @PathVariable("goodsName")String goodsName)
@@ -139,14 +161,7 @@ public class ApiShoppingIController extends BaseController {
         FGoods fGoodsName = fGoodsService.selectFGoodsById(goodsListCoding);
         return AjaxResult.success().put("id",fGoodsName);
     }
-//    @ApiOperation("查询分类数据")
-//    @PostMapping("/export")
-//    public void export(HttpServletResponse response, Category category)
-//    {
-//        List<Category> list = categoryService.selectCategoryList(category);
-//        ExcelUtil<Category> util = new ExcelUtil<Category>(Category.class);
-//        util.exportExcel(response, list, "商品分类数据");
-//    }
+
 
 
 
