@@ -112,4 +112,11 @@ public interface IFGoodsService
      */
     List<FGoods> selectFGoodsByFavorable(FGoods fGoods);
 
+    /**
+     * 查询生鲜列表
+     * @param fGoods
+     * @return
+     */
+    List<FGoods> selectFGoodsByFreshList(FGoods fGoods);
+
 }

@@ -1,5 +1,7 @@
 package cn.lanqiao.common.core.page;
 
+import org.springframework.http.HttpStatus;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -41,6 +43,13 @@ public class TableDataInfo implements Serializable
     {
         this.rows = list;
         this.total = total;
+    }
+
+    public static TableDataInfo error(String s) {
+        TableDataInfo tableDataInfo = new TableDataInfo();
+        tableDataInfo.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value()); // 设置错误代码，可以根据需要选择适当的HTTP状态代码
+        tableDataInfo.setMsg("请求数据错误"); // 设置错误消息
+        return tableDataInfo;
     }
 
     public long getTotal()

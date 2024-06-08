@@ -271,6 +271,16 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.selectFGoodsByFavorable(fGoods);
     }
 
+    /**
+     * 查询生鲜列表
+     * @param fGoods
+     * @return
+     */
+    @Override
+    public List<FGoods> selectFGoodsByFreshList(FGoods fGoods) {
+        return fGoodsMapper.selectFGoodsByFreshList(fGoods);
+    }
+
 
     /**
      * 新增商品分类信息

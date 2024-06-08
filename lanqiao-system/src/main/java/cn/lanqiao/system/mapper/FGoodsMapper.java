@@ -93,6 +93,7 @@ public interface FGoodsMapper
      * @return 结果
      */
     public int deleteCategoryByDeptId(Long id);
+
     /**
      * 根据Id查
      * @param GoodsId
@@ -106,6 +107,7 @@ public interface FGoodsMapper
      * @return
      */
     public   List<FGoods> selectGoodsName(String goodsName);
+
     /**
      *根据商品分类称查询
      * @param
@@ -119,6 +121,7 @@ public interface FGoodsMapper
      * @return
      */
     public   FGoods selectGoodsList(Long coding);
+
     /**
     public  FGoods selectGoodsList(Long coding);
 
@@ -129,29 +132,40 @@ public interface FGoodsMapper
      */
     public  int  UpdateGoodsNum(FGoods fGoods);
 
+
     /**
      * 查询优惠并排序
      * @param fGoods
      * @return
      */
      List<FGoods> selectProfit(FGoods fGoods);
+
      /**
      * 查询推荐
      * @param fGoods
      * @return
      */
      List<FGoods> selectRecommended(FGoods fGoods);
+
      /**
      * 查询小于等于10元的商品
      * @param fGoods
      * @return
      */
      List<FGoods> selectFGoodsLessTen(FGoods fGoods);
+
      /**
      * 查询超盒算
      * @param fGoods
      * @return
      */
      List<FGoods> selectFGoodsByFavorable(FGoods fGoods);
+
+     /**
+     * 查询生鲜列表
+     * @param fGoods
+     * @return
+     */
+     List<FGoods> selectFGoodsByFreshList(FGoods fGoods);
 
 }

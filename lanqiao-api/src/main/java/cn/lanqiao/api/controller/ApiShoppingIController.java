@@ -123,9 +123,20 @@ public class ApiShoppingIController extends BaseController {
         List<FGoods> favorableList = fGoodsService.selectFGoodsByFavorable(fGoods);
         return getDataTable(favorableList);
     }
+//    /**
+//     * 查询生鲜列表
+//     */
+//    @ApiOperation("查询生鲜列表")
+//    @GetMapping("/freshList")
+//    public TableDataInfo selectFGoodsByFreshList(FGoods fGoods)
+//    {
+//        startPage();
+//        List<FGoods> freshList = fGoodsService.selectFGoodsByFreshList(fGoods);
+//        return getDataTable(freshList);
+//    }
 
     /**
-     * 查询推荐列表
+     * 查询推荐列表、生鲜列表、10元商品列表
      */
     @ApiOperation("查询推荐列表")
     @GetMapping("/recommendedList/{sortNum}")
@@ -136,13 +147,15 @@ public class ApiShoppingIController extends BaseController {
         if (sortNum ==1 ){
             List<FGoods> fGoods1 = fGoodsService.selectRecommended(fGoods);
             fGoods2=fGoods1;
+        }else if (sortNum ==2){
+            List<FGoods> freshList = fGoodsService.selectFGoodsByFreshList(fGoods);
+            fGoods2=freshList;
         } else if(sortNum==3) {
             List<FGoods> fGoods1 = fGoodsService.selectFGoodsLessTen(fGoods);
             fGoods2=fGoods1;
         }else {
-            fGoods2=null;
+            return TableDataInfo.error("请求数据错误");
         }
-//        List<FGoods> fGoods1 = fGoodsService.selectRecommended(fGoods);
         return getDataTable(fGoods2);
     }
 
