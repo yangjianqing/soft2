@@ -1,5 +1,6 @@
 package cn.lanqiao.api.controller;
 
+import cn.lanqiao.common.annotation.Log;
 import cn.lanqiao.common.constant.CacheConstants;
 import cn.lanqiao.common.constant.Constants;
 import cn.lanqiao.common.core.controller.BaseController;
@@ -8,6 +9,7 @@ import cn.lanqiao.common.core.domain.R;
 import cn.lanqiao.common.core.domain.entity.Category;
 import cn.lanqiao.common.core.page.TableDataInfo;
 import cn.lanqiao.common.core.redis.RedisCache;
+import cn.lanqiao.common.enums.BusinessType;
 import cn.lanqiao.common.utils.MyClass;
 import cn.lanqiao.common.utils.OrderNumberGenerator;
 import cn.lanqiao.common.utils.SecurityUtils;
@@ -22,6 +24,7 @@ import cn.lanqiao.system.service.impl.IFShoppingCartServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,10 +50,10 @@ public class ApiShoppingIController extends BaseController {
     private IFUsersService ifUsersService;
     @Autowired
     private ICategoryService ifCategoryService;
-
     @Autowired
     private IFShoppingCartServiceImpl ifShoppingCartService;
-
+    @Autowired
+    private IFAppraiseService fAppraiseService;
     @Autowired
     private RedisCache redisCache;
     /**
@@ -167,8 +170,6 @@ public class ApiShoppingIController extends BaseController {
         List<FGoods> fGoodsName = fGoodsService.selectGoodsName(goodsName);
         return AjaxResult.success().put("goods",fGoodsName);
     }
-
-
     /**
      * 根据商品id查询
      * @param goodsListCoding
@@ -182,9 +183,16 @@ public class ApiShoppingIController extends BaseController {
         FGoods fGoodsName = fGoodsService.selectFGoodsById(goodsListCoding);
         return AjaxResult.success().put("id",fGoodsName);
     }
-
-
-
+    /**
+     * 新增评价管理
+     */
+    @ApiOperation("根据id新增评价")
+    @Log(title = "评价管理", businessType = BusinessType.INSERT)
+    @PostMapping
+    public AjaxResult add(@RequestBody FAppraise fAppraise)
+    {
+        return toAjax(fAppraiseService.insertFAppraise(fAppraise));
+    }
 
     /**
      * 根据电话号码获取用户手机app会员信息
