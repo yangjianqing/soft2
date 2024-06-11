@@ -281,6 +281,11 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.selectFGoodsByFreshList(fGoods);
     }
 
+    @Override
+    public List<FGoods> selectFGoodsByDailyList(FGoods fGoods) {
+        return fGoodsMapper.selectFGoodsByDailyList(fGoods);
+    }
+
 
     /**
      * 新增商品分类信息

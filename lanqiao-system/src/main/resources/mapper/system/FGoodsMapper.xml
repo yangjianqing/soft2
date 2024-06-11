@@ -93,11 +93,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE (g.price - p.unit_price) BETWEEN 1 AND 2
         ORDER BY (g.price - p.unit_price)
     </select>
-    <!--    查询超盒算-->
+
+    <!--    查询生鲜-->
     <select id="selectFGoodsByFreshList" parameterType="FGoods" resultMap="FGoodsResult">
         SELECT g.id, g.name, g.category_id, g.price, g.unit, g.image, g.description, g.status, g.coding, g.create_time, g.update_time, g.num, g.specification, g.profit
         FROM f_goods g
         WHERE   g.category_id in ('1001','1003','1005','1007','1019','1020','1022','1023','1024','1025','1026')
+    </select>
+
+<!--    查询日用品-->
+    <select id="selectFGoodsByDailyList" parameterType="FGoods" resultMap="FGoodsResult">
+        SELECT g.id, g.name, g.category_id, g.price, g.unit, g.image, g.description, g.status, g.coding, g.create_time, g.update_time, g.num, g.specification, g.profit
+        FROM f_goods g
+        WHERE   g.category_id in ('1009')
     </select>
 
 <!--    查询商品价格小于10元的数据-->

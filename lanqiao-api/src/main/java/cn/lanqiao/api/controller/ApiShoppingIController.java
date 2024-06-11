@@ -123,17 +123,6 @@ public class ApiShoppingIController extends BaseController {
         List<FGoods> favorableList = fGoodsService.selectFGoodsByFavorable(fGoods);
         return getDataTable(favorableList);
     }
-//    /**
-//     * 查询生鲜列表
-//     */
-//    @ApiOperation("查询生鲜列表")
-//    @GetMapping("/freshList")
-//    public TableDataInfo selectFGoodsByFreshList(FGoods fGoods)
-//    {
-//        startPage();
-//        List<FGoods> freshList = fGoodsService.selectFGoodsByFreshList(fGoods);
-//        return getDataTable(freshList);
-//    }
 
     /**
      * 查询推荐列表、生鲜列表、10元商品列表
@@ -145,12 +134,20 @@ public class ApiShoppingIController extends BaseController {
         startPage();
         List<FGoods> fGoods2=null;
         if (sortNum ==1 ){
+//            查询推荐
             List<FGoods> fGoods1 = fGoodsService.selectRecommended(fGoods);
             fGoods2=fGoods1;
         }else if (sortNum ==2){
+//            查询生鲜
             List<FGoods> freshList = fGoodsService.selectFGoodsByFreshList(fGoods);
             fGoods2=freshList;
-        } else if(sortNum==3) {
+        } else if(sortNum==3){
+//            查询日常用品
+            List<FGoods> fGoods1 = fGoodsService.selectFGoodsByDailyList(fGoods);
+            fGoods2=fGoods1;
+        }
+        else if(sortNum==4) {
+//            查询10元商品
             List<FGoods> fGoods1 = fGoodsService.selectFGoodsLessTen(fGoods);
             fGoods2=fGoods1;
         }else {

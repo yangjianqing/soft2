@@ -167,5 +167,11 @@ public interface FGoodsMapper
      * @return
      */
      List<FGoods> selectFGoodsByFreshList(FGoods fGoods);
+     /**
+     * 查询日用品列表
+     * @param fGoods
+     * @return
+     */
+     List<FGoods> selectFGoodsByDailyList(FGoods fGoods);
 
 }
