@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class OrderNumberGenerator {
     private static final String PREFIX = "222";
-    private static final int LENGTH = 8;
+    private static final int LENGTH = 12;
     private static final Set<String> usedOrderNumbers = new HashSet<>();
     private static final Random random = new Random();
 
