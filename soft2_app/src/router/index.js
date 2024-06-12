@@ -184,18 +184,18 @@ const router = createRouter({
 });
 
 //路由导航前置守卫：在路由跳转之前完成某些操作
-router.beforeEach((to,form,next)=>{
-
-    let totken = localStorage.getItem("token");
-    // 如果进入页面时没有登录标识  则 跳转到登录页 如果有登录标识则放行
-    if((totken!=null && totken!=undefined && totken!="") || to.path=="/login"){  //如果进入的页面时登录页面叶放行
-        next();
-    }else{
-        // 跳转到登录页
-     // alert("你没有登录")
-        next({name:"login"})
-    }
-});
+// router.beforeEach((to,form,next)=>{
+//
+//     let totken = localStorage.getItem("token");
+//     // 如果进入页面时没有登录标识  则 跳转到登录页 如果有登录标识则放行
+//     if((totken!=null && totken!=undefined && totken!="") || to.path=="/login"){  //如果进入的页面时登录页面叶放行
+//         next();
+//     }else{
+//         // 跳转到登录页
+//      // alert("你没有登录")
+//         next({name:"login"})
+//     }
+// });
 
 router.afterEach((to, from)=>{
     console.log(to)

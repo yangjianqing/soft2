@@ -4,6 +4,7 @@ import java.util.*;
 
 import cn.lanqiao.common.core.domain.entity.Category;
 import cn.lanqiao.common.core.domain.entity.SysUser;
+import cn.lanqiao.common.core.page.TableDataInfo;
 import cn.lanqiao.common.utils.DateUtils;
 import cn.lanqiao.system.mapper.CategoryMapper;
 import cn.lanqiao.system.mapper.SysUserMapper;
@@ -242,24 +243,33 @@ public class FGoodsServiceImpl implements IFGoodsService
     }
 
     /**
-     * 查询推荐
+     * 查询推荐、小于等于10元的商品、生鲜列表、日用品列表
+     * @param sortNum
      * @param fGoods
      * @return
      */
     @Override
-    public List<FGoods> selectRecommended(FGoods fGoods) {
-        return fGoodsMapper.selectRecommended(fGoods);
+    public List<FGoods> recommendedList(int sortNum, FGoods fGoods) {
+        List<FGoods> fGoods1 = null;
+        if (sortNum ==1 ){
+//            查询推荐
+            fGoods1 = fGoodsMapper.selectRecommended(fGoods);
+        }else if (sortNum ==2){
+//            查询生鲜
+            fGoods1 = fGoodsMapper.selectFGoodsByFreshList(fGoods);
+        } else if(sortNum==3){
+//            查询日常用品
+            fGoods1 = fGoodsMapper.selectFGoodsByDailyList(fGoods);
+        }
+        else if(sortNum==4) {
+//            查询10元商品
+            fGoods1 = fGoodsMapper.selectFGoodsLessTen(fGoods);
+        }
+        return fGoods1;
     }
 
-    /**
-     * 查询商品小于等于10元
-     * @param fGoods
-     * @return
-     */
-    @Override
-    public List<FGoods> selectFGoodsLessTen(FGoods fGoods) {
-        return fGoodsMapper.selectFGoodsLessTen(fGoods);
-    }
+
+
 
     /**
      * 查询超盒算
@@ -271,20 +281,7 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.selectFGoodsByFavorable(fGoods);
     }
 
-    /**
-     * 查询生鲜列表
-     * @param fGoods
-     * @return
-     */
-    @Override
-    public List<FGoods> selectFGoodsByFreshList(FGoods fGoods) {
-        return fGoodsMapper.selectFGoodsByFreshList(fGoods);
-    }
 
-    @Override
-    public List<FGoods> selectFGoodsByDailyList(FGoods fGoods) {
-        return fGoodsMapper.selectFGoodsByDailyList(fGoods);
-    }
 
 
     /**
