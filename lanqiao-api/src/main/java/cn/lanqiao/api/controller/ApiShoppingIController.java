@@ -168,7 +168,7 @@ public class ApiShoppingIController extends BaseController {
      */
     @ApiOperation("根据id新增评价")
     @Log(title = "评价管理", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/insertFAppraise")
     public AjaxResult add(@RequestBody FAppraise fAppraise)
     {
         return toAjax(fAppraiseService.insertFAppraise(fAppraise));
@@ -180,10 +180,22 @@ public class ApiShoppingIController extends BaseController {
      *
      */
     @ApiOperation("手机端个人详情页面接口")
-    @GetMapping("/users/{usersPhone}")
+    @GetMapping("/getUsers/{usersPhone}")
     public AjaxResult getUsers(@PathVariable("usersPhone") String usersPhone)
     {
         return AjaxResult.success().put("users",ifUsersService.selectUsersusersPhone(usersPhone));
+    }
+
+    /**
+     * 根据电话号码修改用户手机app会员信息
+     * @param fUsers 会员对象
+     *
+     */
+    @ApiOperation("手机端修改个人详情页面数据接口")
+    @GetMapping("/updateFUsers")
+    public AjaxResult updateFUsers(@RequestBody FUsers fUsers)
+    {
+       return toAjax(ifUsersService.updateFUsers(fUsers));
     }
 
     /**
