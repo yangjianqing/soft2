@@ -230,7 +230,7 @@ public class ApiShoppingIController extends BaseController {
      */
     @ApiOperation("根据电话注册手机端会员账号")
     @PostMapping("/registered")
-    public AjaxResult Registered(@PathVariable("usersPhone") String usersPhone, @PathVariable("usersPassword") String usersPassword, @PathVariable("code") String code, @PathVariable("uuid") String uuid)
+    public AjaxResult Registered(@RequestParam("usersPhone") String usersPhone, @RequestParam("usersPassword") String usersPassword, @RequestParam("code") String code, @RequestParam("uuid") String uuid)
     {
         String verKey = CacheConstants.PHONE_CODE_KEY + uuid;
         Object cacheObject = redisCache.getCacheObject(verKey);//获取redis缓存的验证码
@@ -260,18 +260,18 @@ public class ApiShoppingIController extends BaseController {
      * @param usersPassword 用户密码
      */
     @ApiOperation("根据电话注册手机端登录会员账号")
-    @PostMapping("/Login")
-    public AjaxResult Login(@PathVariable("usersPhone") String usersPhone, @PathVariable("usersPassword") String usersPassword)
-    {
+    @PostMapping("/login")
+    public AjaxResult login(@RequestParam("usersPhone") String usersPhone, @RequestParam("usersPassword") String usersPassword) {
         FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
+
         if (fUsers != null) {
-            if (SecurityUtils.matchesPassword(usersPassword,fUsers.getUsersPassword())) {
-                return AjaxResult.error("登录成功");
+            if (SecurityUtils.matchesPassword(usersPassword, fUsers.getUsersPassword())) {
+                return AjaxResult.success("登录成功", fUsers);
             } else {
-                return AjaxResult.error("登录失败,密码错误");
+                return AjaxResult.error("登录失败, 密码错误");
             }
         } else {
-            return AjaxResult.error("登录失败,用户账号不存在");
+            return AjaxResult.error("登录失败, 用户账号不存在");
         }
     }
 
@@ -322,7 +322,7 @@ public class ApiShoppingIController extends BaseController {
      */
     @ApiOperation("手机端购物车结算")
     @PostMapping  (value = "/insertSettlement")
-    public AjaxResult insertSettlement(@PathVariable("usersPhone") String usersPhone, @PathVariable("ordersPayMethod") Long ordersPayMethod, @PathVariable("ordersPayStatuds") Long ordersPayStatuds, @PathVariable("ordersRemark") String ordersRemark, @RequestBody List<FGoods> GoodsList)
+    public AjaxResult insertSettlement(@RequestParam("usersPhone") String usersPhone, @RequestParam("ordersPayMethod") Long ordersPayMethod, @RequestParam("ordersPayStatuds") Long ordersPayStatuds, @RequestParam("ordersRemark") String ordersRemark, @RequestBody List<FGoods> GoodsList)
     {
         try {
             fOrdeersService.insertShopping(usersPhone,ordersPayMethod,ordersPayStatuds,ordersRemark,GoodsList);
