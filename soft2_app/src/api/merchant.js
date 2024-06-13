@@ -11,4 +11,9 @@ export function listShopping(query) {
   })
 }
 
-
+export function selectIdByInfo(id) {
+  return request({
+    url: '/api/fresh/goodsId/'+id,
+    method: 'get',
+  })
+}

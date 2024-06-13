@@ -9,6 +9,8 @@ import request from "@/axios/request"
 import { AddressEdit } from 'vant';
 //1.引入vant
 import Vant  from 'vant';
+
+import { Toast } from 'vant';
 //引入FloatingPanel 浮动面板
 import { FloatingPanel } from 'vant'
 // 2. 引入组件样式
@@ -34,3 +36,5 @@ app.mount('#app');
 app.use(AddressEdit);
 //引入FloatingPanel 浮动面板
 app.use(FloatingPanel);
+
+app.use(Toast);

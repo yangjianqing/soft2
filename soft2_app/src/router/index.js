@@ -89,16 +89,17 @@ const routes = [
                     title: "搜索",
                 },
             },
-            {
-                path:"/index/DiscountPage",
-                component:DiscountPage,
-                name:"DiscountPage",
-                meta: {
-                    title: "优惠",
-                },
-            }
+
         ]
     },
+    {
+    path:"/index/DiscountPage",
+    component:DiscountPage,
+    name:"DiscountPage",
+    meta: {
+      title: "优惠",
+    },
+  },
     {
         path:"/mine/setting",
         component:SetTing,
@@ -108,7 +109,7 @@ const routes = [
         }
     },
     {
-        path:"/cart/shoppinggement",
+        path:"/cart/shoppinggement/:id",
         component:ShoppingGement,
         name:"shoppinggement",
         meta: {

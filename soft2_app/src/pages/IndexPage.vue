@@ -21,7 +21,7 @@
       <!--搜索框-->
       <router-link to="/index/search">
         <van-search
-            style="width: 100%;height: 1.45rem"
+            style="width: 100%;height: 30px"
             v-model="value"
             shape="round"
             placeholder="请输入搜索关键词"
@@ -118,13 +118,21 @@
   </router-link>
 <!--  推荐栏-->
 <div>
-  <van-sticky>
+
   <van-tabs line-height="10px" color="rgb(0,195,255)" background="rgb(245,245,245)" v-model:active="activeName">
     <van-tab title="推   荐"  name="a">
       <template v-for="(goodsInfo,index) in goodsList">
         <div class="total_box" v-if="index%2===1">
-          <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
-          <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+          <router-link
+            :to="{ path: '/cart/shoppinggement/'+goodsList[index-1].id }"
+          >
+            <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+          </router-link>
+          <router-link
+            :to="{ path: '/cart/shoppinggement/'+goodsList[index].id  }"
+          >
+            <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+          </router-link>
         </div>
       </template>
     </van-tab>
@@ -135,25 +143,8 @@
 
     </van-tab>
     <van-tab title="10元 店"  name="d">
-<!--      <van-list-->
-<!--          v-model:loading="loading"-->
-<!--          :finished="finished"-->
-<!--          finished-text="没有更多了"-->
-<!--          @load="onLoad"-->
-<!--      >-->
-<!--        <van-cell v-for="item in list" :key="item" :title="item" />-->
-<!--        <div class="total_box">-->
-<!--          <MerchandiseInfo></MerchandiseInfo>-->
-<!--          <MerchandiseInfo></MerchandiseInfo>-->
-<!--        </div>-->
-<!--        <div class="total_box">-->
-<!--          <MerchandiseInfo></MerchandiseInfo>-->
-<!--          <MerchandiseInfo></MerchandiseInfo>-->
-<!--        </div>-->
-<!--      </van-list>-->
     </van-tab>
   </van-tabs>
-  </van-sticky>
 </div>
 
 
@@ -182,7 +173,6 @@ export default {
   methods:{
     getGoodsList(){
       listShopping().then(res=>{
-        console.log(res.data.rows);
         this.goodsList=res.data.rows;
       })
     }
@@ -279,4 +269,13 @@ export default {
   background-color:rgb(245,245,245) ;
   border-radius: 10px;
 }
+
+.total_box a{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color:rgb(245,245,245) ;
+  border-radius: 10px;
+}
 </style>
+

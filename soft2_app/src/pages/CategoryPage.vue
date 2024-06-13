@@ -9,7 +9,7 @@
     />
   </div>
   </van-sticky>
-  <div style="width: 100%;height: 83vh;">
+  <div style="width: 100%;height: 85vh;">
     <van-tree-select style="width: 100%;height: 100%;"
         v-model:main-active-index="activeIndex"
         :items="items"
