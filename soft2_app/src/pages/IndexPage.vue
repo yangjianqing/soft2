@@ -102,8 +102,8 @@
 <div class="bargain_div" >
     <div class="van_row_div1">
       <div class="box_icon">
-        <van-icon style=" padding: 0  5px;"  name="cart-circle" size="22" color="rgb(255,80,48)" />
-        <span>超盒算</span>
+        <van-icon style=" padding: 0  5px;"  name="fire-o" size="22" color="rgb(255,80,48)" />
+        <span>超划算</span>
       </div>
         <div class="box_bot">
         <el-button style="color: rgb(153,153,153)">更多 ></el-button>
