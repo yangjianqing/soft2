@@ -103,9 +103,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!--    查询日用品-->
     <select id="selectFGoodsByDailyList" parameterType="FGoods" resultMap="FGoodsResult">
-        SELECT g.id, g.name, g.category_id, g.price, g.unit, g.image, g.description, g.status, g.coding, g.create_time, g.update_time, g.num, g.specification, g.profit
-        FROM f_goods g
-        WHERE   g.category_id in ('1009')
+        SELECT id, name, category_id, price, unit, image, description, status, coding, create_time, update_time, num, specification, profit
+        FROM f_goods
+        WHERE   category_id in ('1062','1064','1065')
     </select>
 
 <!--    查询商品价格小于10元的数据-->

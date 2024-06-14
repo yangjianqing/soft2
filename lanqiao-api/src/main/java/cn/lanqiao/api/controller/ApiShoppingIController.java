@@ -125,6 +125,16 @@ public class ApiShoppingIController extends BaseController {
         startPage();
         List<FGoods> favorableList = fGoodsService.selectFGoodsByFavorable(fGoods);
         return getDataTable(favorableList);
+    }  /**
+     * 查询超盒算
+     */
+    @ApiOperation("查询分类图片")
+    @GetMapping("/selectPicture")
+    public TableDataInfo selectPicture(Category category)
+    {
+        startPage();
+        List<Category> picture = ifCategoryService.selectPicture(category);
+        return getDataTable(picture);
     }
 
     /**

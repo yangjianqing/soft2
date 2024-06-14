@@ -129,6 +129,19 @@ public interface CategoryMapper
      * @return 结果
      */
     public Category checkDeptNameUnique(@Param("deptName") String deptName, @Param("parentId") Long parentId);
+
+    /**
+     * 查询父部门
+     * @param category
+     * @return
+     */
     List<Category> selectMacroclassification(Category category);
+
+    /**
+     * 查询图片
+     * @param category
+     * @return
+     */
+    List<Category> selectPicture(Category category);
 
 }

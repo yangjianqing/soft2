@@ -137,6 +137,13 @@ public interface ICategoryService
      * @param category
      * @return
      */
-    List<Category>selectMacroclassification(Category category);
+    List<Category>selectMacroclassification(Category category); /**
+
+    /**
+     * 查询图片
+     * @param category
+     * @return
+     */
+    List<Category> selectPicture(Category category);
 
 }

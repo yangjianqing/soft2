@@ -24,6 +24,18 @@ public class Category extends TreeEntity
     @Excel(name = "分类名称")
     private String deptName;
 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    /**图片*/
+    private String picture;
+
+
     /** 删除标志 */
     private String cFlag;
     private List<Category> children = new ArrayList<Category>();
@@ -76,6 +88,7 @@ public class Category extends TreeEntity
             .append("cFlag", getcFlag())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
+            .append("updateBy", getPicture())
             .append("updateTime", getUpdateTime())
             .toString();
     }

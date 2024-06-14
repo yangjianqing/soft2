@@ -14,10 +14,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="picture"    column="picture"    />
     </resultMap>
 
     <sql id="selectCategoryVo">
-        select dept_id, parent_id, ancestors, dept_name, order_num, c_flag, create_time, update_by, update_time from category
+        select dept_id, parent_id, ancestors, dept_name, order_num, c_flag,picture, create_time, update_by, update_time from category
     </sql>
 
     <select id="selectCategoryList" parameterType="Category" resultMap="CategoryResult">
@@ -84,13 +85,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{CateId}
         </foreach>
     </select>
-
-
-
-
-
-
-
+    <!--    查询部门图片-->
+    <select id="selectPicture" parameterType="Long" resultMap="CategoryResult">
+        SELECT dept_name,picture
+        FROM category
+        WHERE dept_id in ('1000','1001','1002','1003','1004','1005','1006','1007','1008','1009')
+    </select>
 
 
     <insert id="insertCategory" parameterType="Category" useGeneratedKeys="true" keyProperty="deptId">

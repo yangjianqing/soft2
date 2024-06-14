@@ -225,6 +225,11 @@ public class CategoryServiceImpl implements ICategoryService
       return categoryMapper.selectMacroclassification(category);
     }
 
+    @Override
+    public List<Category> selectPicture(Category category) {
+        return categoryMapper.selectPicture(category);
+    }
+
 //结束
 
 
