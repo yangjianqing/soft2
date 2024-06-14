@@ -200,15 +200,16 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.deleteFGoodsById(id);
     }
 
+
+
     /**
      * 根据商品名称查询
      * @param goodsName
      * @return
      */
     @Override
-    public List<FGoods> selectGoodsName(String goodsName) {
-
-        return fGoodsMapper.selectGoodsName(goodsName);
+    public List<FGoods> selectMapGoodsName(  String goodsName) {
+        return fGoodsMapper.selectMapGoodsName(goodsName);
     }
 
     /**

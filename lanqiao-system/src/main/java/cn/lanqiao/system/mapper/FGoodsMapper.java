@@ -106,7 +106,7 @@ public interface FGoodsMapper
      * @param
      * @return
      */
-    public   List<FGoods> selectGoodsName(String goodsName);
+    public   List<FGoods> selectMapGoodsName(String goodsName);
 
     /**
      *根据商品分类称查询

@@ -93,8 +93,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE (g.price - p.unit_price) BETWEEN 1 AND 2
         ORDER BY (g.price - p.unit_price)
     </select>
+<!--&lt;!&ndash;        查询名称->-->
+        <select id="selectMapGoodsName" parameterType="string"  resultMap="FGoodsResult" >
+            select  id, name,category_id, price,unit,coding,specification, image, num,description,num,status, create_time, update_time, create_user, update_user
+            from f_goods
+            where name like concat('%', #{goodsName}, '%')
+        </select>
 
-    <!--    查询生鲜-->
+<!--        查询生鲜-->
     <select id="selectFGoodsByFreshList" parameterType="FGoods" resultMap="FGoodsResult">
         SELECT g.id, g.name, g.category_id, g.price, g.unit, g.image, g.description, g.status, g.coding, g.create_time, g.update_time, g.num, g.specification, g.profit
         FROM f_goods g
@@ -234,10 +240,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </select>
 <!--    根据名称查询-->
-    <select id="selectGoodsName"  resultType="cn.lanqiao.system.domain.FGoods">
-                <include refid="selectFGoodsVo"/>
-        <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-                WHERE  name = #{goodsName}
+    <select id="selectGoodsName"  parameterType="String"  resultMap="FGoodsResult">
+        SELECT * FROM f_goods WHERE name LIKE CONCAT('%', #{goodsName}, '%');
     </select>
 
 
@@ -249,10 +253,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         join category c on fg.category_id = c.dept_id
         where c.dept_name = #{goodsType}
     </select>
-<!--   查询商品名称-->
-    <select id="selectMapGoodsName" parameterType="string"  resultMap="FGoodsResult" >
-        select  *  from f_goods where name like concat('%', #{goodsName}, '%');
-    </select>
+<!--&lt;!&ndash;   查询商品名称&ndash;&gt;-->
+
 
     <select id="selectGoodsList" resultType="cn.lanqiao.system.domain.FGoods">
         <include refid="selectFGoodsVo"/>

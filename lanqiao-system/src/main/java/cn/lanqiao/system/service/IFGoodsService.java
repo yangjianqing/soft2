@@ -73,7 +73,7 @@ public interface IFGoodsService {
      * @param goodsName
      * @return
      */
-    public List<FGoods> selectGoodsName(String goodsName);
+    public List<FGoods> selectMapGoodsName( String goodsName);
 
     /**
      * 根据商品名称查询
@@ -115,7 +115,7 @@ public interface IFGoodsService {
      * @param fGoods
      * @return
      */
-    List<FGoods> selectFGoodsByFavorable(FGoods fGoods);
+    List<FGoods> selectFGoodsByFavorable( FGoods fGoods);
 
 
 

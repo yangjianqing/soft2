@@ -125,8 +125,9 @@ public class ApiShoppingIController extends BaseController {
         startPage();
         List<FGoods> favorableList = fGoodsService.selectFGoodsByFavorable(fGoods);
         return getDataTable(favorableList);
-    }  /**
-     * 查询超盒算
+    }
+    /**
+     * 分类图片
      */
     @ApiOperation("查询分类图片")
     @GetMapping("/selectPicture")
@@ -154,12 +155,13 @@ public class ApiShoppingIController extends BaseController {
      */
     @ApiOperation("根据商品名称查询")
     @GetMapping("/goods/{goodsName}")
-    public AjaxResult goodsName( @PathVariable("goodsName")String goodsName)
+    public AjaxResult goodsName( @PathVariable("goodsName") String goodsName)
     {
         startPage();
-        List<FGoods> fGoodsName = fGoodsService.selectGoodsName(goodsName);
-        return AjaxResult.success().put("goods",fGoodsName);
+        List<FGoods> fGoodsName = fGoodsService.selectMapGoodsName(goodsName);
+        return AjaxResult.success().put("goodsName",fGoodsName);
     }
+
     /**
      * 根据商品id查询
      * @param goodsListCoding
