@@ -2,20 +2,12 @@
 <template>
   <div class="shoppingCart_box">
     <div class="shopBox_left">
-      <img src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" alt="">
+      <img :src="this.baseUrl+imgUrls[0]" alt="">
     </div>
     <div class="shopBox_right">
-      <p >洁柔厨房纸中(抽取式) 2 层75抽4</p>
+      <p >{{Category.name}}</p>
       <div class="Description_box">
-        <div class="Description_box1">
-          <span>山间散养</span>
-        </div>
-        <div class="line_box">
-             |
-        </div>
-        <div class="Description_box2">
-          <span>肉质Q弹</span>
-        </div>
+        <span>{{ Category.description}}</span>
       </div>
       <div class="dis_box">
         <div class="span_box1">
@@ -28,8 +20,8 @@
       </div>
       <div class="money_box">
         <div>
-          <span class="money_span">￥9.9</span>
-          <span class="unit_span">/提</span>
+          <span class="money_span">￥{{Category.price}}</span>
+          <span class="unit_span">/{{Category.unit}}</span>
         </div>
         <van-icon style=" padding: 0  5px;"  name="cart-circle" size="22" color=" rgb(0,178,255)" />
       </div>
@@ -43,13 +35,25 @@
 
 
 <script >
+
+
 export default {
   name: "ShoppingCart",
+  props:['Category'],
   data() {
     return {
-
+      baseUrl:"",
+      imgUrls:""
     };
   },
+  created() {
+      this.baseUrl=process.env.VUE_APP_BASE_API;
+    this.imgUrls = this.Category.image.split(',');
+  },
+  methods:{
+
+  }
+
 }
 </script>
 
@@ -78,7 +82,7 @@ export default {
   border-bottom: 2px solid  rgb(249,249,249);
 }
 .shopBox_right p {
-  margin: 4% 3% 1% 0;
+  margin: 4% 3% 4% 0;
   font-size: 13px;
   font-weight: bold;
   text-align: left;
@@ -86,7 +90,7 @@ export default {
 .dis_box {
   text-align: left;
   color: rgb(0,171,241);
-  margin: 1px 0 ;
+  margin: 2px 0  0;
   display: flex;
 }
 
@@ -114,7 +118,7 @@ export default {
 
 }
 .money_box{
-  margin: 3% 2%;
+  margin: 5% 2%;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -102,7 +102,7 @@
 <div class="bargain_div" >
     <div class="van_row_div1">
       <div class="box_icon">
-        <van-icon style=" padding: 0  5px;"  name="fire-o" size="22" color="rgb(255,80,48)" />
+        <van-icon style=" padding: 0  5px;"  name="fire-o" size="18" color="rgb(255,80,48)" />
         <span>超划算</span>
       </div>
         <div class="box_bot">
@@ -119,7 +119,7 @@
 <!--  推荐栏-->
 <div>
 
-  <van-tabs line-height="10px" color="rgb(0,195,255)" background="rgb(245,245,245)" v-model:active="activeName">
+  <van-tabs line-height="10px" color="rgb(0,195,255)" background="rgb(245,245,245)" v-model:active="activeName" @change="onTabChange">
     <van-tab title="推   荐"  name="a">
       <template v-for="(goodsInfo,index) in goodsList">
         <div class="total_box" v-if="index%2===1">
@@ -137,12 +137,54 @@
       </template>
     </van-tab>
     <van-tab title="生鲜自营" name="b">
+      <template v-for="(goodsInfo,index) in goodsList">
+        <div class="total_box" v-if="index%2===1">
+          <router-link
+            :to="{ path: '/cart/shoppinggement/'+goodsList[index-1].id }"
+          >
+            <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+          </router-link>
+          <router-link
+            :to="{ path: '/cart/shoppinggement/'+goodsList[index].id  }"
+          >
+            <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+          </router-link>
+        </div>
+      </template>
 
     </van-tab>
-    <van-tab title="进口超市" name="c">
+    <van-tab title="日常用品" name="c">
+      <template v-for="(goodsInfo,index) in goodsList">
+        <div class="total_box" v-if="index%2===1">
+          <router-link
+            :to="{ path: '/cart/shoppinggement/'+goodsList[index-1].id }"
+          >
+            <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+          </router-link>
+          <router-link
+            :to="{ path: '/cart/shoppinggement/'+goodsList[index].id  }"
+          >
+            <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+          </router-link>
+        </div>
+      </template>
 
     </van-tab>
     <van-tab title="10元 店"  name="d">
+      <template v-for="(goodsInfo,index) in goodsList">
+        <div class="total_box" v-if="index%2===1">
+          <router-link
+            :to="{ path: '/cart/shoppinggement/'+goodsList[index-1].id }"
+          >
+            <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+          </router-link>
+          <router-link
+            :to="{ path: '/cart/shoppinggement/'+goodsList[index].id  }"
+          >
+            <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+          </router-link>
+        </div>
+      </template>
     </van-tab>
   </van-tabs>
 </div>
@@ -152,7 +194,7 @@
 <script>
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 import Merchandise from "@/components/Index/Merchandise.vue";
-import {listShopping} from "@/api/merchant.js"
+import { recommendedList} from "@/api/merchant.js"
 
 export default {
   name: "IndexPage",
@@ -162,20 +204,48 @@ export default {
   },
   data() {
     return {
+      activeName: 'a',
       gridItems: [],
       goodsList:[],
     };
   },
   created() {
-    //获取商品列表
-    this.getGoodsList();
+
   },
   methods:{
-    getGoodsList(){
-      listShopping().then(res=>{
-        this.goodsList=res.data.rows;
+    onTabChange(activeName) {
+      // 根据当前激活的tab名称来确定查询参数
+      let sortNum;
+      switch (activeName) {
+        case 'a':
+          sortNum = 1;
+          break;
+        case 'b':
+          sortNum = 2;
+          break;
+        case 'c':
+          sortNum = 3;
+          break;
+        case 'd':
+          sortNum = 4;
+          break;
+      }
+      // 调用方法获取对应的商品数据
+      this.queryRecommendation(sortNum);
+    },
+
+    queryRecommendation(sortNum){
+      recommendedList(sortNum).then(res =>{
+        // 这里可以处理获取到的推荐商品数据
+        // 更新 goodsList 为新的数据
+        this.goodsList = res.data.rows;
+        console.log( res.data.rows);
       })
     }
+  },
+  mounted() {
+    // 初始加载默认的tab数据
+    this.queryRecommendation(1);
   },
   setup() {
     const images = [

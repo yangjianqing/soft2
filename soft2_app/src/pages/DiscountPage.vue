@@ -5,6 +5,7 @@
         <div>超划算</div>
       </template>
     </van-nav-bar>
+
   </div>
 
 
