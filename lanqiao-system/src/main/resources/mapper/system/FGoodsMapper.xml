@@ -233,9 +233,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{GoodsId}
         </foreach>
     </select>
-
+<!--    根据名称查询-->
     <select id="selectGoodsName"  resultType="cn.lanqiao.system.domain.FGoods">
                 <include refid="selectFGoodsVo"/>
+        <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
                 WHERE  name = #{goodsName}
     </select>
 
