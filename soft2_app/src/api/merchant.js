@@ -47,3 +47,23 @@ export function recommendedList(sortNum){
     method: 'get',
   })
 }
+
+//根据分类显示对应的分类图片
+export function selectPicture(query){
+  return request({
+    url: '/api/fresh/selectPicture',
+    method: 'get',
+    params: query,
+  })
+}
+
+
+
+//根据搜索内容查询商品
+export function goods(query){
+  return request({
+    url: '/api/fresh/goods',
+    method: 'get',
+    params: query,
+  })
+}

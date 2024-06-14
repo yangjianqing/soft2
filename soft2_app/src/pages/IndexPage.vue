@@ -41,60 +41,34 @@
     </van-swipe>
   </div>
   <div class="Classification">
-    <router-link to="/classification">
-    <van-swipe :show-indicators="false">
-      <van-swipe-item >
-          <van-grid  :border="true" :column-num="8">
-          <van-grid-item >
-            <img class="img_item" src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" >
-            <p>果蔬鲜花</p>
-          </van-grid-item>
-          <van-grid-item>
-            <img class="img_item" src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" >
-            <p>果蔬鲜花</p>
-          </van-grid-item>
-          <van-grid-item >
-            <img class="img_item" src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" >
-            <p>果蔬鲜花</p>
-          </van-grid-item>
-          <van-grid-item >
-            <img class="img_item" src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" >
-            <p>果蔬鲜花</p>
-          </van-grid-item>
-          <van-grid-item >
-            <img class="img_item" src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" >
-            <p>果蔬鲜花</p>
-          </van-grid-item>
-        </van-grid>
 
+    <van-swipe :show-indicators="false">
+      <van-swipe-item>
+        <van-grid  :border="true" :column-num="8">
+          <template v-for="(category, index) in categoryInFo">
+            <router-link to="/classification" v-if="index%2==0">
+              <van-grid-item>
+                <img class="img_item" :src="baseUrl+category.picture" >
+                <p style="font-size: 12px;padding-top: 6px">{{ category.deptName }}</p>
+              </van-grid-item>
+            </router-link>
+          </template>
+        </van-grid>
       </van-swipe-item>
       <van-swipe-item>
         <van-grid  :border="true" :column-num="8">
-          <van-grid-item >
-            <img class="img_item" src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" >
-            <p>果蔬鲜花</p>
-          </van-grid-item>
-          <van-grid-item>
-            <img class="img_item" src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" >
-            <p>果蔬鲜花</p>
-          </van-grid-item>
-          <van-grid-item >
-            <img class="img_item" src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" >
-            <p>果蔬鲜花</p>
-          </van-grid-item>
-          <van-grid-item >
-            <img class="img_item" src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" >
-            <p>果蔬鲜花</p>
-          </van-grid-item>
-          <van-grid-item >
-            <img class="img_item" src="https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg" >
-            <p>果蔬鲜花</p>
-          </van-grid-item>
+          <template v-for="(category, index) in categoryInFo">
+            <router-link to="/classification" v-if="index%2!=0">
+              <van-grid-item>
+                <img class="img_item" :src="baseUrl+category.picture" >
+                <p style="font-size: 12px;padding-top: 6px">{{ category.deptName }}</p>
+              </van-grid-item>
+            </router-link>
+          </template>
         </van-grid>
-
       </van-swipe-item>
     </van-swipe>
-    </router-link>
+
 
   </div>
 <!-- 超合算 -->
@@ -119,69 +93,69 @@
 <!--  推荐栏-->
 <div>
 
-  <van-tabs line-height="10px" color="rgb(0,195,255)" background="rgb(245,245,245)" v-model:active="activeName" @change="onTabChange">
+  <van-tabs line-height="10px" color="rgb(0,195,255)" animated background="rgb(245,245,245)" v-model:active="activeName">
     <van-tab title="推   荐"  name="a">
-      <template v-for="(goodsInfo,index) in goodsList">
+      <template v-for="(goodsInfo,index) in goodsList1">
         <div class="total_box" v-if="index%2===1">
           <router-link
-            :to="{ path: '/cart/shoppinggement/'+goodsList[index-1].id }"
+            :to="{ path: '/cart/shoppinggement/'+goodsList1[index-1].id }"
           >
-            <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+            <MerchandiseInfo :goodsInfo="goodsList1[index-1]"></MerchandiseInfo>
           </router-link>
           <router-link
-            :to="{ path: '/cart/shoppinggement/'+goodsList[index].id  }"
+            :to="{ path: '/cart/shoppinggement/'+goodsList1[index].id  }"
           >
-            <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+            <MerchandiseInfo :goodsInfo="goodsList1[index]"></MerchandiseInfo>
           </router-link>
         </div>
       </template>
     </van-tab>
     <van-tab title="生鲜自营" name="b">
-      <template v-for="(goodsInfo,index) in goodsList">
+      <template v-for="(goodsInfo,index) in goodsList2">
         <div class="total_box" v-if="index%2===1">
           <router-link
-            :to="{ path: '/cart/shoppinggement/'+goodsList[index-1].id }"
+            :to="{ path: '/cart/shoppinggement/'+goodsList2[index-1].id }"
           >
-            <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+            <MerchandiseInfo :goodsInfo="goodsList2[index-1]"></MerchandiseInfo>
           </router-link>
           <router-link
-            :to="{ path: '/cart/shoppinggement/'+goodsList[index].id  }"
+            :to="{ path: '/cart/shoppinggement/'+goodsList2[index].id  }"
           >
-            <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+            <MerchandiseInfo :goodsInfo="goodsList2[index]"></MerchandiseInfo>
           </router-link>
         </div>
       </template>
 
     </van-tab>
     <van-tab title="日常用品" name="c">
-      <template v-for="(goodsInfo,index) in goodsList">
+      <template v-for="(goodsInfo,index) in goodsList3">
         <div class="total_box" v-if="index%2===1">
           <router-link
-            :to="{ path: '/cart/shoppinggement/'+goodsList[index-1].id }"
+            :to="{ path: '/cart/shoppinggement/'+goodsList3[index-1].id }"
           >
-            <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+            <MerchandiseInfo :goodsInfo="goodsList3[index-1]"></MerchandiseInfo>
           </router-link>
           <router-link
-            :to="{ path: '/cart/shoppinggement/'+goodsList[index].id  }"
+            :to="{ path: '/cart/shoppinggement/'+goodsList3[index].id  }"
           >
-            <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+            <MerchandiseInfo :goodsInfo="goodsList3[index]"></MerchandiseInfo>
           </router-link>
         </div>
       </template>
 
     </van-tab>
     <van-tab title="10元 店"  name="d">
-      <template v-for="(goodsInfo,index) in goodsList">
+      <template v-for="(goodsInfo,index) in goodsList4">
         <div class="total_box" v-if="index%2===1">
           <router-link
-            :to="{ path: '/cart/shoppinggement/'+goodsList[index-1].id }"
+            :to="{ path: '/cart/shoppinggement/'+goodsList4[index-1].id }"
           >
-            <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
+            <MerchandiseInfo :goodsInfo="goodsList4[index-1]"></MerchandiseInfo>
           </router-link>
           <router-link
-            :to="{ path: '/cart/shoppinggement/'+goodsList[index].id  }"
+            :to="{ path: '/cart/shoppinggement/'+goodsList4[index].id  }"
           >
-            <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+            <MerchandiseInfo :goodsInfo="goodsList4[index]"></MerchandiseInfo>
           </router-link>
         </div>
       </template>
@@ -194,7 +168,7 @@
 <script>
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 import Merchandise from "@/components/Index/Merchandise.vue";
-import { recommendedList} from "@/api/merchant.js"
+import {recommendedList, selectPicture} from "@/api/merchant.js"
 
 export default {
   name: "IndexPage",
@@ -206,40 +180,53 @@ export default {
     return {
       activeName: 'a',
       gridItems: [],
-      goodsList:[],
+      goodsList1:[],
+      goodsList2:[],
+      goodsList3:[],
+      goodsList4:[],
+      categoryInFo: [],
+      baseUrl: '' // 初始化 baseUrl
     };
   },
   created() {
-
+      this.queryCategory();
+      this.baseUrl=process.env.VUE_APP_BASE_API;
+      this.onTabChange();
   },
   methods:{
-    onTabChange(activeName) {
-      // 根据当前激活的tab名称来确定查询参数
-      let sortNum;
-      switch (activeName) {
-        case 'a':
-          sortNum = 1;
-          break;
-        case 'b':
-          sortNum = 2;
-          break;
-        case 'c':
-          sortNum = 3;
-          break;
-        case 'd':
-          sortNum = 4;
-          break;
-      }
+    //根据tab栏状态判断
+    onTabChange() {
       // 调用方法获取对应的商品数据
-      this.queryRecommendation(sortNum);
+      this.queryRecommendation(1);
+      this.queryRecommendation(2);
+      this.queryRecommendation(3);
+      this.queryRecommendation(4);
     },
-
+    //查询tab栏对应的商品信息
     queryRecommendation(sortNum){
       recommendedList(sortNum).then(res =>{
         // 这里可以处理获取到的推荐商品数据
         // 更新 goodsList 为新的数据
-        this.goodsList = res.data.rows;
-        console.log( res.data.rows);
+        switch (sortNum) {
+          case 1:
+            this.goodsList1 = res.data.rows;
+            break;
+          case 2:
+            this.goodsList2 = res.data.rows;
+            break;
+          case 3:
+            this.goodsList3 = res.data.rows;
+            break;
+          case 4:
+            this.goodsList4 = res.data.rows;
+            break;
+        }
+      })
+    },
+    //查询分类导航栏及其图片
+    queryCategory(){
+      selectPicture().then(res =>{
+        this.categoryInFo = res.data.rows;
       })
     }
   },
