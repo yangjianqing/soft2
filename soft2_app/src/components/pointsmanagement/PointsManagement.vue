@@ -1,16 +1,13 @@
 <template>
 <div style="display: flex;justify-content: space-between;padding-top: 13px" v-for="list in 5">
   <div style="display: flex;" >
-    <div class="div_img">
-      <img src="@/assets/img/xiaomage.jpg" alt="">
-    </div>
     <div style="display: flex;flex-direction: column;justify-content: space-evenly;">
-      <p>拼多多平台用户</p>
-      <p>5月26日 09:30</p>
+      <p>购买商品</p>
+      <p style=" text-align: left;">2024-06-16</p>
     </div>
   </div>
   <div>
-      <p>-159.00</p>
+      <p>+2积分</p>
   </div>
 </div>
 

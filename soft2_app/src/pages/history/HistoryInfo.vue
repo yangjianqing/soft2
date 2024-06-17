@@ -7,9 +7,12 @@
         left-arrow
         @click-left="onClickLeft"
     />
-    <van-cell-group v-for="list in 3">
-      <van-cell title="{{list.name}}" value="{{list.valuephone}}" />
-    </van-cell-group>
+    <router-link to="/mine/address">
+    <van-cell class="address" :title="text" icon="location-o" is-link/>
+
+    </router-link>
+
+    <OrderInfo></OrderInfo>
   </div>
 </template>
 
@@ -17,8 +20,11 @@
 
 
 
+import OrderInfo from "@/components/OrderInfo.vue";
+
 export default {
   name:"HistoryInfo",
+  components: {OrderInfo},
   computed: {  },
   data() {
     return {
@@ -26,6 +32,7 @@ export default {
         name: "在2024年6月3号，办理了会员",
         valuephone: "+3",
       },
+      text:"地址管理",
       onClickLeft,
     };
   }
@@ -35,5 +42,8 @@ const onClickLeft = () => history.back();
 <style scoped>
 >>> .van-cell__title {
   text-align: left !important;
+}
+.address{
+  margin-top: 6px;
 }
 </style>

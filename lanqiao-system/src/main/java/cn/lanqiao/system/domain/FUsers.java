@@ -49,6 +49,16 @@ public class FUsers extends BaseEntity
     @Excel(name = "会员积分")
     private BigDecimal memberTotal;
 
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public void setUsersId(Long usersId)
     {
         this.usersId = usersId;
@@ -137,4 +147,6 @@ public class FUsers extends BaseEntity
                 .append("createTime", getCreateTime())
                 .toString();
     }
+
+
 }

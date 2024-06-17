@@ -2,12 +2,11 @@
 <div class="body">
   <van-nav-bar
       title="个人中心"
-
   />
   <div class="image-wrapper">
     <div class="image-wrappers">
       <div style="padding-left: 12px;padding-top: 12px">
-        <p>生鲜绿源</p>
+        <p>{{ userInfo.usersName }}</p>
       </div>
       <van-image
           round
@@ -67,7 +66,7 @@
        </div>
      </router-link>
       <router-link to="/mine/">
-        <div style="display: flex; align-items: center;    flex-direction: column;">
+        <div style="display: flex; align-items: center;    flex-direction: column;" @click="showPopup">
           <van-icon size="30px" name="phone-circle" color="#1989fa"/>
           <p style="font-size: 13px;color: #808080;flex-direction: column;">
             联系电话</p>
@@ -76,12 +75,12 @@
     </div>
     <van-cell />
   </van-cell-group>
-  <van-action-sheet v-model:show="show" :actions="actions" @select="onSelect" />
+  <van-action-sheet v-model:show="show" @select="onSelect" />
 
   <van-cell-group style="margin-top: 13px;margin-bottom: 13px"  inset>
     <router-link to="/mine/UpdatePassword"><van-cell title="修改密码" is-link /></router-link>
 
-  <van-cell  title="退出登录" is-link/>
+  <van-cell  title="退出登录" is-link  v-on:click="showConfirmDialog()"/>
   </van-cell-group>
     <van-divider
         :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
@@ -96,9 +95,9 @@
   >
  <div  style="display: flex;flex-wrap: wrap">
    <template v-for="(goodsInfo,index) in goodsList">
-     <div class="total_box" v-if="index%2===1">
-       <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
-       <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+     <div class="total_box"  v-if="index%2===1" >
+       <MerchandiseInfo :goodsInfo="goodsList[index-1]" v-on:click="ReturnOrShopping"></MerchandiseInfo>
+       <MerchandiseInfo :goodsInfo="goodsList[index]" v-on:click="ReturnOrShopping"></MerchandiseInfo>
      </div>
    </template>
  </div>
@@ -106,17 +105,26 @@
 
 
 
+
+
 </div>
+  <van-popup
+    v-model:show="showBottom"
+    position="bottom"
+    :style="{ height: '10%' }"
+  >
+    <div class="sousaphone">客服电话:18881146195</div>
+  </van-popup>
 </template>
 <script>
     // 这里需要什么其他功能可以查询文档
     import { ref } from 'vue';
-    import { showToast } from 'vant';
+    import {showConfirmDialog, showToast} from 'vant';
     import router from "@/router";
     import axios from "axios";
     import ShoppingCard from "@/components/card/ShoppingCard.vue";
     import NavTitle from "@/components/Navtitle/NavTitle.vue";
-    import {listShopping} from "@/api/merchant.js"
+    import {listShopping, listUsers} from "@/api/merchant.js"
     import MerchantList from "@/components/MerchantInfo.vue";
     import MerchantInfo from "@/components/MerchantInfo.vue";
     import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
@@ -125,17 +133,21 @@
       name: "MyInfo",
       components: {MerchandiseInfo, MerchantInfo, NavTitle, ShoppingCard},
       data() {
+        const showBottom = ref(false);
+        const showPopup = () => {
+          showBottom.value = true;
+        };
         return{
           show,
-          actions,
           onSelect,
           count,
           onRefresh,
+          showPopup,
+          showBottom,
           goodsList:[],
           finished:false,//false还有数据  true 已经是最后一条数据了
           loading:false, //是否显示加载中
-          merList:[
-          ],
+          merList:[],
           queryParams: {
             pageNum: 1,
             pageSize: 5,
@@ -143,10 +155,29 @@
             phone: null,
             serveType: null,
             minimumCharge: null,
+            userInfo:"",
           },
+
         }
       },
       methods:{
+        showConfirmDialog(){
+          showConfirmDialog({
+            title: '退出登录',
+            message:
+              '确认要退出登录吗？',
+          })
+            .then(() => {
+              // on confirm
+                // 清除本地存储的用户数据（如JWT令牌）
+                localStorage.removeItem('userToken');
+                // 重定向到登录页面
+                window.location.href = 'http://localhost:8082/#/login';
+            })
+            .catch(() => {
+              // on cancel
+            });
+        },
         //加载名字
         ReturnPoMa(){
           router.push({ path: '/mine/poma' });
@@ -155,7 +186,7 @@
           router.push({ path: '/mine/ordermanagement' });
         },
         ReturnOrShopping(){
-          router.push({ path: '/cart/shoppinggement' });
+          router.push({ path: '/cart/shoppinggement/' });
         }
         ,
         ReturnSetting(){
@@ -165,6 +196,8 @@
         RetrunHistory(){
           router.push({ path: '/mine/history' });
         },
+        //退出登录
+
         // onLoad(){
         //   // 开启loading
         //   this.loading = true;
@@ -196,19 +229,19 @@
             this.goodsList=res.data.rows;
           })
         },
+
       },
       created() {
         //获取商品列表
         this.getGoodsList();
+        //根据电话查询个人信息
+        //根据电话查询个人信息
+        this.userInfo=JSON.parse(localStorage.getItem("userInfo"))
+
       },
     };
     // 导入插件样式返回
     const show = ref(false);
-    const actions = [
-      { name: '选项一' },
-      { name: '选项二' },
-      { name: '选项三' },
-    ];
     const onSelect = (item) => {
       // 默认情况下点击选项时不会自动收起
       // 可以通过 close-on-click-action 属性开启自动收起
@@ -264,5 +297,11 @@
 }
 .goods-card__desc {
   order: 0; /* 将描述保持在中间 */
+}
+.sousaphone{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
 }
 </style>

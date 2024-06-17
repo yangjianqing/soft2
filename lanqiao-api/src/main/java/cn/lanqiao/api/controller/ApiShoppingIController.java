@@ -7,6 +7,7 @@ import cn.lanqiao.common.core.controller.BaseController;
 import cn.lanqiao.common.core.domain.AjaxResult;
 import cn.lanqiao.common.core.domain.R;
 import cn.lanqiao.common.core.domain.entity.Category;
+import cn.lanqiao.common.core.domain.model.LoginUser;
 import cn.lanqiao.common.core.page.TableDataInfo;
 import cn.lanqiao.common.core.redis.RedisCache;
 import cn.lanqiao.common.enums.BusinessType;
@@ -18,7 +19,10 @@ import cn.lanqiao.common.utils.SendSms;
 import cn.lanqiao.common.utils.uuid.IdUtils;
 
 //import cn.lanqiao.system.Category;
+import cn.lanqiao.framework.web.service.SysLoginService;
+import cn.lanqiao.framework.web.service.TokenService;
 import cn.lanqiao.system.domain.*;
+import cn.lanqiao.system.domain.vo.LoginVo;
 import cn.lanqiao.system.mapper.FAddressMapper;
 import cn.lanqiao.system.mapper.FadvertisementMapper;
 import cn.lanqiao.system.service.*;
@@ -68,6 +72,9 @@ public class ApiShoppingIController extends BaseController {
 
     @Autowired
     private IFAddressService fAddressService;
+
+    @Autowired
+    private TokenService tokenService;
     /**
      * 查询商品列表
      */
@@ -323,25 +330,21 @@ public class ApiShoppingIController extends BaseController {
 
     /**
      * 根据电话注册手机app会员账号
-     * @param usersPhone 用户账号(电话号码)
-     * @param usersPassword 用户密码
-     * @param code 验证码
-     * @param uuid 验证码信息
      */
     @ApiOperation("根据电话注册手机端会员账号")
     @PostMapping("/registered")
-    public AjaxResult Registered(@RequestParam("usersPhone") String usersPhone, @RequestParam("usersPassword") String usersPassword, @RequestParam("code") String code, @RequestParam("uuid") String uuid)
+    public AjaxResult Registered(@RequestBody LoginVo user)
     {
-        String verKey = CacheConstants.PHONE_CODE_KEY + uuid;
+        String verKey = CacheConstants.PHONE_CODE_KEY ;
         Object cacheObject = redisCache.getCacheObject(verKey);//获取redis缓存的验证码
-
+        FUsers fUsers = ifUsersService.selectUsersusersPhone(user.getUsersPhone());
         // TODO: 在这里进行用户名和密码的校验操作
         String cacheString = cacheObject.toString();
-        if (usersPhone.matches("^(0\\d{2,3}-\\d{7,8}|1[34578]\\d{9})$")) {
-            if (cacheString.equals(code)) {
-                FUsers fUsers = new FUsers();
-                fUsers.setUsersPhone(usersPhone);
-                fUsers.setUsersPassword(SecurityUtils.encryptPassword(usersPassword));
+        if (fUsers.getUsersPhone().matches("^(0\\d{2,3}-\\d{7,8}|1[34578]\\d{9})$")) {
+            if (cacheString.equals(user.getCode())) {
+                FUsers fUser = new FUsers();
+                fUsers.setUsersPhone(fUser.getUsersPhone());
+                fUsers.setUsersPassword(SecurityUtils.encryptPassword(fUser.getUsersPassword()));
                 fUsers.setMemberGrade(0L);
                 fUsers.setMemberTotal(new BigDecimal(0));
                 return toAjax(ifUsersService.insertFUsers(fUsers));
@@ -355,9 +358,6 @@ public class ApiShoppingIController extends BaseController {
 
     /**
      * 根据电话注册手机app登录会员账号
-     *
-     * @param usersPhone 用户账号(电话号码)
-     * @param usersPassword 用户密码
      */
     @ApiOperation("根据电话注册手机端登录会员账号")
     @PostMapping("/login")
@@ -365,7 +365,11 @@ public class ApiShoppingIController extends BaseController {
         FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
         if (fUsers != null) {
             if (SecurityUtils.matchesPassword(usersPassword, fUsers.getUsersPassword())) {
-                return AjaxResult.success("登录成功", fUsers);
+                fUsers.setUsersPassword("");
+                String token = tokenService.createApiToken(fUsers);
+                fUsers.setToken(token);
+                AjaxResult reslut = AjaxResult.success("登录成功", fUsers);
+                return reslut;
             } else {
                 return AjaxResult.error("登录失败, 密码错误");
             }

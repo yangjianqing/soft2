@@ -24,7 +24,7 @@
     <p class="totals">金额:334元</p>
     <div class="bottom_btn">
       <div>
-        <van-button plain hairline round  type="primary" size="mini">再次购买</van-button>
+        <van-button plain hairline round  type="primary" size="mini" @add="addNum" >再次购买</van-button>
         <van-button plain hairline round  type="danger" size="mini">评价</van-button>
       </div>
     </div>
@@ -32,8 +32,59 @@
 </template>
 <script >
 
+import {listShopping, listShoppings} from "@/api/merchant";
+
 export default {
   name: "OrderInfo",
+  data(){
+    return{
+      merchant:"",
+      baseUrl:"",
+      carList:[]
+    }
+  },
+  methods:{
+    //接口调用方法
+    // getOrederInfo(){
+    //   listShoppings().then(res=>{
+    //     console.log(res)
+    //   })
+    // },
+    addGoodsToCar(goods){
+      let addNum=0;
+      //加入的商品如果已经在购物列表中存在 则商品数量加一
+      for(var i=0;i<this.carList.length;i++){
+        if(goods.id===this.carList[i].id){
+          this.carList[i].num++;
+          addNum=1;
+          break;
+        }
+      }
+      if(addNum===0){
+        //将子组件中传递出来的商品 添加到购物车列表
+        goods.num=1;
+        //接口书记
+        this.carList.push(goods)
+      }
+    },
+    addNum(goods){
+      this.addGoodsToCar(goods);
+    },
+  },
+  created() {
+    this.baseUrl=process.env.VUE_APP_BASE_API;
+    // this.getOrederInfo();
+  },
+  // computed:{
+  //   total(){
+  //     //计算购物车的总结
+  //     let total=0;
+  //     for(var i=0;i<this.carList.length;i++){
+  //       total+= this.carList[i].num*this.carList[i].price;
+  //     }
+  //     return total;
+  //   }
+  // }
 }
 </script>
 <style scoped>

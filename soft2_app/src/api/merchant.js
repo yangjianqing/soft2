@@ -11,6 +11,25 @@ export function listShopping(query) {
   })
 }
 
+export function listShoppings(phone) {
+  return request({
+    url: '/api/fresh/selectShopData'+phone,
+    method: 'get',
+    params: phone
+  })
+}
+
+//手机端购物车页面数据接口
+export function CarList(query) {
+  return request({
+    url: '/api/fresh/selectShopData/15082460058',
+    method: 'get',
+    params: query
+  })
+}
+
+
+
 
 //根据商品id查询商品详情
 export function selectIdByInfo(id) {
