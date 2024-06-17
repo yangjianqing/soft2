@@ -121,12 +121,10 @@ export default {
     Big_pieChart() {
       // 获取 echarts 实例
       let Big_pieChart = echarts.init(document.getElementById("Big_pieChart"));
-
       let data = [];
       for (let i = 0; i < 5; ++i) {
         data.push(Math.round(Math.random() * 200));
       }
-
       let option = {
         series: [
           {
@@ -161,6 +159,7 @@ export default {
         Big_pieChart.setOption(option);
       }, 1000);
     },
+    //渲染
 
     //折线图
     lineChart() {
