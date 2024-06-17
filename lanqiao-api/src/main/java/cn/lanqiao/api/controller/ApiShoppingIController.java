@@ -22,6 +22,7 @@ import cn.lanqiao.system.domain.*;
 import cn.lanqiao.system.mapper.FAddressMapper;
 import cn.lanqiao.system.mapper.FadvertisementMapper;
 import cn.lanqiao.system.service.*;
+import cn.lanqiao.system.service.impl.FAddressServiceImpl;
 import cn.lanqiao.system.service.impl.IFShoppingCartServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -64,6 +65,9 @@ public class ApiShoppingIController extends BaseController {
 
     @Autowired
     private FAddressMapper fAddressMapper;
+
+    @Autowired
+    private IFAddressService fAddressService;
     /**
      * 查询商品列表
      */
@@ -233,6 +237,36 @@ public class ApiShoppingIController extends BaseController {
         FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
         List<FAddress> fAddresses = fAddressMapper.selectUsersIdByType(String.valueOf(fUsers.getUsersId()));
         return AjaxResult.success(fAddresses);
+    }
+
+    /**
+     * 新增地址
+     */
+    @ApiOperation("手机端个人地址详情新增地址接口")
+    @PostMapping("/addUsersAddressList")
+    public AjaxResult addUsersAddressList(@RequestBody FAddress fAddress)
+    {
+        return toAjax(fAddressService.insertFAddress(fAddress));
+    }
+
+    /**
+     * 修改地址
+     */
+    @ApiOperation("手机端个人地址详情修改地址接口")
+    @PutMapping("/editUsersAddressList")
+    public AjaxResult editUsersAddressList(@RequestBody FAddress fAddress)
+    {
+        return toAjax(fAddressService.updateFAddress(fAddress));
+    }
+
+    /**
+     * 删除地址
+     */
+    @ApiOperation("手机端个人地址详情删除地址接口")
+    @DeleteMapping("removeUsersAddressList/{addressIds}")
+    public AjaxResult removeUsersAddressList(@PathVariable Long[] addressIds)
+    {
+        return toAjax(fAddressService.deleteFAddressByAddressIds(addressIds));
     }
 
     /**
