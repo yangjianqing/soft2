@@ -1,13 +1,13 @@
 import request from "@/axios/request"
 
 // 登录方法
-export function login(username, password,) {
+export function login(usersPhone, usersPassword) {
   const data = {
-    username,
-    password,
+    usersPhone,
+    usersPassword,
   }
   return request({
-    url: '/login',
+    url: 'api/fresh/login',
     headers: {
       isToken: false
     },
@@ -17,9 +17,15 @@ export function login(username, password,) {
 }
 
 // 注册方法
-export function register(data) {
+export function register(usersPhone,usersPassword,code,uuid) {
+  const data = {
+    usersPhone,
+    usersPassword,
+    code,
+    uuid
+  }
   return request({
-    url: '/register',
+    url: '/api/fresh/registered',
     headers: {
       isToken: false
     },
@@ -27,27 +33,10 @@ export function register(data) {
     data: data
   })
 }
-
-// 获取用户详细信息
-export function getInfo() {
-  return request({
-    url: '/getInfo',
-    method: 'get'
-  })
-}
-
-// 退出方法
-export function logout() {
-  return request({
-    url: '/logout',
-    method: 'post'
-  })
-}
-
 // 获取验证码
-export function getCodeImg() {
+export function sendCode() {
   return request({
-    url: '/captchaImage',
+    url: '/api/fresh/sendCode',
     headers: {
       isToken: false
     },
@@ -55,3 +44,14 @@ export function getCodeImg() {
     timeout: 20000
   })
 }
+
+
+// 退出方法
+export function logout() {
+  return request({
+    url: 'api/fresh/logout',
+    method: 'post'
+  })
+}
+
+

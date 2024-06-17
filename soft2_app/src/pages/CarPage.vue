@@ -3,7 +3,10 @@
       <van-nav-bar   title="购物车"></van-nav-bar>
       <van-pull-refresh v-model="loading" @refresh="onRefresh">
         <div v-if="hasItemsInCart">
+<!--          -->
+<!--          <template  v-for="(goodsInfo,index) in goodsList" >-->
           <OrderInfo ></OrderInfo>
+<!--          </template>-->
         </div>
         <div v-else>
           <NoShopping>
@@ -26,10 +29,8 @@
       </van-pull-refresh>
     </div>
   <van-action-bar  safe-area-inset-bottom style="bottom: 48px">
-    <van-action-bar-icon icon="gold-coin-o" text="总金额" />
-    <van-action-bar-button color="#be99ff" type="warning" text="加入购物车" :click="addToCar"/>
-      <van-action-bar-button color="#7232dd" type="danger" text="去付款" @click="Retrunshoppings" />
-
+    <van-action-bar-button color="#be99ff" type="warning" :text="'总净额:'+{total}" :click="addToCar" />
+    <van-action-bar-button color="#7232dd" type="danger" text="去付款" @click="Retrunshoppings" />
   </van-action-bar>
 </template>
 
@@ -40,7 +41,7 @@ import OrderInfo from "@/components/OrderInfo.vue";
 import NoShopping from "@/components/NoShopping/NoShopping.vue";
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 import router from "@/router";
-import {listShopping} from "@/api/merchant";
+import {CarList, listShopping} from "@/api/merchant";
 import Goods from "@/components/good/goods.vue";
 
 const count = ref(0);
@@ -89,9 +90,15 @@ const hasItemsInCart = ref(value); // 假设这是从购物车服务获取的
             this.goodsList=res.data.rows;
           })
         },
+        getCarInfoList(){
+          CarList().then(res=>{
+            console.log(res);
+          })
+        }
       },
       created() {
-          this.getGoodsList()
+          this.getGoodsList();
+          this.getCarInfoList();
       }
     }
 

@@ -26,7 +26,8 @@
           </template>
         </div>
       </van-tab>
-      <van-tab title="待付款"> <van-cell  title="用户名"/>
+      <van-tab title="待付款">
+        <van-cell  title="用户名"/>
         <van-swipe-cell v-for="list in 3">
           <OrderInfo>
 
@@ -39,9 +40,16 @@
               <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
               <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
             </div>
+            <van-action-bar  safe-area-inset-bottom>
+              <van-action-bar-button color="#be99ff" type="warning" :text="'总净额:'+{total}" />
+              <van-action-bar-button color="#7232dd" type="danger" text="付款" @click="showPopup" />
+            </van-action-bar>
           </template>
+
         </div>
+
       </van-tab>
+
       <van-tab title="待发货">
         <AddressGement>
 
@@ -80,17 +88,29 @@
         </div>
       </van-tab>
     </van-tabs>
-
   </van-pull-refresh>
+  <van-popup
+    v-model:show="show"
+    position="bottom"
+    :style="{ height: '70%' }"
+    class="bottoms"
+  >
+  <PayInfo></PayInfo>
+  </van-popup>
 </template>
+<!-- 底部弹出 -->
 
 <script>
 
 import AssessMent from "@/components/Assessment/AssessMent.vue";
 
+const show = ref(false);
+const showPopup = () => {
+  show.value = true;
+};
 export default {
   name:"OrderManagement",
-  components: {MerchandiseInfo, OrderInfo, ShoppingCard, AddressGement, AssessMent},
+  components: {PayInfo, MerchandiseInfo, OrderInfo, ShoppingCard, AddressGement, AssessMent},
   data(){
     return{
       count,
@@ -100,6 +120,8 @@ export default {
       active,
       actives,
       goodsList:[],
+      show,
+      showPopup,
     }
   },
   methods:{
@@ -108,7 +130,8 @@ export default {
         console.log(res.data.rows);
         this.goodsList=res.data.rows;
       })
-    }
+    },
+
   },
   created() {
     //获取商品列表
@@ -122,6 +145,8 @@ import ShoppingCard from "@/components/card/ShoppingCard.vue";
 import OrderInfo from "@/components/OrderInfo.vue";
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 import {listShopping} from "@/api/merchant";
+import router from "@/router";
+import PayInfo from "@/pages/PayInfo/PayInfo.vue";
 const actives = ref(1);
 const count = ref(0);
 const loading = ref(false);
@@ -167,5 +192,8 @@ const active = ref(0);
 
 .goods-card__desc {
   order: 2; /* 将描述保持在中间 */
+}
+.bottoms{
+  background-color: #e3e3e3;
 }
 </style>

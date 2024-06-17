@@ -10,9 +10,11 @@
 
       <!-- 右侧购物车图标 -->
       <template #right>
-        <van-badge :content="cartCount" class="cart-badge">
-          <van-icon name="shopping-cart-o" @click="goToCart" />
-        </van-badge>
+        <router-link :to="{ path: '/cart' }">
+          <van-badge :content="cartCount > 0 ? displayCartCount : ''">
+            <van-icon name="shopping-cart-o" />
+          </van-badge>
+        </router-link>
       </template>
 
     </van-nav-bar>
@@ -51,6 +53,11 @@ export default {
     //获取超盒算列表
     this.getFavorableList();
   },
+  computed: {
+    displayCartCount() {
+      return this.cartCount > 99 ? '99+' : this.cartCount.toString();
+    }
+  },
   methods: {
     goBack() {
       // 返回上一菜单的逻辑，可以根据您的路由设置进行相应调整
@@ -59,7 +66,6 @@ export default {
     getFavorableList(){
       selectFGoodsByFavorable().then(res=>{
         this.favorableList=res.data.rows;
-        console.log(res.data.rows);
       })
     },
     goToCart() {

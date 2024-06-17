@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: center;height: 30px">
   </div>
-
+  <van-uploader v-model="fileList" multiple :max-count="2" />
   <van-cell-group inset style="margin-bottom: 10px">
     <van-field
         v-model="user.password"

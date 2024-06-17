@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
+
+import cn.lanqiao.system.domain.FUsers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -113,6 +115,14 @@ public class TokenService
         setUserAgent(loginUser);
         refreshToken(loginUser);
 
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(Constants.LOGIN_USER_KEY, token);
+        return createToken(claims);
+    }
+
+    public String createApiToken(FUsers user){
+        String token = IdUtils.fastUUID();
+        user.setToken(token);
         Map<String, Object> claims = new HashMap<>();
         claims.put(Constants.LOGIN_USER_KEY, token);
         return createToken(claims);
