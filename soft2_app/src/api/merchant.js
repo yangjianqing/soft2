@@ -68,10 +68,10 @@ export function selectPicture(query){
 
 
 //根据搜索内容查询商品
-export function goods(query){
+export function goods(keyword){
   return request({
-    url: '/api/fresh/goods',
+    url: '/api/fresh/goods/'+keyword,
     method: 'get',
-    params: query,
+    params:  { keyword },
   })
 }

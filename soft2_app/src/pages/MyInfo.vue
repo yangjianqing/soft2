@@ -88,7 +88,12 @@
     >
       猜你喜欢
     </van-divider>
-
+  <van-list
+    v-model:loading="loading"
+    :finished="finished"
+    finished-text="没有数据了"
+    @load="onLoad"
+  >
  <div  style="display: flex;flex-wrap: wrap">
    <template v-for="(goodsInfo,index) in goodsList">
      <div class="total_box" v-if="index%2===1">
@@ -97,19 +102,8 @@
      </div>
    </template>
  </div>
-  <van-list
-    v-model:loading="loading"
-    :finished="finished"
-    finished-text="没有数据了"
-    @load="onLoad"
-  >
-    <template v-for="item in merList" :key="item.id" style="display: flex;flex-wrap: wrap;">
-      <router-link :to="'/cart/shoppinggement'+item.id">
-        <MerchandiseInfo  :merchandiseInfo="item">
-        </MerchandiseInfo>
-      </router-link>
-    </template>
   </van-list>
+
 
 
 </div>

@@ -20,7 +20,7 @@
 
 
    <div  style="margin-top: 3%">
-     <div style="margin-right:68% ;font-size: 20px ;font-weight: bold;">
+     <div style="display: flex; padding-left: 3%; font-size: 20px ;font-weight: bold;">
        <p>{{ selectedGoods.name }}</p>
      </div>
      <div style="display:flex;justify-content: space-between;align-items: center;">

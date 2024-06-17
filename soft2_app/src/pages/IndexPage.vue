@@ -46,8 +46,8 @@
       <van-swipe-item>
         <van-grid  :border="true" :column-num="8">
           <template v-for="(category, index) in categoryInFo">
-            <router-link to="/classification" v-if="index%2==0">
-              <van-grid-item>
+            <router-link style="margin: 2px 1vw" to="/classification" v-if="index%2==0">
+              <van-grid-item >
                 <img class="img_item" :src="baseUrl+category.picture" >
                 <p style="font-size: 12px;padding-top: 6px">{{ category.deptName }}</p>
               </van-grid-item>
@@ -56,10 +56,10 @@
         </van-grid>
       </van-swipe-item>
       <van-swipe-item>
-        <van-grid  :border="true" :column-num="8">
+        <van-grid :border="true" :column-num="8">
           <template v-for="(category, index) in categoryInFo">
-            <router-link to="/classification" v-if="index%2!=0">
-              <van-grid-item>
+            <router-link style="margin: 2px 1vw" to="/classification" v-if="index%2!=0">
+              <van-grid-item >
                 <img class="img_item" :src="baseUrl+category.picture" >
                 <p style="font-size: 12px;padding-top: 6px">{{ category.deptName }}</p>
               </van-grid-item>
@@ -346,5 +346,9 @@ export default {
   background-color:rgb(245,245,245) ;
   border-radius: 10px;
 }
+
+
+
+
 </style>
 
