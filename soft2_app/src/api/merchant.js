@@ -20,6 +20,14 @@ export function selectIdByInfo(id) {
   })
 }
 
+export function selectFGoodsByFavorable(query){
+  return request({
+    url: '/api/fresh/favorableList',
+    method: 'get',
+    params: query
+  })
+}
+
 //根据大分类查询商品
 export function categoryList( query){
   return request({
