@@ -6,12 +6,13 @@
     <resultMap type="Fadvertisement" id="FadvertisementResult">
         <result property="fadvertisementId"    column="id"    />
         <result property="fadvertisementName"    column="name"    />
+        <result property="goodsId"    column="goods_id"    />
         <result property="fadvertisementImg"    column="img"    />
         <result property="fadvertisementprice"    column="price"    />
     </resultMap>
 
     <sql id="selectFadvertisementVo">
-        select id,name,img,price from f_advertisement
+        select id,name,goods_id,img,price from f_advertisement
     </sql>
 
     <select id="selectFadvertisementList"  parameterType="Fadvertisement" resultMap="FadvertisementResult">
@@ -19,6 +20,7 @@
         <where>
             <if test="fadvertisementId != null "> and id = #{fadvertisementId} </if>
             <if test="fadvertisementName != null  and addressName != ''"> and name like concat('%', #{fadvertisementName}, '%') </if>
+            <if test="goodsId != null "> and goods_id = #{goodsId} </if>
             <if test="fadvertisementImg != null  and addressPhone != ''"> and img = #{fadvertisementImg} </if>
             <if test="fadvertisementprice != null "> and price = #{fadvertisementprice} </if>
         </where>

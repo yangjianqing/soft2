@@ -125,7 +125,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectFGoodsById" parameterType="Long" resultMap="FGoodsCategoryResult">
         select a.id, a.name, a.category_id, a.price,a.unit,a.coding,a.specification,a.image, a.description, a.num,a.status,a.create_time, a.update_time, a.create_user, a.update_user,
- b.dept_id as sub_dept_id, b.parent_id as sub_parent_id, b.ancestors as sub_ancestors, b.dept_name as sub_dept_name, b.order_num as sub_order_num, b.c_flag as sub_c_flag, b.create_time as sub_create_time, b.update_by as sub_update_by, b.update_time as sub_update_time
+        b.dept_id as sub_dept_id, b.parent_id as sub_parent_id, b.ancestors as sub_ancestors, b.dept_name as sub_dept_name, b.order_num as sub_order_num, b.c_flag as sub_c_flag, b.create_time as sub_create_time, b.update_by as sub_update_by, b.update_time as sub_update_time
         from f_goods a
         left join category b on b.dept_id = a.id
         where a.id = #{id}

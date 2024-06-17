@@ -20,6 +20,10 @@ public class Fadvertisement extends BaseEntity {
     @Excel(name = "广告名称")
     private String fadvertisementName;
 
+    /** 商品id */
+    @Excel(name = "商品id")
+    private Long goodsId;
+
     /** 广告图片 */
     @Excel(name = "广告图片")
     private String fadvertisementImg;
@@ -28,14 +32,11 @@ public class Fadvertisement extends BaseEntity {
     @Excel(name = "广告费用")
     private BigDecimal fadvertisementprice;
 
-    public Fadvertisement() {
-    }
+    /** 商品数据 */
+    @Excel(name = "商品数据")
+    private FGoods fGoods;
 
-    public Fadvertisement(Long fadvertisementId, String fadvertisementName, String fadvertisementImg, BigDecimal fadvertisementprice) {
-        this.fadvertisementId = fadvertisementId;
-        this.fadvertisementName = fadvertisementName;
-        this.fadvertisementImg = fadvertisementImg;
-        this.fadvertisementprice = fadvertisementprice;
+    public Fadvertisement() {
     }
 
     public Long getFadvertisementId() {
@@ -54,6 +55,14 @@ public class Fadvertisement extends BaseEntity {
         this.fadvertisementName = fadvertisementName;
     }
 
+    public Long getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(Long goodsId) {
+        this.goodsId = goodsId;
+    }
+
     public String getFadvertisementImg() {
         return fadvertisementImg;
     }
@@ -70,13 +79,23 @@ public class Fadvertisement extends BaseEntity {
         this.fadvertisementprice = fadvertisementprice;
     }
 
+    public FGoods getfGoods() {
+        return fGoods;
+    }
+
+    public void setfGoods(FGoods fGoods) {
+        this.fGoods = fGoods;
+    }
+
     @Override
     public String toString() {
         return "Fadvertisement{" +
                 "fadvertisementId=" + fadvertisementId +
                 ", fadvertisementName='" + fadvertisementName + '\'' +
+                ", goodsId=" + goodsId +
                 ", fadvertisementImg='" + fadvertisementImg + '\'' +
                 ", fadvertisementprice=" + fadvertisementprice +
+                ", fGoods=" + fGoods +
                 '}';
     }
 }

@@ -59,13 +59,10 @@ public class ApiShoppingIController extends BaseController {
     private IFAppraiseService fAppraiseService;
     @Autowired
     private RedisCache redisCache;
-
     @Autowired
-    private FadvertisementMapper fadvertisementMapper;
-
+    private FadvertisementService fadvertisementService;
     @Autowired
     private FAddressMapper fAddressMapper;
-
     @Autowired
     private IFAddressService fAddressService;
     /**
@@ -116,6 +113,7 @@ public class ApiShoppingIController extends BaseController {
         List<FOrdeers> list = fOrdeersService.selectFOrdeersList(fOrdeers);
         return getDataTable(list);
     }
+
     /**
      * 查询订单明细列表
      */
@@ -172,7 +170,7 @@ public class ApiShoppingIController extends BaseController {
      @GetMapping("/selectFadvertisementList")
      public AjaxResult selectFadvertisementList()
      {
-         List<Fadvertisement> fadvertisements = fadvertisementMapper.selectFadvertisementList();
+         List<Fadvertisement> fadvertisements = fadvertisementService.selectFadvertisementList();
          return AjaxResult.success(fadvertisements);
      }
 
