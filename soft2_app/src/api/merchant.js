@@ -20,6 +20,7 @@ export function selectIdByInfo(id) {
   })
 }
 
+//查询超盒算列表
 export function selectFGoodsByFavorable(query){
   return request({
     url: '/api/fresh/favorableList',

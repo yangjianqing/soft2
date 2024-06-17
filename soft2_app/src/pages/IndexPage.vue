@@ -86,10 +86,8 @@
   </router-link>
 
     <div class="van_row_div2">
-      <template v-for="(favorable, index) in favorableList" :key="index">
-<!--        <router-link :to="{ path: '/cart/shoppinggement/'+favorableList[index].id  }" >-->
-        <Merchandise v-if="index < 3" :favorable="favorable" ></Merchandise>
-<!--        </router-link>-->
+      <template v-for="(favorable, index) in favorableList.slice(0,3)" :key="index">
+        <Merchandise :favorable="favorable" ></Merchandise>
       </template>
     </div>
 </div>
