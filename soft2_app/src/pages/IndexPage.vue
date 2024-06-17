@@ -72,8 +72,8 @@
 
   </div>
 <!-- 超合算 -->
-  <router-link to="/index/DiscountPage">
 <div class="bargain_div" >
+  <router-link to="/index/DiscountPage">
     <div class="van_row_div1">
       <div class="box_icon">
         <van-icon style=" padding: 0  5px;"  name="fire-o" size="18" color="rgb(255,80,48)" />
@@ -83,13 +83,16 @@
         <el-button style="color: rgb(153,153,153)">更多 ></el-button>
       </div>
     </div>
+  </router-link>
+
     <div class="van_row_div2">
-      <Merchandise></Merchandise>
-      <Merchandise></Merchandise>
-      <Merchandise></Merchandise>
+      <template v-for="(favorable, index) in favorableList" :key="index">
+<!--        <router-link :to="{ path: '/cart/shoppinggement/'+favorableList[index].id  }" >-->
+        <Merchandise v-if="index < 3" :favorable="favorable" ></Merchandise>
+<!--        </router-link>-->
+      </template>
     </div>
 </div>
-  </router-link>
 <!--  推荐栏-->
 <div>
 
@@ -169,6 +172,7 @@
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 import Merchandise from "@/components/Index/Merchandise.vue";
 import {recommendedList, selectPicture} from "@/api/merchant.js"
+import {selectFGoodsByFavorable} from "@/api/merchant.js"
 
 export default {
   name: "IndexPage",
@@ -180,6 +184,7 @@ export default {
     return {
       activeName: 'a',
       gridItems: [],
+      favorableList:[],
       goodsList1:[],
       goodsList2:[],
       goodsList3:[],
@@ -189,6 +194,8 @@ export default {
     };
   },
   created() {
+    //获取超盒算列表
+    this.getFavorableList();
       this.queryCategory();
       this.baseUrl=process.env.VUE_APP_BASE_API;
       this.onTabChange();
@@ -227,6 +234,11 @@ export default {
     queryCategory(){
       selectPicture().then(res =>{
         this.categoryInFo = res.data.rows;
+      })
+    },
+    getFavorableList(){
+      selectFGoodsByFavorable().then(res=>{
+        this.favorableList=res.data.rows;
       })
     }
   },

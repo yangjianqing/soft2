@@ -28,7 +28,7 @@ const SearchPage =() =>import("@/pages/SearchPage.vue")
 const DiscountPage =() =>import("@/pages/DiscountPage.vue")
 // 3. 定义一些路由。
 const HistoryInfo = () => import("@/pages/history/HistoryInfo.vue")
-const ResultShopping = () => import("@/pages/ResultShopping.vue")
+// const ResultShopping = () => import("@/pages/ResultShopping.vue")
 // 每个路由都需要映射到一个组件。
 const routes = [
     //一级路由
@@ -173,15 +173,15 @@ const routes = [
         title: "搜索",
       },
     },
-    {
-      path:"/index/ResultShopping",
-      component:ResultShopping,
-      props: route => ({ keyword: route.query.keyword }),// 将 query 中的 keyword 参数作为 props 传递给组件
-      name:"ResultShopping",
-      meta: {
-        title: "搜索",
-      },
-    },
+    // {
+    //   path:"/index/ResultShopping",
+    //   component:ResultShopping,
+    //   props: route => ({ keyword: route.query.keyword }),// 将 query 中的 keyword 参数作为 props 传递给组件
+    //   name:"ResultShopping",
+    //   meta: {
+    //     title: "搜索",
+    //   },
+    // },
 
 ];
 
