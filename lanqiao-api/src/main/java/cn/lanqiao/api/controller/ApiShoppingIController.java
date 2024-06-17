@@ -19,6 +19,8 @@ import cn.lanqiao.common.utils.uuid.IdUtils;
 
 //import cn.lanqiao.system.Category;
 import cn.lanqiao.system.domain.*;
+import cn.lanqiao.system.mapper.FAddressMapper;
+import cn.lanqiao.system.mapper.FadvertisementMapper;
 import cn.lanqiao.system.service.*;
 import cn.lanqiao.system.service.impl.IFShoppingCartServiceImpl;
 import io.swagger.annotations.Api;
@@ -56,6 +58,12 @@ public class ApiShoppingIController extends BaseController {
     private IFAppraiseService fAppraiseService;
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private FadvertisementMapper fadvertisementMapper;
+
+    @Autowired
+    private FAddressMapper fAddressMapper;
     /**
      * 查询商品列表
      */
@@ -115,6 +123,7 @@ public class ApiShoppingIController extends BaseController {
         List<FOrderPartslist> list = fOrderPartslistService.selectFOrderPartslistList(fOrderPartslist);
         return getDataTable(list);
     }
+
     /**
      * 查询超盒算
      */
@@ -126,6 +135,7 @@ public class ApiShoppingIController extends BaseController {
         List<FGoods> favorableList = fGoodsService.selectFGoodsByFavorable(fGoods);
         return getDataTable(favorableList);
     }
+
     /**
      * 分类图片
      */
@@ -149,6 +159,18 @@ public class ApiShoppingIController extends BaseController {
         List<FGoods> fGoods2=fGoodsService.recommendedList(sortNum,fGoods);
         return getDataTable(fGoods2);
     }
+
+    /**
+     * 查询广告数据
+     *
+     */
+     @ApiOperation("查询广告数据")
+     @GetMapping("/selectFadvertisementList")
+     public AjaxResult selectFadvertisementList()
+     {
+         List<Fadvertisement> fadvertisements = fadvertisementMapper.selectFadvertisementList();
+         return AjaxResult.success(fadvertisements);
+     }
 
     /**
      * 根据商品名称查询
@@ -175,6 +197,7 @@ public class ApiShoppingIController extends BaseController {
         FGoods fGoodsName = fGoodsService.selectFGoodsById(goodsListCoding);
         return AjaxResult.success().put("id",fGoodsName);
     }
+
     /**
      * 新增评价管理
      */
@@ -199,6 +222,20 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
+     * 根据电话号码获取用户手机app会员地址信息
+     * @param usersPhone 电话号码
+     *
+     */
+    @ApiOperation("手机端个人地址详情页面接口")
+    @GetMapping("/selectUsersAddressList/{usersPhone}")
+    public AjaxResult selectUsersAddressList(@PathVariable("usersPhone") String usersPhone)
+    {
+        FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
+        List<FAddress> fAddresses = fAddressMapper.selectUsersIdByType(String.valueOf(fUsers.getUsersId()));
+        return AjaxResult.success(fAddresses);
+    }
+
+    /**
      * 根据电话号码修改用户手机app会员信息
      * @param fUsers 会员对象
      *
@@ -208,6 +245,23 @@ public class ApiShoppingIController extends BaseController {
     public AjaxResult updateFUsers(@RequestBody FUsers fUsers)
     {
        return toAjax(ifUsersService.updateFUsers(fUsers));
+    }
+
+    /**
+     * 根据电话号码修改用户手机app会员信息
+     * @param usersPhone 会员电话
+     * @param usersPassword 会员密码
+     *
+     */
+    @ApiOperation("根据电话注册手机端会员账号")
+    @PostMapping("/updatePassword")
+    public void updatePassword(@RequestParam("usersPhone") String usersPhone,@RequestParam("usersPassword") String usersPassword)
+    {
+        if (usersPhone != null && usersPassword != null) {
+            FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
+            fUsers.setUsersPassword(SecurityUtils.encryptPassword(usersPassword));
+            ifUsersService.updateFUsers(fUsers);
+        }
     }
 
     /**
@@ -275,7 +329,6 @@ public class ApiShoppingIController extends BaseController {
     @PostMapping("/login")
     public AjaxResult login(@RequestParam("usersPhone") String usersPhone, @RequestParam("usersPassword") String usersPassword) {
         FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
-
         if (fUsers != null) {
             if (SecurityUtils.matchesPassword(usersPassword, fUsers.getUsersPassword())) {
                 return AjaxResult.success("登录成功", fUsers);
@@ -286,8 +339,6 @@ public class ApiShoppingIController extends BaseController {
             return AjaxResult.error("登录失败, 用户账号不存在");
         }
     }
-
-
 
     /**
      * 手机端添加购物车数据到redis

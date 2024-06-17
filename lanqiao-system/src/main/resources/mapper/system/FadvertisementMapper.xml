@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.system.mapper.FadvertisementMapper">
+    <resultMap type="Fadvertisement" id="FadvertisementResult">
+        <result property="fadvertisementId"    column="id"    />
+        <result property="fadvertisementName"    column="name"    />
+        <result property="fadvertisementImg"    column="img"    />
+        <result property="fadvertisementprice"    column="price"    />
+    </resultMap>
+
+    <sql id="selectFadvertisementVo">
+        select id,name,img,price from f_advertisement
+    </sql>
+
+    <select id="selectFadvertisementList"  parameterType="Fadvertisement" resultMap="FadvertisementResult">
+        <include refid="selectFadvertisementVo"/>
+        <where>
+            <if test="fadvertisementId != null "> and id = #{fadvertisementId} </if>
+            <if test="fadvertisementName != null  and addressName != ''"> and name like concat('%', #{fadvertisementName}, '%') </if>
+            <if test="fadvertisementImg != null  and addressPhone != ''"> and img = #{fadvertisementImg} </if>
+            <if test="fadvertisementprice != null "> and price = #{fadvertisementprice} </if>
+        </where>
+    </select>
+</mapper>

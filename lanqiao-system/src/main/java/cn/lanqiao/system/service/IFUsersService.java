@@ -1,6 +1,8 @@
 package cn.lanqiao.system.service;
 
 import java.util.List;
+
+import cn.lanqiao.system.domain.FAddress;
 import cn.lanqiao.system.domain.FUsers;
 
 /**
