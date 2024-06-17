@@ -82,7 +82,11 @@
       <el-table-column label="明细ID" align="center" prop="id" />
       <el-table-column label="商品编码" align="center" prop="goods.coding" />
       <el-table-column label="商品名称" align="center" prop="goods.name" />
-      <el-table-column label="商品图片" align="center" prop="goods.image" />
+      <el-table-column label="商品图片" align="center" prop="image" width="100">
+        <template slot-scope="scope">
+          <image-preview :src="scope.row.goods.image" :width="50" :height="50"/>
+        </template>
+      </el-table-column>
       <el-table-column label="商品价格" align="center" prop="goods.price" />
       <el-table-column label="订单编号" align="center" prop="orderId" />
       <el-table-column label="商品数量" align="center" prop="goodsNum" />
