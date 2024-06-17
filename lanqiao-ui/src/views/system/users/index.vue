@@ -249,7 +249,7 @@ export default {
       // 表单校验
       rules: {
         usersName: [
-          { required: true, message: "用户姓名不能为空", trigger: "blur" },
+          { required: true, message: "会员姓名不能为空", trigger: "blur" },
           { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]{3,6}$/, message: "3-6位中文、英文、英文数字组合", trigger: "blur" }
         ],
         usersPhone: [
@@ -257,7 +257,7 @@ export default {
           { pattern: /^((0\d{2,3}-\d{7,8})|(1[34578]\d{9}))$/, message: "电话号码无效", trigger: "blur" }
         ],
         usersPassword: [
-          { required: true, message: "用户密码不能为空", trigger: "blur" },
+          { required: true, message: "会员密码不能为空", trigger: "blur" },
           { pattern:/^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$)([^\u4e00-\u9fa5\s]){6,20}$/, message: "6-20位英文数字组合", trigger: "blur" }
         ],
         memberTotal: [

@@ -123,7 +123,7 @@ public class FUsersController extends BaseController
     {
         FUsers fUsers = fUsersService.selectUsersusersPhone(memberPhone);
         if (fUsers == null || fUsers.getUsersName() == null || fUsers.getMemberTotal() == null) {
-            return AjaxResult.error("查无此会员 请重新输入");
+            return AjaxResult.error("查无此会员 请重新输入或新增会员");
         }
         return AjaxResult.success(fUsers);
     }

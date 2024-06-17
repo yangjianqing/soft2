@@ -198,7 +198,7 @@ export default {
       // 表单校验
       rules: {
         usersName: [
-          { required: true, message: "用户姓名不能为空", trigger: "blur" },
+          { required: true, message: "会员姓名不能为空", trigger: "blur" },
           { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]{2,10}$/, message: "2-10位中文、英文、英文数字组合", trigger: "blur" }
         ],
         usersPhone: [
@@ -206,7 +206,7 @@ export default {
           { pattern: /^((0\d{2,3}-\d{7,8})|(1[34578]\d{9}))$/, message: "电话号码无效", trigger: "blur" }
         ],
         usersPassword: [
-          { required: true, message: "用户密码不能为空", trigger: "blur" },
+          { required: true, message: "会员密码不能为空", trigger: "blur" },
           { pattern:/^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$)([^\u4e00-\u9fa5\s]){6,20}$/, message: "6-20位英文数字组合", trigger: "blur" }
         ],
         memberTotal: [
@@ -294,7 +294,6 @@ export default {
       }
       }, 500); // 设置延迟时间为 500 毫秒
     },
-
     //会员功能
     handleMemberAccountInput() {
       // 在此处处理会员账号输入框输入事件，可以进行实时校验、查询等操作
@@ -318,7 +317,6 @@ export default {
           }
       }, 1000);
     },
-
     //抵扣积分判断功能
     handleMemberTotal() {
       // 在此处处理会员账号输入框输入事件，可以进行实时校验、查询等操作
@@ -332,7 +330,6 @@ export default {
         }
         }, 1000);
     },
-
     //结算功能
     checkout() {
       if (this.productsInCart.length !== 0) {//判断购物车是否为null
@@ -356,7 +353,6 @@ export default {
         this.clearCart(); // 调用清空购物车+会员方法
       }
     },
-
     //新增会员用户功能
     /** 新增按钮操作 */
     handleAdd() {
@@ -366,10 +362,14 @@ export default {
     },
     // 提交表单方法
     submitForm() {
-      addUsers(this.form).then(response => {
-        this.$modal.msgSuccess("新增成功");
-        this.open = false;
-        this.reset();
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+            addUsers(this.form).then(response => {
+              this.$modal.msgSuccess("新增成功");
+              this.open = false;
+              this.reset();
+            });
+        }
       });
     },
     // 取消按钮
