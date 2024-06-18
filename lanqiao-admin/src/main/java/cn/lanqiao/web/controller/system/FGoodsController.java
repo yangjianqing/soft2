@@ -112,6 +112,8 @@ public class FGoodsController extends BaseController
         return toAjax(fGoodsService.updateFGoods(fGoods));
     }
 
+
+
     /**
      * 删除商品
      */
@@ -122,6 +124,7 @@ public class FGoodsController extends BaseController
     {
         return toAjax(fGoodsService.deleteFGoodsByIds(ids));
     }
+
     /**
      * 获取部门树列表
      */
