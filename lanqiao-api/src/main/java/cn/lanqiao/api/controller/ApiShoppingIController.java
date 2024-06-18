@@ -11,11 +11,8 @@ import cn.lanqiao.common.core.domain.model.LoginUser;
 import cn.lanqiao.common.core.page.TableDataInfo;
 import cn.lanqiao.common.core.redis.RedisCache;
 import cn.lanqiao.common.enums.BusinessType;
-import cn.lanqiao.common.utils.MyClass;
-import cn.lanqiao.common.utils.OrderNumberGenerator;
-import cn.lanqiao.common.utils.SecurityUtils;
+import cn.lanqiao.common.utils.*;
 import cn.lanqiao.common.utils.poi.ExcelUtil;
-import cn.lanqiao.common.utils.SendSms;
 import cn.lanqiao.common.utils.uuid.IdUtils;
 
 //import cn.lanqiao.system.Category;
@@ -69,7 +66,6 @@ public class ApiShoppingIController extends BaseController {
     private FAddressMapper fAddressMapper;
     @Autowired
     private IFAddressService fAddressService;
-
     @Autowired
     private TokenService tokenService;
     /**
@@ -330,49 +326,34 @@ public class ApiShoppingIController extends BaseController {
      * 根据电话注册手机app会员账号
      */
     @ApiOperation("根据电话注册手机端会员账号")
-    @PostMapping("/registered")
-    public AjaxResult Registered(@RequestBody LoginVo user)
+    @PostMapping("/LoginUsers")
+    public AjaxResult LoginUsers(@RequestBody LoginVo user)
     {
-        String verKey = CacheConstants.PHONE_CODE_KEY ;
-        Object cacheObject = redisCache.getCacheObject(verKey);//获取redis缓存的验证码
-        FUsers fUsers = ifUsersService.selectUsersusersPhone(user.getUsersPhone());
-        // TODO: 在这里进行用户名和密码的校验操作
-        String cacheString = cacheObject.toString();
-        if (fUsers.getUsersPhone().matches("^(0\\d{2,3}-\\d{7,8}|1[34578]\\d{9})$")) {
-            if (cacheString.equals(user.getCode())) {
-                FUsers fUser = new FUsers();
-                fUsers.setUsersPhone(fUser.getUsersPhone());
-                fUsers.setUsersPassword(SecurityUtils.encryptPassword(fUser.getUsersPassword()));
-                fUsers.setMemberGrade(0L);
-                fUsers.setMemberTotal(new BigDecimal(0));
-                return toAjax(ifUsersService.insertFUsers(fUsers));
+        // TODO: 在这里进行电话号码是否有效校验操作
+        if (user.getUsersPhone().matches("^(0\\d{2,3}-\\d{7,8}|1[34578]\\d{9})$")) {
+            FUsers fUsers = ifUsersService.selectUsersusersPhone(user.getUsersPhone());
+            String verKey = CacheConstants.PHONE_CODE_KEY;
+            Object cacheObject = redisCache.getCacheObject(verKey);//获取redis缓存的验证码
+            String cacheString = cacheObject.toString();
+            // TODO: 在这里进行查询用户电话是否为空判断校验操作
+            if (fUsers != null) {
+                // TODO: 在这里进行登录操作
+                if (cacheString.equals(user.getCode())) {
+                    String token = tokenService.createApiToken(fUsers);
+                    fUsers.setToken(token);
+                    return AjaxResult.success("登录成功", fUsers);
+                } else {
+                    return AjaxResult.error("登录失败,验证码错误");
+                }
+            } else if (cacheString.equals(user.getCode())) {
+                // TODO: 在这里进行注册操作
+                FUsers fUser =  new FUsers(RandomUsernameGenerator.generateRandomUsername(), "2", user.getUsersPhone(), 0L,new BigDecimal(0));
+                return toAjax(ifUsersService.insertFUsers(fUser));
+                } else {
+                    return AjaxResult.error("注册失败,验证码错误");
+                }
             } else {
-                return AjaxResult.error("注册失败");
-            }
-        } else {
             return AjaxResult.error("电话号码无效");
-        }
-    }
-
-    /**
-     * 根据电话注册手机app登录会员账号
-     */
-    @ApiOperation("根据电话注册手机端登录会员账号")
-    @PostMapping("/login")
-    public AjaxResult login(@RequestParam("usersPhone") String usersPhone, @RequestParam("usersPassword") String usersPassword) {
-        FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
-        if (fUsers != null) {
-            if (SecurityUtils.matchesPassword(usersPassword, fUsers.getUsersPassword())) {
-                fUsers.setUsersPassword("");
-                String token = tokenService.createApiToken(fUsers);
-                fUsers.setToken(token);
-                AjaxResult reslut = AjaxResult.success("登录成功", fUsers);
-                return reslut;
-            } else {
-                return AjaxResult.error("登录失败, 密码错误");
-            }
-        } else {
-            return AjaxResult.error("登录失败, 用户账号不存在");
         }
     }
 

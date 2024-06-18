@@ -133,6 +133,14 @@ public class FUsers extends BaseEntity
         return memberTotal;
     }
 
+    public FUsers(String usersName, String usersSex, String usersPhone, Long memberGrade, BigDecimal memberTotal) {
+        this.usersName = usersName;
+        this.usersSex = usersSex;
+        this.usersPhone = usersPhone;
+        this.memberGrade = memberGrade;
+        this.memberTotal = memberTotal;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

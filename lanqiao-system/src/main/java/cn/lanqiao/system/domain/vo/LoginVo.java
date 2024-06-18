@@ -1,15 +1,23 @@
 package cn.lanqiao.system.domain.vo;
 
+
 import cn.lanqiao.common.annotation.Excel;
 
 public class LoginVo {
+    /** 用户电话 */
+    @Excel(name = "用户电话")
     private String usersPhone;
 
     /** 用户密码 */
+    @Excel(name = "用户密码")
     private String usersPassword;
 
+    /** uuid */
+    @Excel(name = "uuid")
     private String  uuid;
 
+    /** 验证码 */
+    @Excel(name = "验证码")
     private String code;
 
     public String getUsersPhone() {

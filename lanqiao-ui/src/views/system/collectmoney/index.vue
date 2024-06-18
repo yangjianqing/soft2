@@ -16,7 +16,6 @@
                   v-model="barcode"
                   placeholder="请扫描商品条形码"
                   @input="handleBarcodeInput"
-                  @keyup.enter.native="checkout"
                 ></el-input>
               </p>
             </el-col>
