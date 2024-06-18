@@ -164,12 +164,11 @@ export default {
 .nav_img{
   border-radius: 1%;
   height: 932px;
-  background-image: url("@/assets/img/registess");
+  background-image: url("@/assets/img/login.jpg");
   background-size: 141% 100%; /* 这将设置图像的宽度和高度 */
   background-position: center; /* 这将确保图像在容器中居中 */
   background-repeat: no-repeat; /* 这将确保图像不重复 */
 }
-
 
 .search-icon {
   font-size: 16px;

@@ -35,6 +35,7 @@ const routes = [
     {
         path:"/",
         component:Home,
+        redirect:"/index",
         //二级路由
         children: [
             // 空嵌套路由

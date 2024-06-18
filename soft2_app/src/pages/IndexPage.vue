@@ -56,7 +56,7 @@
         </van-grid>
       </van-swipe-item>
       <van-swipe-item>
-        <van-grid :border="true" :column-num="8">
+        <van-grid :border="true" :column-num="8" style="justify-content: space-around;">
           <template v-for="(category, index) in categoryInFo">
             <router-link style="margin: 2px 1vw" to="/classification" v-if="index%2!=0">
               <van-grid-item >
@@ -258,7 +258,11 @@ export default {
 }
 </script>
 <style >
-
+.van-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
 .row_swipe{
   margin: 2% 2%;
   width: 96%;
