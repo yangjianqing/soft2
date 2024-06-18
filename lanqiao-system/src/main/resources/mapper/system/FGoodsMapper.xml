@@ -64,9 +64,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectFGoodsList" parameterType="FGoods" resultMap="FGoodsResult">
-        select id, name,category_id, price,unit,coding,specification, image, num,description,num,status, g.create_time, g.update_time, create_user, update_user from f_goods g
-        left join category c on c.dept_id = g.category_id
-        <where>  
+        select g.id, g.name, g.category_id, g.price, g.unit, g.coding, g.specification, g.image, g.num, g.description, g.status, g.create_time, g.update_time, g.create_user,po.quantity
+        from f_goods g
+        LEFT JOIN category c ON c.dept_id = g.category_id
+        LEFT JOIN f_purchase_orders po ON po.goods_id = g.id
+        <where>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="status != null "> and status = #{status}</if>
             <if test="categoryId != null and categoryId != 0">
@@ -122,7 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             price = 10
         </where>
     </select>
-
+<!--根据id查询-->
     <select id="selectFGoodsById" parameterType="Long" resultMap="FGoodsCategoryResult">
         select a.id, a.name, a.category_id, a.price,a.unit,a.coding,a.specification,a.image, a.description, a.num,a.status,a.create_time, a.update_time, a.create_user, a.update_user,
         b.dept_id as sub_dept_id, b.parent_id as sub_parent_id, b.ancestors as sub_ancestors, b.dept_name as sub_dept_name, b.order_num as sub_order_num, b.c_flag as sub_c_flag, b.create_time as sub_create_time, b.update_by as sub_update_by, b.update_time as sub_update_time
@@ -131,6 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where a.id = #{id}
     </select>
 
+<!--查询好评-->
     <select id="selectRecommended" parameterType="FGoods" resultMap="FGoodsResult">
         SELECT g.id, g.name, g.category_id, g.price, g.unit, g.image, g.description, g.status, g.coding, g.create_time, g.update_time, g.num, g.specification, g.profit
         FROM f_goods g
@@ -239,6 +242,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{GoodsId}
         </foreach>
     </select>
+
 <!--    根据名称查询-->
     <select id="selectGoodsName"  parameterType="String"  resultMap="FGoodsResult">
         SELECT * FROM f_goods WHERE name LIKE CONCAT('%', #{goodsName}, '%');
