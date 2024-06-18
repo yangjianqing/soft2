@@ -332,7 +332,7 @@ public class ApiShoppingIController extends BaseController {
         // TODO: 在这里进行电话号码是否有效校验操作
         if (user.getUsersPhone().matches("^(0\\d{2,3}-\\d{7,8}|1[34578]\\d{9})$")) {
             FUsers fUsers = ifUsersService.selectUsersusersPhone(user.getUsersPhone());
-            String verKey = CacheConstants.PHONE_CODE_KEY;
+            String verKey = CacheConstants.PHONE_CODE_KEY + user.getUuid();
             Object cacheObject = redisCache.getCacheObject(verKey);//获取redis缓存的验证码
             String cacheString = cacheObject.toString();
             // TODO: 在这里进行查询用户电话是否为空判断校验操作

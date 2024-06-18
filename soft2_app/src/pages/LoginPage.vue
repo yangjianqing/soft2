@@ -108,8 +108,16 @@ export default {
   },
   methods: {
     submitForm(form) {
+      console.log(this.form.uuid)
+      const user = {
+        usersPhone: form.usersPhone,
+        code: form.verificationCode,
+        uuid: this.form.uuid
+      };
       // 假设 login 函数返回一个 Promise
-      login(form.usersPhone, form.usersPassword).then(res => {
+      login(user).then(res => {
+        console.log(res.data.code)
+        console.log(res.data)
         // 检查登录是否成功（这取决于您的后端API返回的数据结构）
         if (res.data.code === 200) {
           localStorage.setItem("shoppingInfo", JSON.stringify(res.data.data));
@@ -128,12 +136,8 @@ export default {
     validatePhoneNumber() {
       const phoneNumber = this.form.usersPhone.trim();
       // 使用正则表达式验证手机号码
-      const regex = /^1[3-9]\d{9}$/;
-      if (regex.test(phoneNumber)) {
-        return true;
-      } else {
-        return false;
-      }
+      const regex = /^(0\d{2,3}-\d{7,8}|1[34578]\d{9})$/;
+      return regex.test(phoneNumber);
     },
     //验证码
     sendVerificationCode(verificationCode) {
@@ -148,7 +152,6 @@ export default {
         sendCode(this.form.verificationCode).then(res => {
           if (res.data.code === 200) {
             this.form.uuid = res.data.uuid;
-            console.log(res.data.uuid);
             // 这里可以更新UI，显示“验证码已发送”等消息
             showNotify({type: 'success', message: '验证码发送成功'});
             this.startCountdown();

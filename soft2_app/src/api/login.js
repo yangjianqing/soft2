@@ -1,38 +1,42 @@
 import request from "@/axios/request"
+import axios from 'axios';
+export function login(user) {
+  return axios.post('http://localhost:8082/dev-api/api/fresh/LoginUsers', user);
+}
 
 // 登录方法
-export function login(usersPhone, usersPassword) {
-  const data = {
-    usersPhone,
-    usersPassword,
-  }
-  return request({
-    url: 'api/fresh/login',
-    headers: {
-      isToken: false
-    },
-    method: 'post',
-    data: data
-  })
-}
+// export function login(usersPhone, usersPassword) {
+//   const data = {
+//     usersPhone,
+//     usersPassword,
+//   }
+//   return request({
+//     url: 'api/fresh/login',
+//     headers: {
+//       isToken: false
+//     },
+//     method: 'post',
+//     data: data
+//   })
+// }
 
 // 注册方法
-export function register(usersPhone,usersPassword,code,uuid) {
-  const data = {
-    usersPhone,
-    usersPassword,
-    code,
-    uuid
-  }
-  return request({
-    url: '/api/fresh/registered',
-    headers: {
-      isToken: false
-    },
-    method: 'post',
-    data: data
-  })
-}
+// export function register(usersPhone,usersPassword,code,uuid) {
+//   const data = {
+//     usersPhone,
+//     usersPassword,
+//     code,
+//     uuid
+//   }
+//   return request({
+//     url: '/api/fresh/registered',
+//     headers: {
+//       isToken: false
+//     },
+//     method: 'post',
+//     data: data
+//   })
+// }
 // 获取验证码
 export function sendCode() {
   return request({
