@@ -133,6 +133,9 @@ public class FUsers extends BaseEntity
         return memberTotal;
     }
 
+    public FUsers() {
+    }
+
     public FUsers(String usersName, String usersSex, String usersPhone, Long memberGrade, BigDecimal memberTotal) {
         this.usersName = usersName;
         this.usersSex = usersSex;
@@ -155,6 +158,4 @@ public class FUsers extends BaseEntity
                 .append("createTime", getCreateTime())
                 .toString();
     }
-
-
 }

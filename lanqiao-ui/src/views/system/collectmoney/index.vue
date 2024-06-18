@@ -128,13 +128,6 @@
         <el-form-item label="联系方式" prop="usersPhone">
           <el-input v-model="form.usersPhone" placeholder="请输入联系方式" prefix-icon="el-icon-phone-outline" />
         </el-form-item>
-        <el-form-item label="会员密码" prop="usersPassword">
-          <el-input v-model="form.usersPassword" :type="showPassword ? 'text' : 'password'" placeholder="请输入会员密码" prefix-icon="el-icon-lock">
-            <template #append>
-              <el-button icon="el-icon-view" @click="showPassword = !showPassword" circle></el-button>
-            </template>
-          </el-input>
-        </el-form-item>
         <el-form-item label="会员头像">
           <image-upload  v-model="form.usersAvatar"/>
         </el-form-item>
@@ -188,7 +181,6 @@ export default {
         usersName: '',
         usersSex: '',
         usersPhone: '',
-        usersPassword: '',
         usersAvatar: '',
         memberGrade: '',
         memberTotal: '',
@@ -204,19 +196,12 @@ export default {
           { required: true, message: "联系方式不能为空", trigger: "blur" },
           { pattern: /^((0\d{2,3}-\d{7,8})|(1[34578]\d{9}))$/, message: "电话号码无效", trigger: "blur" }
         ],
-        usersPassword: [
-          { required: true, message: "会员密码不能为空", trigger: "blur" },
-          { pattern:/^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$)([^\u4e00-\u9fa5\s]){6,20}$/, message: "6-20位英文数字组合", trigger: "blur" }
-        ],
         memberTotal: [
           { required: true, message: "会员积分不能为空", trigger: "blur" },
           { pattern: /^(0|[1-9]\d*)$/, message: "请输入非负整数", trigger: "blur" }
         ]
       }
     };
-  },
-  created() {
-
   },
   watch: {
     'form.memberTotal': function(value) {
@@ -383,7 +368,6 @@ export default {
         usersName: null,
         usersSex: null,
         usersPhone: null,
-        usersPassword: null,
         usersAvatar: null,
         memberGrade: 0,
         memberTotal: null,
@@ -396,9 +380,6 @@ export default {
       this.productsInCart = []; //重置购物车数据
       this.member= {}; //重置会员数据
     },
-  },
-  computed: {
-
   }
 };
 </script>

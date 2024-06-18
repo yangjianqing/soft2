@@ -79,7 +79,6 @@ public class FUsersController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody FUsers fUsers)
     {
-        fUsers.setUsersPassword(SecurityUtils.encryptPassword(fUsers.getUsersPassword()));
         return toAjax(fUsersService.insertFUsers(fUsers));
     }
 
