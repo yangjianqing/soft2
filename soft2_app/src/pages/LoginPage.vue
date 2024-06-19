@@ -125,7 +125,7 @@ export default {
           localStorage.setItem("userInfo", JSON.stringify(res.data.data));
           this.$router.push('/index');
         } else {
-          showNotify({type: 'danger', message: '登录失败，请检查您的网络连接或稍后再试'});
+          showNotify({type: 'danger', message: res.data.msg});
         }
       }).catch(error => {
         // 处理网络错误或其他异常
