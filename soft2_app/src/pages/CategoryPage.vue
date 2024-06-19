@@ -18,8 +18,10 @@
         @click-nav="queryCategoryInFo"
       >
         <template #content>
-          <template v-for="goods in goodsList">
+          <template v-for="goods in goodsList" :key="goods.id">
+            <router-link :to="'/cart/shoppinggement/'+goods.id ">
             <shopping-cart  :Category="goods"></shopping-cart>
+            </router-link>
           </template>
         </template>
       </van-tree-select>
@@ -29,7 +31,6 @@
 
 <script>
 
-import {ref} from 'vue';
 import ShoppingCart from "@/components/Index/ShoppingCart.vue";
 import {categoryList, goodsList2} from "@/api/merchant.js"
 
@@ -39,7 +40,7 @@ export default {
   },
   data() {
     return {
-      activeIndex:3,
+      activeIndex:0,
       category:[],
       goodsList:"",
       items: [],
@@ -47,6 +48,7 @@ export default {
   },
   created() {
     this.queryCategory();
+
   },
   methods: {
     queryCategory() {
@@ -55,18 +57,19 @@ export default {
         this.category.forEach(e=>{
           this.items.push({ text: e.deptName,typeId: e.deptId})
         });
+        // 分类数据加载完成后，加载默认分类的商品
+        if (this.category.length > 0) {
+          this.queryCategoryInFo(0);
+        }
       });
     },
-
-
-
     queryCategoryInFo(e) {
       // 遍历每个 deptId 并调用 goodsList2
         goodsList2(this.category[e].deptId).then(res => {
           this.goodsList = res.data.deptId;
+          console.log(this.goodsList)
         });
     },
-
   },
 
 };

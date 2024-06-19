@@ -5,9 +5,11 @@
       @click-left="onClickLeft"
   >
     <template #right>
+      <router-link to="/mine/ordermanagement">
       <div class="right_nav">
-        <van-icon name="cart-o" size="20"/>
+        <van-icon name="cart-o" size="20" badge="1"/>
       </div>
+      </router-link>
     </template>
   </van-nav-bar>
 
@@ -33,11 +35,6 @@
 
    </div>
 
-
-
-
-
-
   <van-divider
       :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
   >
@@ -60,11 +57,9 @@
 import { showToast } from 'vant';
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 import router from "@/router";
-import {listShopping} from "@/api/merchant";
-import {selectIdByInfo} from "@/api/merchant.js";
+import {listShopping,addCarList,selectIdByInfo} from "@/api/merchant";
 
 const onClickLeft = () => history.back();
-const onClickIcon = () => showToast('已添加购物车');
 const onClickButton = () => showToast('立即购买');
 export default {
   components: {MerchandiseInfo},
@@ -72,18 +67,28 @@ export default {
   data(){
     return{
       onClickLeft,
-      images,
-      onClickIcon,
       onClickButton,
       goodsList:[],
       selectedGoods:[],
       baseUrl:"",
-      imgUrls:""
+      imgUrls:"",
+      usersPhone:"",
     }
   },
   methods:{
-    Retrunshopping(){
-      router.push({ path: '/cart/shoppinggement' });
+    onClickIcon(){
+      const userInfoString = localStorage.getItem("userInfo");
+      // 将字符串解析回对象
+      const userInfo = JSON.parse(userInfoString);
+
+      // 现在可以访问对象中的属性了
+      this.usersPhone = userInfo.usersPhone; // 假设属性名为 phone
+      console.log(this.usersPhone)
+      addCarList(this.usersPhone,this.selectedGoods.coding).then(res=>{
+          if (res.code==200){
+            alert("成功")
+          }
+      })
     },
     getGoodsList(){
       listShopping().then(res=>{
@@ -105,12 +110,9 @@ export default {
     this.getGoodsList();
     // 从路由参数中获取商品id
     this.selectById();
-
   },
-}
-const images = [
+  }
 
-];
 
 </script>
 <style scoped>

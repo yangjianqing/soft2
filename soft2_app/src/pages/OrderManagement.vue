@@ -8,8 +8,6 @@
   <van-pull-refresh v-model="loading" :onclick="AddProduct" @refresh="onRefresh">
     <van-tabs v-model:active="active">
       <van-tab title="全部订单">
-        <van-cell  title="用户名"/>
-
         <van-swipe-cell v-for="list in 3">
           <OrderInfo>
 
@@ -27,7 +25,7 @@
         </div>
       </van-tab>
       <van-tab title="待付款">
-        <van-cell  title="用户名"/>
+
         <van-swipe-cell v-for="list in 3">
           <OrderInfo>
 
@@ -56,8 +54,6 @@
         </AddressGement>
       </van-tab>
       <van-tab title="待收货">
-        <van-cell  title="用户名"/>
-
         <van-swipe-cell v-for="list in 3">
           <OrderInfo>
 

@@ -6,7 +6,8 @@
   <div class="image-wrapper">
     <div class="image-wrappers">
       <div style="padding-left: 12px;padding-top: 12px">
-        <p>{{ userInfo.usersName }}</p>
+<!--        {{ userInfo.usersName }}-->
+        <p>神仙</p>
       </div>
       <van-image
           round
@@ -115,6 +116,8 @@
   >
     <div class="sousaphone">客服电话:18881146195</div>
   </van-popup>
+
+
 </template>
 <script>
     // 这里需要什么其他功能可以查询文档
@@ -138,6 +141,7 @@
           showBottom.value = true;
         };
         return{
+          location: null,
           show,
           onSelect,
           count,
@@ -229,7 +233,6 @@
             this.goodsList=res.data.rows;
           })
         },
-
       },
       created() {
         //获取商品列表
@@ -237,7 +240,6 @@
         //根据电话查询个人信息
         //根据电话查询个人信息
         this.userInfo=JSON.parse(localStorage.getItem("userInfo"))
-
       },
     };
     // 导入插件样式返回

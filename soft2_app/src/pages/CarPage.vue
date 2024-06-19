@@ -41,7 +41,7 @@ import OrderInfo from "@/components/OrderInfo.vue";
 import NoShopping from "@/components/NoShopping/NoShopping.vue";
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 import router from "@/router";
-import {CarList, listShopping} from "@/api/merchant";
+import {CarList, listShopping,getCarList} from "@/api/merchant";
 import Goods from "@/components/good/goods.vue";
 
 const count = ref(0);
@@ -99,6 +99,10 @@ const hasItemsInCart = ref(value); // 假设这是从购物车服务获取的
       created() {
           this.getGoodsList();
           this.getCarInfoList();
+          //取购物车的数据
+          getCarList(1234343432).then(res =>{
+            console.log(res)
+          })
       }
     }
 

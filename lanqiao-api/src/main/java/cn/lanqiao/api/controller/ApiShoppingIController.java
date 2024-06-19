@@ -348,7 +348,10 @@ public class ApiShoppingIController extends BaseController {
             } else if (cacheString.equals(user.getCode())) {
                 // TODO: 在这里进行注册操作
                 FUsers fUser =  new FUsers(RandomUsernameGenerator.generateRandomUsername(), "2", user.getUsersPhone(), 0L,new BigDecimal(0));
-                return toAjax(ifUsersService.insertFUsers(fUser));
+                ifUsersService.insertFUsers(fUser);
+                String token = tokenService.createApiToken(fUser);
+                fUser.setToken(token);
+                return AjaxResult.success("保存成功", fUser);
                 } else {
                     return AjaxResult.error("注册失败,验证码错误");
                 }
