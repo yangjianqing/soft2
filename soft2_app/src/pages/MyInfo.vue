@@ -6,8 +6,7 @@
   <div class="image-wrapper">
     <div class="image-wrappers">
       <div style="padding-left: 12px;padding-top: 12px">
-<!--        {{ userInfo.usersName }}-->
-        <p>神仙</p>
+        <p>{{ userInfo.usersName }}</p>
       </div>
       <van-image
           round
@@ -114,7 +113,7 @@
     position="bottom"
     :style="{ height: '10%' }"
   >
-    <div class="sousaphone">客服电话:18881146195</div>
+    <div class="sousaphone" >客服电话:18881146195</div>
   </van-popup>
 
 
@@ -165,6 +164,9 @@
         }
       },
       methods:{
+        toPhone() {
+        },
+        //退出登录
         showConfirmDialog(){
           showConfirmDialog({
             title: '退出登录',
@@ -182,6 +184,7 @@
               // on cancel
             });
         },
+
         //加载名字
         ReturnPoMa(){
           router.push({ path: '/mine/poma' });
@@ -305,5 +308,6 @@
   justify-content: center;
   align-items: center;
   font-size: 30px;
+  border-radius: 30px;
 }
 </style>

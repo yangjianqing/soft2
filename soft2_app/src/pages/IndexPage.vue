@@ -221,44 +221,44 @@ export default {
     },
     //获取浏览器所在经纬度
     getLocation() {
-      return new Promise((resolve, reject) => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const location = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-              };
-              console.log('Latitude:', position.coords.latitude);
-              console.log('Longitude:', position.coords.longitude);
-              resolve(location); // 返回位置信息
-            },
-            (error) => {
-              console.error('Error getting location:', error);
-              reject(error);
-            }
-          );
-        } else {
-          console.error('该浏览器不支持 Geolocation');
-          reject(new Error('Geolocation not supported'));
-        }
-      });
+      // return new Promise((resolve, reject) => {
+      //   if (navigator.geolocation) {
+      //     navigator.geolocation.getCurrentPosition(
+      //       (position) => {
+      //         const location = {
+      //           latitude: position.coords.latitude,
+      //           longitude: position.coords.longitude,
+      //         };
+      //         console.log('Latitude:', position.coords.latitude);
+      //         console.log('Longitude:', position.coords.longitude);
+      //         resolve(location); // 返回位置信息
+      //       },
+      //       (error) => {
+      //         console.error('Error getting location:', error);
+      //         reject(error);
+      //       }
+      //     );
+      //   } else {
+      //     console.error('该浏览器不支持 Geolocation');
+      //     reject(new Error('Geolocation not supported'));
+      //   }
+      // });
     },
     async getAddress(latitude, longitude) {
-      try {
-        const url = `https://api.map.baidu.com/reverse_geocoding/v3/?ak=QHdL52NTXrQT5iABEjB9htutCDt4l8dC&location=${latitude},${longitude}&output=json&coordtype=wgs84`;
-        // 注意：将YOUR_APP_KEY替换为您自己的App Key
-        // location参数是纬度和经度的组合，格式为"纬度,经度"
-        // output参数指定返回的数据格式，这里使用json
-        // coordtype参数指定输入坐标的类型，这里使用wgs84（GPS坐标）
-        const response = await axios.get(url);
-        const data = response.data;
-        // 处理返回的数据...
-        console.log(data);
-
-      } catch (error) {
-        console.error("请求失败:", error);
-      }
+      // try {
+      //   const url = `https://api.map.baidu.com/reverse_geocoding/v3/?ak=QHdL52NTXrQT5iABEjB9htutCDt4l8dC&location=${latitude},${longitude}&output=json&coordtype=wgs84`;
+      //   // 注意：将YOUR_APP_KEY替换为您自己的App Key
+      //   // location参数是纬度和经度的组合，格式为"纬度,经度"
+      //   // output参数指定返回的数据格式，这里使用json
+      //   // coordtype参数指定输入坐标的类型，这里使用wgs84（GPS坐标）
+      //   const response = await axios.get(url);
+      //   const data = response.data;
+      //   // 处理返回的数据...
+      //   console.log(data);
+      //
+      // } catch (error) {
+      //   console.error("请求失败:", error);
+      // }
     },
 
 

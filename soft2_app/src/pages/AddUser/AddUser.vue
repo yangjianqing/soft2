@@ -131,7 +131,7 @@ export default {
 
     //注册
     registerUser(user){
-      if (!this.user.userPassword===this.user.confirmPassword){
+      if (!(this.user.userPassword===this.user.confirmPassword)){
         showToast({
           message: '两次密码不一致',
           position: 'top',

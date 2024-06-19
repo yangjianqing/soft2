@@ -1,6 +1,7 @@
 <template>
     <div>
       <van-nav-bar   title="购物车"></van-nav-bar>
+
       <van-pull-refresh v-model="loading" @refresh="onRefresh">
         <div v-if="hasItemsInCart">
 <!--          -->
@@ -13,6 +14,7 @@
 
           </NoShopping>
         </div>
+
         <van-divider
             :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
         >
@@ -32,6 +34,7 @@
     <van-action-bar-button color="#be99ff" type="warning" :text="'总净额:'+{total}" :click="addToCar" />
     <van-action-bar-button color="#7232dd" type="danger" text="去付款" @click="Retrunshoppings" />
   </van-action-bar>
+
 </template>
 
 <script>
@@ -70,6 +73,7 @@ const hasItemsInCart = ref(value); // 假设这是从购物车服务获取的
             onRefresh,
             hasItemsInCart,
             goodsList:[],
+
           }
         },
       methods:{
@@ -97,12 +101,10 @@ const hasItemsInCart = ref(value); // 假设这是从购物车服务获取的
         }
       },
       created() {
+
           this.getGoodsList();
           this.getCarInfoList();
-          //取购物车的数据
-          getCarList(1234343432).then(res =>{
-            console.log(res)
-          })
+
       }
     }
 

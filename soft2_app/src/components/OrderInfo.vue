@@ -2,37 +2,37 @@
   <div class="order">
     <router-link to="/cart/shoppinggement">
     <div class="title">
-      <span>盒马生鲜</span>
+      <span>{{ userInfo.name }}</span>
       <span style="color: #FFB366">未支付</span>
     </div>
     <div class="content">
-
       <div class="img_info">
-        <img src="@/assets/img/OIP-C.jpg" alt="">
+        <img :src="this.baseUrl+this.userInfo.image" alt="">
       </div>
-
       <div class="content_txt">
         <div style="height: 40px">
-          <h4 style="font-size: 12px">盒马购买成功南汇8424西瓜单果3kg-4kg</h4>
+          <h4 style="font-size: 12px">{{ userInfo.description }}</h4>
         </div>
         <p>规格：一个</p>
-        <p>单价：￥29.90/个</p>
-        <p>数量：1个</p>
+        <p>单价：￥{{ userInfo.specification }}</p>
+        <p>数量：{{userInfo.quantity}}个</p>
       </div>
     </div>
     </router-link>
-    <p class="totals">金额:334元</p>
+      <p class="totals">金额:{{ userInfo.price }}元</p>
     <div class="bottom_btn">
       <div>
         <van-button plain hairline round  type="primary" size="mini" @add="addNum" >再次购买</van-button>
-        <van-button plain hairline round  type="danger" size="mini">评价</van-button>
+        <router-link to="/mine/ordermanagement">
+          <van-button plain hairline round  type="danger" size="mini">评价</van-button>
+        </router-link>
       </div>
     </div>
   </div>
 </template>
 <script >
 
-import {listShopping, listShoppings} from "@/api/merchant";
+import {getCarList, listShopping, listShoppings} from "@/api/merchant";
 
 export default {
   name: "OrderInfo",
@@ -40,7 +40,9 @@ export default {
     return{
       merchant:"",
       baseUrl:"",
-      carList:[]
+      carList:[],
+      userInfo:"",
+      imgUrls:""
     }
   },
   methods:{
@@ -73,7 +75,20 @@ export default {
   },
   created() {
     this.baseUrl=process.env.VUE_APP_BASE_API;
+    this.imgUrls = this.userInfo.image;
+    console.log(this.imgUrls);
     // this.getOrederInfo();
+    //取购物车的数据
+    const userInfoString = localStorage.getItem("userInfo");
+    // 将字符串解析回对象
+    const userInfo = JSON.parse(userInfoString);
+
+    // 现在可以访问对象中的属性了
+    this.usersPhone = userInfo.usersPhone;
+    getCarList(this.usersPhone).then(res =>{
+      this.userInfo=res.data.data[0];
+      console.log(res.data.data)
+    })
   },
   // computed:{
   //   total(){

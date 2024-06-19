@@ -19,6 +19,9 @@ export function listShoppings(phone) {
   })
 }
 
+
+
+
 //手机端购物车页面数据接口
 export function CarList(query) {
   return request({
