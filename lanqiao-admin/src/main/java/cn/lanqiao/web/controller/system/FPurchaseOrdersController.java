@@ -90,7 +90,8 @@ public class FPurchaseOrdersController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody FPurchaseOrders fPurchaseOrders)
     {
-        return toAjax(fPurchaseOrdersService.insertFPurchaseOrders(fPurchaseOrders));
+        int i = fPurchaseOrdersService.insertFPurchaseOrders(fPurchaseOrders);
+      return toAjax(i);
     }
 
     /**

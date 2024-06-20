@@ -43,12 +43,12 @@ export default {
   data() {
     return {
       baseUrl:"",
-      imgUrls:""
+      imgUrls:"",
     };
   },
   created() {
       this.baseUrl=process.env.VUE_APP_BASE_API;
-    this.imgUrls = this.Category.image.split(',');
+      this.imgUrls = this.Category.image.split(',');
   },
   methods:{
 

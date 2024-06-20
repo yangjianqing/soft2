@@ -8,13 +8,11 @@
   <van-pull-refresh v-model="loading" :onclick="AddProduct" @refresh="onRefresh">
     <van-tabs v-model:active="active">
       <van-tab title="全部订单">
-        <van-cell  title="用户名"/>
+        <template  v-for="(goodsInfo,index) in goodsList" >
+          <OrderListInfo :goodsInfo="goodsInfo">
 
-        <van-swipe-cell v-for="list in 3">
-          <OrderInfo>
-
-          </OrderInfo>
-        </van-swipe-cell>
+          </OrderListInfo>
+        </template>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
 
         <div style="display: flex;flex-wrap: wrap;">
@@ -27,12 +25,12 @@
         </div>
       </van-tab>
       <van-tab title="待付款">
-        <van-cell  title="用户名"/>
-        <van-swipe-cell v-for="list in 3">
-          <OrderInfo>
 
-          </OrderInfo>
-        </van-swipe-cell>
+        <template  v-for="(goodsInfo,index) in goodsList" >
+          <OrderListInfo :goodsInfo="goodsInfo">
+
+          </OrderListInfo>
+        </template>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
         <div style="display: flex;flex-wrap: wrap;">
           <template v-for="(goodsInfo,index) in goodsList">
@@ -56,16 +54,16 @@
         </AddressGement>
       </van-tab>
       <van-tab title="待收货">
-        <van-cell  title="用户名"/>
+        <van-swipe-cell>
+          <template  v-for="(goodsInfo,index) in goodsList" >
+            <OrderListInfo :goodsInfo="goodsInfo">
 
-        <van-swipe-cell v-for="list in 3">
-          <OrderInfo>
-
-          </OrderInfo>
+            </OrderListInfo>
+          </template>
         </van-swipe-cell>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
         <div style="display: flex;flex-wrap: wrap;">
-          <template v-for="(goodsInfo,index) in goodsList">
+          <template v-for="(goodsInfo,index) in goodsListInfo">
             <div class="total_box" v-if="index%2===1">
               <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
               <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
@@ -79,10 +77,10 @@
       </AssessMent>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
         <div style="display: flex;flex-wrap: wrap;">
-          <template v-for="(goodsInfo,index) in goodsList">
+          <template v-for="(goodsInfo,index) in goodsListInfo">
             <div class="total_box" v-if="index%2===1">
-              <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
-              <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
+              <MerchandiseInfo :goodsInfo="goodsListInfo[index-1]"></MerchandiseInfo>
+              <MerchandiseInfo :goodsInfo="goodsListInfo[index]"></MerchandiseInfo>
             </div>
           </template>
         </div>
@@ -103,14 +101,23 @@
 <script>
 
 import AssessMent from "@/components/Assessment/AssessMent.vue";
-
+import {ref} from "vue";
+import {showToast} from "vant";
+import AddressGement from "@/components/address/AddressGement.vue";
+import ShoppingCard from "@/components/card/ShoppingCard.vue";
+import OrderInfo from "@/components/OrderInfo.vue";
+import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
+import {getCarList, listShopping} from "@/api/merchant";
+import router from "@/router";
+import PayInfo from "@/pages/PayInfo/PayInfo.vue";
+import OrderListInfo from "@/components/OrderlistInfo.vue";
 const show = ref(false);
 const showPopup = () => {
   show.value = true;
 };
 export default {
   name:"OrderManagement",
-  components: {PayInfo, MerchandiseInfo, OrderInfo, ShoppingCard, AddressGement, AssessMent},
+  components: {OrderListInfo, PayInfo, MerchandiseInfo, OrderInfo, ShoppingCard, AddressGement, AssessMent},
   data(){
     return{
       count,
@@ -122,31 +129,31 @@ export default {
       goodsList:[],
       show,
       showPopup,
+      goodsListInfo:""
     }
   },
   methods:{
     getGoodsList(){
       listShopping().then(res=>{
         console.log(res.data.rows);
-        this.goodsList=res.data.rows;
+        this.goodsListInfo=res.data.rows;
       })
     },
 
   },
   created() {
-    //获取商品列表
-    this.getGoodsList();
+    //取购物车的数据
+      const userInfoString = localStorage.getItem("userInfo");
+      // 将字符串解析回对象
+      this.userInfo = JSON.parse(userInfoString);
+      // 现在可以访问对象中的属性了
+      getCarList(this.userInfo.usersPhone).then(res =>{
+        console.log(res)
+        this.goodsList=res.data.data;
+      })
   },
 }
-import {ref} from "vue";
-import {showToast} from "vant";
-import AddressGement from "@/components/address/AddressGement.vue";
-import ShoppingCard from "@/components/card/ShoppingCard.vue";
-import OrderInfo from "@/components/OrderInfo.vue";
-import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
-import {listShopping} from "@/api/merchant";
-import router from "@/router";
-import PayInfo from "@/pages/PayInfo/PayInfo.vue";
+
 const actives = ref(1);
 const count = ref(0);
 const loading = ref(false);

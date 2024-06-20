@@ -1,95 +1,74 @@
 <template>
-  <div class="order">
-    <router-link to="/cart/shoppinggement">
-    <div class="title">
-      <span>盒马生鲜</span>
-      <span style="color: #FFB366">未支付</span>
-    </div>
-    <div class="content">
-
-      <div class="img_info">
-        <img src="@/assets/img/OIP-C.jpg" alt="">
-      </div>
-
-      <div class="content_txt">
-        <div style="height: 40px">
-          <h4 style="font-size: 12px">盒马购买成功南汇8424西瓜单果3kg-4kg</h4>
+  <van-swipe-cell>
+    <div class="order">
+      <router-link to="/cart/shoppinggement">
+        <div class="title">
+          <span style="font-size:16px ;font-weight: bold">{{ goodsInfo.name }}</span>
+          <span style="color: #FFB366">未支付</span>
         </div>
-        <p>规格：一个</p>
-        <p>单价：￥29.90/个</p>
-        <p>数量：1个</p>
-      </div>
+        <div class="content">
+
+          <div class="img_info">
+            <img :src="this.baseUrl+imgUrl[0]" alt="">
+          </div>
+          <div class="content_txt">
+            <div style="margin-top: 10px;margin-bottom: 5px">
+              <h4 style="font-size: 12px">{{ goodsInfo.description }}</h4>
+            </div>
+            <p>规格：{{ goodsInfo.specification }}</p>
+            <p>单价：{{ goodsInfo.price }}￥</p>
+            <p>数量：{{goodsInfo.quantity}}{{goodsInfo.unit}}</p>
+          </div>
+        </div>
+      </router-link>
+      <p class="totals">金额:{{ goodsInfo.price * goodsInfo.quantity }}元</p>
     </div>
-    </router-link>
-    <p class="totals">金额:334元</p>
-    <div class="bottom_btn">
-      <div>
-        <van-button plain hairline round  type="primary" size="mini" @add="addNum" >再次购买</van-button>
-        <van-button plain hairline round  type="danger" size="mini">评价</van-button>
-      </div>
-    </div>
-  </div>
+
+    <template #right>
+      <van-button @click="clickBot()" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
+    </template>
+  </van-swipe-cell>
+
 </template>
 <script >
 
-import {listShopping, listShoppings} from "@/api/merchant";
+import { showConfirmDialog } from 'vant';
 
 export default {
   name: "OrderInfo",
+  props:["goodsInfo"],
   data(){
     return{
-      merchant:"",
       baseUrl:"",
-      carList:[]
+      imgUrl:""
     }
   },
   methods:{
-    //接口调用方法
-    // getOrederInfo(){
-    //   listShoppings().then(res=>{
-    //     console.log(res)
-    //   })
-    // },
-    addGoodsToCar(goods){
-      let addNum=0;
-      //加入的商品如果已经在购物列表中存在 则商品数量加一
-      for(var i=0;i<this.carList.length;i++){
-        if(goods.id===this.carList[i].id){
-          this.carList[i].num++;
-          addNum=1;
-          break;
-        }
-      }
-      if(addNum===0){
-        //将子组件中传递出来的商品 添加到购物车列表
-        goods.num=1;
-        //接口书记
-        this.carList.push(goods)
-      }
+    clickBot(){
+      showConfirmDialog({
+        message:
+          '将此款商品删除',
+      })
+        .then(() => {
+          // on confirm
+        })
+        .catch(() => {
+          // on cancel
+        });
     },
-    addNum(goods){
-      this.addGoodsToCar(goods);
-    },
+
+
   },
   created() {
     this.baseUrl=process.env.VUE_APP_BASE_API;
-    // this.getOrederInfo();
+    this.imgUrl = this.goodsInfo.image.split(",");
   },
-  // computed:{
-  //   total(){
-  //     //计算购物车的总结
-  //     let total=0;
-  //     for(var i=0;i<this.carList.length;i++){
-  //       total+= this.carList[i].num*this.carList[i].price;
-  //     }
-  //     return total;
-  //   }
-  // }
+
 }
 </script>
 <style scoped>
 .order{
-  height: 230px;
+  height: 180px;
   background-color: #ffffff;
   margin: 1%;
   border-radius: 3%;

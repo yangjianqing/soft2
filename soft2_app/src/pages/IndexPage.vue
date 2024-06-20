@@ -14,7 +14,8 @@
     <template #left>
       <van-icon name="location-o" size="20" />
       <span >
-            泸州市
+<!--            {{ address || '获取位置中...' }}-->
+        泸州市
       </span>
     </template>
     <template #title>
@@ -33,15 +34,16 @@
 
   <!--第一个模块-->
   <div class="row_swipe">
-     <!--轮播图-->
     <van-swipe style="border-radius: 10px" :autoplay="3000" lazy-render>
-      <van-swipe-item v-for="image in images" :key="image">
-        <img class="van_swipe_item_img" :src="image" />
+      <van-swipe-item v-for="Advertising in selectFadvertisement.data" >
+        <router-link :to="'/cart/shoppinggement/' +Advertising.goodsId ">
+          <img class="van_swipe_item_img" :src="this.baseUrl + Advertising.fadvertisementImg" />
+        </router-link>
       </van-swipe-item>
     </van-swipe>
   </div>
+<!-- 分类导航栏-->
   <div class="Classification">
-
     <van-swipe :show-indicators="false">
       <van-swipe-item>
         <van-grid  :border="true" :column-num="8">
@@ -92,7 +94,7 @@
     </div>
 </div>
 <!--  推荐栏-->
-<div>
+<div style="margin-bottom: 50px;">
 
   <van-tabs line-height="10px" color="rgb(0,195,255)" animated background="rgb(245,245,245)" v-model:active="activeName">
     <van-tab title="推   荐"  name="a">
@@ -169,8 +171,9 @@
 <script>
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 import Merchandise from "@/components/Index/Merchandise.vue";
-import {recommendedList, selectPicture} from "@/api/merchant.js"
+import {recommendedList, selectFadvertisementList, selectPicture} from "@/api/merchant.js"
 import {selectFGoodsByFavorable} from "@/api/merchant.js"
+const axios = require('axios'); // 确保您已经安装了axios库
 
 export default {
   name: "IndexPage",
@@ -188,17 +191,79 @@ export default {
       goodsList3:[],
       goodsList4:[],
       categoryInFo: [],
-      baseUrl: '' // 初始化 baseUrl
+      baseUrl: '' ,// 初始化 baseUrl
+      selectFadvertisement:[],
+      address: '', // 确保定义了address
+      location: [], // 确保定义了location，最好是一个对象
     };
   },
   created() {
     //获取超盒算列表
-    this.getFavorableList();
+      this.getFavorableList();
       this.queryCategory();
       this.baseUrl=process.env.VUE_APP_BASE_API;
       this.onTabChange();
+      this.selectRotationalList();
+    // 调用获取位置和地址的函数
+      this.getLocationAndAddress();
   },
   methods:{
+    async getLocationAndAddress() {
+      try {
+        const location = await this.getLocation();
+        if (location) {
+          await this.getAddress(location.latitude, location.longitude);
+        } else {
+          console.error('无法获取位置信息');
+        }
+      } catch (error) {
+        console.error('获取位置或地址时出错:', error);
+      }
+    },
+    //获取浏览器所在经纬度
+    getLocation() {
+      // return new Promise((resolve, reject) => {
+      //   if (navigator.geolocation) {
+      //     navigator.geolocation.getCurrentPosition(
+      //       (position) => {
+      //         const location = {
+      //           latitude: position.coords.latitude,
+      //           longitude: position.coords.longitude,
+      //         };
+      //         console.log('Latitude:', position.coords.latitude);
+      //         console.log('Longitude:', position.coords.longitude);
+      //         resolve(location); // 返回位置信息
+      //       },
+      //       (error) => {
+      //         console.error('Error getting location:', error);
+      //         reject(error);
+      //       }
+      //     );
+      //   } else {
+      //     console.error('该浏览器不支持 Geolocation');
+      //     reject(new Error('Geolocation not supported'));
+      //   }
+      // });
+    },
+    async getAddress(latitude, longitude) {
+      // try {
+      //   const url = `https://api.map.baidu.com/reverse_geocoding/v3/?ak=QHdL52NTXrQT5iABEjB9htutCDt4l8dC&location=${latitude},${longitude}&output=json&coordtype=wgs84`;
+      //   // 注意：将YOUR_APP_KEY替换为您自己的App Key
+      //   // location参数是纬度和经度的组合，格式为"纬度,经度"
+      //   // output参数指定返回的数据格式，这里使用json
+      //   // coordtype参数指定输入坐标的类型，这里使用wgs84（GPS坐标）
+      //   const response = await axios.get(url);
+      //   const data = response.data;
+      //   // 处理返回的数据...
+      //   console.log(data);
+      //
+      // } catch (error) {
+      //   console.error("请求失败:", error);
+      // }
+    },
+
+
+
     //根据tab栏状态判断
     onTabChange() {
       // 调用方法获取对应的商品数据
@@ -238,21 +303,19 @@ export default {
       selectFGoodsByFavorable().then(res=>{
         this.favorableList=res.data.rows;
       })
-    }
+    },
+    //首页轮播图显示
+    selectRotationalList(){
+      selectFadvertisementList().then(res=>{
+        this.selectFadvertisement  = res.data;
+      })
+
+    },
   },
   mounted() {
     // 初始加载默认的tab数据
     this.queryRecommendation(1);
-  },
-  setup() {
-    const images = [
-      'https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg',
-      'https://fastly.jsdelivr.net/npm/@vant/assets/apple-2.jpeg',
-      'https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg',
-      'https://fastly.jsdelivr.net/npm/@vant/assets/apple-2.jpeg',
-    ];
-    return { images };
-
+    this.getLocation();
   },
 
 }
@@ -261,7 +324,7 @@ export default {
 .van-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content:  space-evenly;
 }
 .row_swipe{
   margin: 2% 2%;

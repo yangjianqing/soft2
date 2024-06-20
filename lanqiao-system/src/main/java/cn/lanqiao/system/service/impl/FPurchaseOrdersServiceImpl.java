@@ -92,7 +92,17 @@ public class FPurchaseOrdersServiceImpl implements IFPurchaseOrdersService
     @Override
     public int insertFPurchaseOrders(FPurchaseOrders fPurchaseOrders)
     {
-        return fPurchaseOrdersMapper.insertFPurchaseOrders(fPurchaseOrders);
+        try {
+            fPurchaseOrdersMapper.insertFPurchaseOrders(fPurchaseOrders);
+            //更新数量
+            FGoods fGoods = fGoodsMapper.selectFGoodsById(fPurchaseOrders.getGoodsId());
+            fGoods.setNum(fGoods.getNum()+fPurchaseOrders.getQuantity());
+            int i = fGoodsMapper.updateFGoods(fGoods);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return 0;
+        }
+        return 1;
     }
 
     /**
@@ -116,7 +126,15 @@ public class FPurchaseOrdersServiceImpl implements IFPurchaseOrdersService
     @Override
     public int deleteFPurchaseOrdersByOrderIds(Long[] orderIds)
     {
-        return fPurchaseOrdersMapper.deleteFPurchaseOrdersByOrderIds(orderIds);
+        for(Long id:orderIds ){
+            FPurchaseOrders fPurchaseOrders = fPurchaseOrdersMapper.selectFPurchaseOrdersByOrderId(id);
+            //更新数量
+            FGoods fGoods = fGoodsMapper.selectFGoodsById(fPurchaseOrders.getGoodsId());
+            fGoods.setNum(fGoods.getNum()-fPurchaseOrders.getQuantity());
+            fGoodsMapper.updateFGoods(fGoods);
+        }
+        int i = fPurchaseOrdersMapper.deleteFPurchaseOrdersByOrderIds(orderIds);
+        return i;
     }
 
     /**

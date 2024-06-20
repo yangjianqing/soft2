@@ -120,12 +120,12 @@ export default {
         console.log(res.data)
         // 检查登录是否成功（这取决于您的后端API返回的数据结构）
         if (res.data.code === 200) {
-          localStorage.setItem("shoppingInfo", JSON.stringify(res.data.data));
+          localStorage.setItem("shoppingInfo",JSON.stringify(res.data.data));
           //存储用户信息和token
           localStorage.setItem("userInfo", JSON.stringify(res.data.data));
           this.$router.push('/index');
         } else {
-          showNotify({type: 'danger', message: '登录失败，请检查您的网络连接或稍后再试'});
+          showNotify({type: 'danger', message: res.data.msg});
         }
       }).catch(error => {
         // 处理网络错误或其他异常

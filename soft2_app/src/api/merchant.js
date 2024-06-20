@@ -19,18 +19,6 @@ export function listShoppings(phone) {
   })
 }
 
-//手机端购物车页面数据接口
-export function CarList(query) {
-  return request({
-    url: '/api/fresh/selectShopData/15082460058',
-    method: 'get',
-    params: query
-  })
-}
-
-
-
-
 //根据商品id查询商品详情
 export function selectIdByInfo(id) {
   return request({
@@ -93,6 +81,37 @@ export function goods(keyword){
     url: '/api/fresh/goods/'+keyword,
     method: 'get',
     params:  { keyword },
+  })
+}
+
+//首页广告图片
+export function selectFadvertisementList(query){
+  return request({
+    url: '/api/fresh/selectFadvertisementList',
+    method: 'get',
+    params: query,
+  })
+}
+
+export function addCarList(phone,code){
+  return request({
+    url: '/api/fresh/insertShopData/'+phone+'/'+code,
+    method: 'get',
+  })
+}
+
+export function getCarList(phone){
+  return request({
+    url: '/api/fresh/selectShopData/'+phone,
+    method: 'get',
+  })
+}
+//首页地址
+export function selectUsersAddressList(userPhone){
+  return request({
+    url:"/api/fresh/selectUsersAddressList/"+userPhone,
+    method: 'get',
+
   })
 }
 

@@ -64,10 +64,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectFGoodsList" parameterType="FGoods" resultMap="FGoodsResult">
-        select g.id, g.name, g.category_id, g.price, g.unit, g.coding, g.specification, g.image, g.num, g.description, g.status, g.create_time, g.update_time, g.create_user,po.quantity
+        select g.id, g.name, g.category_id, g.price, g.unit, g.coding, g.specification, g.image, g.num, g.description, g.status, g.create_time, g.update_time, g.create_user
         from f_goods g
         LEFT JOIN category c ON c.dept_id = g.category_id
-        LEFT JOIN f_purchase_orders po ON po.goods_id = g.id
         <where>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="status != null "> and status = #{status}</if>
@@ -264,7 +263,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFGoodsVo"/>
         WHERE  coding = #{coding}
     </select>
-
 <!--根据编号获取商品信息-->
     <select id="selectProfit" resultType="cn.lanqiao.system.domain.FGoods">
         <include refid="selectFGoodsVo"/>
@@ -280,4 +278,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </set>
         where coding = #{coding}
     </update>
+
+
+
 </mapper>

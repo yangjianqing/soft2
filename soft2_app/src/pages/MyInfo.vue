@@ -113,8 +113,10 @@
     position="bottom"
     :style="{ height: '10%' }"
   >
-    <div class="sousaphone">客服电话:18881146195</div>
+    <div class="sousaphone" >客服电话:18881146195</div>
   </van-popup>
+
+
 </template>
 <script>
     // 这里需要什么其他功能可以查询文档
@@ -138,6 +140,7 @@
           showBottom.value = true;
         };
         return{
+          location: null,
           show,
           onSelect,
           count,
@@ -197,39 +200,12 @@
           router.push({ path: '/mine/history' });
         },
         //退出登录
-
-        // onLoad(){
-        //   // 开启loading
-        //   this.loading = true;
-        //   //加载商家列表的数据
-        //   listMembers(this.queryParams).then(res=>{
-        //     var rows = res.data.rows;
-        //     if(rows){ //判断列表中是否有数据
-        //       rows.forEach(data=>{ //循环将数据添加到 merList列表中
-        //         this.merList.push(data);
-        //       })
-        //     }else{
-        //       //接口中已经没有数据
-        //       this.finished=true;
-        //     }
-        //     //当total的数值等于 merList的长度的时候标识数据加载完了
-        //     if(res.data.total===this.merList.length){
-        //       this.finished=true;
-        //     }
-        //
-        //     this.loading = false;
-        //   }).catch(error=>{
-        //     console.log(error)
-        //   })
-        //   this.queryParams.pageNum++;
-        // },
         getGoodsList(){
           listShopping().then(res=>{
             console.log(res.data.rows);
             this.goodsList=res.data.rows;
           })
         },
-
       },
       created() {
         //获取商品列表
@@ -237,7 +213,6 @@
         //根据电话查询个人信息
         //根据电话查询个人信息
         this.userInfo=JSON.parse(localStorage.getItem("userInfo"))
-
       },
     };
     // 导入插件样式返回
@@ -303,5 +278,6 @@
   justify-content: center;
   align-items: center;
   font-size: 30px;
+  border-radius: 30px;
 }
 </style>
