@@ -82,5 +82,4 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService {
         }
         return shoppingList;
     }
-
 }

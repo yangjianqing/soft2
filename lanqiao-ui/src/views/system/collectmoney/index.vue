@@ -271,9 +271,9 @@ export default {
               });
             }
             this.barcode = ''; // 清空条形码输入
-          } else {
-            this.$message.error('未找到该商品');
           }
+        }).catch(error => {
+          this.barcode = ''; // 清空条形码输入
         });
       }
       }, 500); // 设置延迟时间为 500 毫秒
@@ -282,7 +282,7 @@ export default {
     handleMemberAccountInput() {
       // 在此处处理会员账号输入框输入事件，可以进行实时校验、查询等操作
       clearTimeout(this.timer);// 清除之前的定时器
-      // 设置延迟时间为 500 毫秒
+      // 设置延迟时间为 1000 毫秒
       this.timer = setTimeout(() => {
           if (this.member.memberPhone !== '') {//判断用户输入会员账号是否为null
             selectMemberName(this.member.memberPhone).then(response => {
@@ -290,14 +290,12 @@ export default {
               if (response.code === 200) {
                 this.member.memberName = response.data.usersName;
                 this.member.memberTotal = response.data.memberTotal;
-              } else {
-                this.$message.success("网络异常");
               }
+            }).catch(error => {
+              this.clearMembers();
             });
           } else {
-            this.member.memberName = '';
-            this.member.memberTotal= '';
-            this.member.memberJian= '';
+            this.clearMembers();
           }
       }, 1000);
     },
@@ -309,7 +307,7 @@ export default {
       this.timer = setTimeout(() => {
         if (this.member.memberJian !== '') {
           if (this.member.memberJian > this.member.memberTotal && this.member.memberTotal !=='') {
-            this.$message.error("抵扣积分不能大于会员积分");
+            this.$message.error("抵扣积分超过会员积分");
           }
         }
         }, 1000);
@@ -334,7 +332,7 @@ export default {
             this.$message.error("网络异常");
           }
         });
-        this.clearCart(); // 调用清空购物车+会员方法
+        this.clearCartMembers(); // 调用清空购物车+会员方法
       }
     },
     //新增会员用户功能
@@ -376,10 +374,24 @@ export default {
       this.resetForm("form");
     },
     //清空购物车+会员
-    clearCart() {
+    clearCartMembers() {
       this.productsInCart = []; //重置购物车数据
-      this.member= {}; //重置会员数据
+      this.member= {
+          memberPhone: '', // 会员账号
+          memberName: '', // 会员名称
+          memberTotal: '', //会员积分
+          memberJian: '', //抵扣积分
+        }; //重置会员数据
     },
+    //清空会员数据
+    clearMembers() {
+      this.member= {
+        memberPhone: '', // 会员账号
+        memberName: '', // 会员名称
+        memberTotal: '', //会员积分
+        memberJian: '', //抵扣积分
+      };
+    }
   }
 };
 </script>

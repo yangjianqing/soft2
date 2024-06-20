@@ -20,6 +20,7 @@ import cn.lanqiao.framework.web.service.SysLoginService;
 import cn.lanqiao.framework.web.service.TokenService;
 import cn.lanqiao.system.domain.*;
 import cn.lanqiao.system.domain.vo.LoginVo;
+import cn.lanqiao.system.domain.vo.Settlement;
 import cn.lanqiao.system.mapper.FAddressMapper;
 import cn.lanqiao.system.mapper.FadvertisementMapper;
 import cn.lanqiao.system.service.*;
@@ -387,25 +388,20 @@ public class ApiShoppingIController extends BaseController {
     public AjaxResult selectShopData(@PathVariable("usersPhone") String usersPhone)
     {
         List<FGoods> fGoods = ifShoppingCartService.selectShopData(usersPhone);
-        System.out.println(fGoods);
         return AjaxResult.success(fGoods);
     }
 
     /**
      * 手机端结算
+     * @param settlement 手机端结算数据对象
      *
-     * @param usersPhone 用户电话号码
-     * @param ordersPayMethod 支付方式
-     * @param ordersPayStatuds 支付状态
-     * @param ordersRemark 订单备注信息
-     * @param GoodsList 订单集合
      */
     @ApiOperation("手机端购物车结算")
     @PostMapping  (value = "/insertSettlement")
-    public AjaxResult insertSettlement(@RequestParam("usersPhone") String usersPhone, @RequestParam("ordersPayMethod") Long ordersPayMethod, @RequestParam("ordersPayStatuds") Long ordersPayStatuds, @RequestParam("ordersRemark") String ordersRemark, @RequestBody List<FGoods> GoodsList)
+    public AjaxResult insertSettlement(@RequestBody Settlement settlement)
     {
         try {
-            fOrdeersService.insertShopping(usersPhone,ordersPayMethod,ordersPayStatuds,ordersRemark,GoodsList);
+            fOrdeersService.insertShopping(settlement);
             return AjaxResult.success("付款成功");
         } catch (Exception ex){
             ex.getMessage();

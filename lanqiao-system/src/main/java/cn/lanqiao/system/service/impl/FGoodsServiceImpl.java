@@ -229,12 +229,7 @@ public class FGoodsServiceImpl implements IFGoodsService
      */
     @Override
     public FGoods selectGoodsList(Long coding) {
-        FGoods fGoods = fGoodsMapper.selectGoodsList(coding);
-        //判断商品库存是否为0
-        if(fGoods.getNum()==0){
-            return null;
-        }
-        return fGoods;
+        return fGoodsMapper.selectGoodsList(coding);
     }
 
     @Override

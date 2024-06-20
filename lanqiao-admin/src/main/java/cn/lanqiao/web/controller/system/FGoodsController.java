@@ -136,12 +136,29 @@ public class FGoodsController extends BaseController
      * 根据编号获取商品详细信息
      */
     @GetMapping(value = "/Goods/{coding}")
-    public AjaxResult getGoodsList(@PathVariable("coding") Long coding)
+    public AjaxResult getGoodsList(@PathVariable("coding") String coding)
     {
-        if(fGoodsService.selectGoodsList(coding) == null){
-          return  AjaxResult.error("该商品已售完 请添加商品");
+        try {
+            if (coding == null) {
+                return AjaxResult.error("输入异常 请重新输入");
+            } else if (coding.length() > 19) { //超过Long类型长度提示查无此商品
+                return AjaxResult.error("查无此商品");
+            }  else {
+                FGoods fGoods = fGoodsService.selectGoodsList(Long.valueOf(coding));
+                if (fGoods == null) {
+                    return  AjaxResult.error("查无此商品");
+                } else {
+                    if(fGoods.getNum() == 0) {//判断商品库存是否为0
+                        return  AjaxResult.error("该商品已售完 请添加商品");
+                    } else {
+                        return AjaxResult.success().put("GoodsList",fGoods);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
         }
-        return AjaxResult.success().put("GoodsList",fGoodsService.selectGoodsList(coding));
     }
 
     /**
@@ -152,14 +169,18 @@ public class FGoodsController extends BaseController
     public AjaxResult addGoodsList(@RequestBody FormData formData)
     {
         try {
-            // 获取前端发送的数据
-            String memberPhone = formData.getMemberPhone();
-            BigDecimal totalPrice = formData.getTotalPrice();
-            BigDecimal memberJian = formData.getMemberJian();
-            List<FGoods> productsInCart = formData.getProductsInCart();
-            fOrdeersService.settle(memberPhone,totalPrice,memberJian,productsInCart);
-            return AjaxResult.success("结账成功");
-        } catch (Exception ex){
+            if (formData.getProductsInCart() == null) {
+                return AjaxResult.error("结账异常 请重新结账");
+            } else {
+                // 获取前端发送的数据
+                String memberPhone = formData.getMemberPhone();
+                BigDecimal totalPrice = formData.getTotalPrice();
+                BigDecimal memberJian = formData.getMemberJian();
+                List<FGoods> productsInCart = formData.getProductsInCart();
+                fOrdeersService.settle(memberPhone, totalPrice, memberJian, productsInCart);
+                return AjaxResult.success("结账成功");
+            }
+        } catch (Exception ex) {
             ex.getMessage();
             return AjaxResult.error("系统异常");
         }

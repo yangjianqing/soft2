@@ -120,10 +120,20 @@ public class FUsersController extends BaseController
     @GetMapping(value = "/member/{memberPhone}")
     public AjaxResult selectMemberName(@PathVariable("memberPhone") String memberPhone)
     {
-        FUsers fUsers = fUsersService.selectUsersusersPhone(memberPhone);
-        if (fUsers == null || fUsers.getUsersName() == null || fUsers.getMemberTotal() == null) {
-            return AjaxResult.error("查无此会员 请重新输入或新增会员");
+        try {
+            if (memberPhone == null) {
+                return AjaxResult.error("会员输入异常 请重新输入");
+            } else {
+                FUsers fUsers = fUsersService.selectUsersusersPhone(memberPhone);
+                if (fUsers == null || fUsers.getUsersName() == null || fUsers.getMemberTotal() == null) {
+                    return AjaxResult.error("查无此会员 请重新输入或新增会员");
+                } else {
+                    return AjaxResult.success(fUsers);
+                }
+            }
+        } catch (Exception ex) {
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
         }
-        return AjaxResult.success(fUsers);
     }
 }

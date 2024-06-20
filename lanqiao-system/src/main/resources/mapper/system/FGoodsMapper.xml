@@ -260,10 +260,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!--&lt;!&ndash;   查询商品名称&ndash;&gt;-->
 
 
-    <select id="selectGoodsList" resultType="cn.lanqiao.system.domain.FGoods">
+    <select id="selectGoodsList" resultType="FGoods">
         <include refid="selectFGoodsVo"/>
         WHERE  coding = #{coding}
     </select>
+
 <!--根据编号获取商品信息-->
     <select id="selectProfit" resultType="cn.lanqiao.system.domain.FGoods">
         <include refid="selectFGoodsVo"/>
@@ -279,6 +280,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </set>
         where coding = #{coding}
     </update>
-
-
 </mapper>

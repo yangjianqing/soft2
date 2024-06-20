@@ -6,6 +6,7 @@ import java.util.List;
 import cn.lanqiao.system.domain.FGoods;
 import cn.lanqiao.system.domain.FOrdeers;
 import cn.lanqiao.system.domain.FOrderPartslist;
+import cn.lanqiao.system.domain.vo.Settlement;
 
 /**
  * 订单管理Service接口
@@ -72,13 +73,10 @@ public interface IFOrdeersService
     /**
      * 手机端结算
      *
-     * @param usersPhone 用户电话号码
-     * @param ordersPayMethod 支付方式
-     * @param ordersPayStatuds 支付状态
-     * @param ordersRemark 订单备注信息
-     * @param GoodsList 订单集合
+     * @param settlement 手机端结算数据对象
+     *
      */
-    public void insertShopping(String usersPhone,Long ordersPayMethod,Long ordersPayStatuds,String ordersRemark,List<FGoods> GoodsList);
+    public void insertShopping(Settlement settlement);
 
     /**
      * 手机端用户全部订单

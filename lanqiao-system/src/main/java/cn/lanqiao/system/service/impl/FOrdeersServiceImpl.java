@@ -2,10 +2,14 @@ package cn.lanqiao.system.service.impl;
 
 import java.math.BigDecimal;
 import java.util.*;
+
+import cn.lanqiao.common.constant.CacheConstants;
 import cn.lanqiao.common.core.domain.entity.SysUser;
+import cn.lanqiao.common.core.redis.RedisCache;
 import cn.lanqiao.common.utils.DateUtils;
 import cn.lanqiao.common.utils.OrderNumberGenerator;
 import cn.lanqiao.system.domain.*;
+import cn.lanqiao.system.domain.vo.Settlement;
 import cn.lanqiao.system.mapper.*;
 import cn.lanqiao.system.service.IFGoodsService;
 import cn.lanqiao.system.service.IFUsersService;
@@ -40,6 +44,9 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     private FOrderPartslistMapper fOrderPartslistMapper;
 
     @Autowired
+    private IFShoppingCartServiceImpl ifShoppingCartService;
+
+    @Autowired
     private IFOrdeersService fOrdeersService;
 
     @Autowired
@@ -47,6 +54,9 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
     @Autowired
     private IFUsersService ifUsersService;
+
+    @Autowired
+    private RedisCache redisCache;
     /**
      * 查询订单管理
      * 
@@ -214,7 +224,8 @@ public class FOrdeersServiceImpl implements IFOrdeersService
      * @param productsInCart 订单集合
      */
     @Override
-    public void settle(String memberPhone, BigDecimal totalPrice, BigDecimal memberJian, List<FGoods> productsInCart) {
+    public void settle(String memberPhone, BigDecimal totalPrice, BigDecimal memberJian, List<FGoods> productsInCart)
+    {
         if (productsInCart.size() != 0) {
             // 设置 memberJian 默认值为 0
             if (memberJian == null) {
@@ -259,33 +270,42 @@ public class FOrdeersServiceImpl implements IFOrdeersService
      * @param ordersPayMethod 支付方式
      * @param ordersPayStatuds 支付状态
      * @param ordersRemark 订单备注信息
-     * @param GoodsList 订单集合
+     * @param settlement 手机端结算对象数据
      */
     private int deliveryIndex = 0; // 将deliveryIndex定义为类的成员变量，以保持索引状态
     @Override
-    public void insertShopping(String usersPhone,Long ordersPayMethod,Long ordersPayStatuds,String ordersRemark,List<FGoods> GoodsList) {
-        if (GoodsList.size() != 0) {
-            // TODO: 进行新增订单操作
-            String OrderNu = OrderNumberGenerator.generateOrderNumber();//创建订单编号
-            FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);//根据电话查询用户id
-            List<SysUser> sysUsers = sysUserMapper.selectSysUserAll();//查询全部配送员信息
-            if (deliveryIndex >= sysUsers.size()) {
-                deliveryIndex = 0; // 如果超出配送员数量，重置索引
-            }
-            SysUser sysUser = sysUsers.get(deliveryIndex);//根据索引取配送员信息
-            //创建订单对象传值,调用新增订单
-            fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu,fUsers.getUsersId(),sysUser.getUserId(),ordersPayMethod,ordersPayStatuds,0L,ordersRemark));
-            deliveryIndex++; // 为下一次调用准备索引
+    public void insertShopping(Settlement settlement)
+    {
+        if (settlement != null && settlement.getUsersPhone() != null && settlement.getOrdersPayStatuds() != null) {
+            List<FGoods> GoodsList = ifShoppingCartService.selectShopData(settlement.getUsersPhone());
+            if (GoodsList != null) {
+                // TODO: 进行新增订单操作
+                String OrderNu = OrderNumberGenerator.generateOrderNumber();//创建订单编号
+                FUsers fUsers = fUsersMapper.selectUsersusersPhone(settlement.getUsersPhone());//根据电话查询用户id
+                List<SysUser> sysUsers = sysUserMapper.selectSysUserAll();//查询全部配送员信息
+                if (deliveryIndex >= sysUsers.size()) {
+                    deliveryIndex = 0; // 如果超出配送员数量，重置索引
+                }
+                SysUser sysUser = sysUsers.get(deliveryIndex);//根据索引取配送员信息
+                //创建订单对象传值,调用新增订单
+                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu,fUsers.getUsersId(),sysUser.getUserId(),settlement.getOrdersPayMethod(),settlement.getOrdersPayStatuds(),0L,settlement.getOrdersRemark()));
+                deliveryIndex++; // 为下一次调用准备索引
 
-            // TODO: 进行新增订单明细操作
-            for (FGoods fGoods : GoodsList) {
-                //利用前端传递的商品编号(fGood.getId())，查询商品信息
-                FGoods fGoods1 = fGoodsService.selectGoodsList(fGoods.getId());
-                //创建订单详情传值,调用新增订单详情
-                fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods1.getId(),OrderNu,fGoods.getQuantity()));
-                //更新商品数量
-                fGoods1.setNum(fGoods1.getNum()-fGoods.getQuantity());
-                fGoodsService.updateFGoods(fGoods1);
+                // TODO: 进行新增订单明细操作
+                for (FGoods fGoods : GoodsList) {
+                    //利用前端传递的商品编号(fGood.getId())，查询商品信息
+                    FGoods fGoods1 = fGoodsService.selectGoodsList(fGoods.getId());
+                    //创建订单详情传值,调用新增订单详情
+                    fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods1.getId(),OrderNu,fGoods.getQuantity()));
+                    //更新商品数量
+                    fGoods1.setNum(fGoods1.getNum()-fGoods.getQuantity());
+                    fGoodsService.updateFGoods(fGoods1);
+                }
+
+                // TODO: 进行清空redis购物车数据操作
+                // 生成唯一标识 Key
+                String verKey = CacheConstants.Query_Shopping_KEY + settlement.getUsersPhone();
+                redisCache.deleteObject(verKey);
             }
         }
     }
