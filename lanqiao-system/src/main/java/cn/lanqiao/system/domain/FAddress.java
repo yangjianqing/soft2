@@ -53,8 +53,19 @@ public class FAddress extends BaseEntity
     /** 详细地址 */
     @Excel(name = "详细地址")
     private String addressDetail;
+    /** 详细地址 */
+    @Excel(name = "详细地址")
+    private String addressLevel;
 
-    public void setAddressId(Long addressId) 
+    public String getAddressLevel() {
+        return addressLevel;
+    }
+
+    public void setAddressLevel(String addressLevel) {
+        this.addressLevel = addressLevel;
+    }
+
+    public void setAddressId(Long addressId)
     {
         this.addressId = addressId;
     }
@@ -157,6 +168,7 @@ public class FAddress extends BaseEntity
             .append("addressLabel", getAddressLabel())
             .append("addressTude", getAddressTude())
             .append("addressLatit", getAddressLatit())
+            .append("addressLevel", getAddressLevel())
             .append("addressDetail", getAddressDetail())
             .toString();
     }
