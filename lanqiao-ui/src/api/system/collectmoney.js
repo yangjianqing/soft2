@@ -33,3 +33,20 @@ export function addUsers(data) {
     data: data
   })
 }
+
+// 查询部门下拉树结构
+export function cateTreeSelect() {
+  return request({
+    url: '/system/goods/categoryTree',
+    method: 'get'
+  })
+}
+
+// 新增商品
+export function addGoods(data) {
+  return request({
+    url: '/system/goods',
+    method: 'post',
+    data: data
+  })
+}

@@ -142,8 +142,6 @@
             <dict-tag :options="dict.type.f_goods" :value="scope.row.status"/>
           </template>
         </el-table-column>
-<!--        <el-table-column label="创建人" align="center" prop="createUserName" />-->
-<!--        <el-table-column label="修改人" align="center" prop="updateUserName" />-->
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button

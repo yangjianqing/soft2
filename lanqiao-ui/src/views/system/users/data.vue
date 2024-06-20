@@ -226,7 +226,7 @@ export default {
         adderssUsersId: this.$route.query.usersId,
         addressName: null,
         addressPhone: null,
-        addressLabel: null,
+        addressLabel: null
       },
       // 表单参数
       form: {},
@@ -249,8 +249,7 @@ export default {
           { pattern: /^[1-9]\d*$/, message: "地址纬度无效", trigger: "blur" }
         ],
         addressDetail: [
-          { required: true, message: "详细地址不能为空", trigger: "blur" },
-          { pattern:/^[\u4e00-\u9fa5]+$/, message: '请输入中文地址', trigger: 'blur' }
+          { required: true, message: "详细地址不能为空", trigger: "blur" }
         ]
       }
     };
