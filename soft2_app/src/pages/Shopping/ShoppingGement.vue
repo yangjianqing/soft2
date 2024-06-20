@@ -84,6 +84,7 @@ export default {
       // 现在可以访问对象中的属性了
       this.usersPhone = userInfo.usersPhone; // 假设属性名为 phone
       console.log(this.usersPhone)
+      //加入购物车
       addCarList(this.usersPhone, this.selectedGoods.coding).then(res => {
         if (res.code == 200) {
           alert("成功")

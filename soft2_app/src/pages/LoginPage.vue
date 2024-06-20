@@ -120,7 +120,7 @@ export default {
         console.log(res.data)
         // 检查登录是否成功（这取决于您的后端API返回的数据结构）
         if (res.data.code === 200) {
-          localStorage.setItem("shoppingInfo", JSON.stringify(res.data.data));
+          localStorage.setItem("shoppingInfo",JSON.stringify(res.data.data));
           //存储用户信息和token
           localStorage.setItem("userInfo", JSON.stringify(res.data.data));
           this.$router.push('/index');
