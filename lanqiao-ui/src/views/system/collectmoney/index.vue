@@ -323,7 +323,7 @@ export default {
         // 根据不同的支付方式设置相应的二维码路径
         switch(paymentMethod) {//利用switch控制语句进行判断传入的参数值与谁匹配
           case 'wechat':
-            this.currentQRCode = require('@/assets/images/collectmoney/weChatCode.jpg');
+            this.currentQRCode = require('@/assets/images/collectmoney/weChatCode.png');
             break;
           case 'alipay':
             this.currentQRCode = require('@/assets/images/collectmoney/alipayCode.jpg');
