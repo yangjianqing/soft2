@@ -21,10 +21,12 @@
 
 import OrderInfo from "@/components/OrderInfo.vue";
 import {getCarList,insertSettlement} from "@/api/merchant";
-import {ref} from "vue";
-import router from "@/router";
 import {showToast} from "vant";
 
+
+const PREFIX = '222';
+const LENGTH = 12;
+const usedOrderNumbers = new Set();
     export default {
         name: "CarPage",
         components: {OrderInfo},
@@ -32,15 +34,27 @@ import {showToast} from "vant";
           return {
             userInfo:"",
             goodsList:[],
+
           }
         },
+
       methods:{
-        generateOrderNumber() {
-          const timestamp = new Date().getTime(); // 获取当前时间戳
-          const random = Math.floor(Math.random() * 1000); // 生成一个随机数
-          const orderNumber = `${timestamp}${random}`; // 拼接订单号，可以根据自己的需要调整格式
-          return orderNumber;
-        },
+
+       generateOrderNumber() {
+            let orderNumber;
+            do {
+              let randomNumber = PREFIX;
+              for (let i = 2; i < LENGTH; i++) {
+                randomNumber += Math.floor(Math.random() * 10); // 生成0到9之间的随机数字
+              }
+              orderNumber = randomNumber;
+            } while (usedOrderNumbers.has(orderNumber)); // 如果订单号已存在，则重新生成
+
+            usedOrderNumbers.add(orderNumber); // 添加到已使用的订单号集合中
+            return orderNumber;
+          },
+
+
 
         Retrunshoppings(){
             let orderNum = this.generateOrderNumber();

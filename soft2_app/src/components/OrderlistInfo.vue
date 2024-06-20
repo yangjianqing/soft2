@@ -16,11 +16,11 @@
         </div>
         <p>规格：{{ goodsInfo.specification }}</p>
         <p>单价：{{ goodsInfo.price }}￥</p>
-        <p>数量：{{goodsInfo.quantity}}{{goodsInfo.unit}}</p>
+        <p>数量：{{goodsInfo.goodsNum}}{{goodsInfo.unit}}</p>
       </div>
     </div>
     </router-link>
-      <p class="totals">金额:{{ goodsInfo.price * goodsInfo.quantity }}元</p>
+      <p class="totals">金额:{{ goodsInfo.price * goodsInfo.goodsNum }}元</p>
     <div class="bottom_btn">
       <div>
         <router-link to="/mine/ordermanagement">

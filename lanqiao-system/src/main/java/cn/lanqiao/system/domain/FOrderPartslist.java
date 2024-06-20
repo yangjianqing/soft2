@@ -74,6 +74,16 @@ public class FOrderPartslist extends BaseEntity
     @Excel(name = "图片")
     private String image;
 
+    private int ordersStatus;
+
+    public int getOrdersStatus() {
+        return ordersStatus;
+    }
+
+    public void setOrdersStatus(int ordersStatus) {
+        this.ordersStatus = ordersStatus;
+    }
+
     public String getName() {
         return name;
     }

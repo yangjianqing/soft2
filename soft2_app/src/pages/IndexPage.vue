@@ -48,7 +48,7 @@
       <van-swipe-item>
         <van-grid  :border="true" :column-num="8">
           <template v-for="(category, index) in categoryInFo">
-            <router-link style="margin: 2px 1vw" to="/classification" v-if="index%2==0">
+            <router-link style="margin: 2px 0.5vw" to="/classification" v-if="index%2==0">
               <van-grid-item >
                 <img class="img_item" :src="baseUrl+category.picture" >
                 <p style="font-size: 12px;padding-top: 6px">{{ category.deptName }}</p>
@@ -60,7 +60,7 @@
       <van-swipe-item>
         <van-grid :border="true" :column-num="8" style="justify-content: space-around;">
           <template v-for="(category, index) in categoryInFo">
-            <router-link style="margin: 2px 1vw" to="/classification" v-if="index%2!=0">
+            <router-link style="margin: 2px 0.5vw" to="/classification" v-if="index%2!=0">
               <van-grid-item >
                 <img class="img_item" :src="baseUrl+category.picture" >
                 <p style="font-size: 12px;padding-top: 6px">{{ category.deptName }}</p>

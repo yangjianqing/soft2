@@ -93,7 +93,7 @@
     finished-text="没有数据了"
     @load="onLoad"
   >
- <div  style="display: flex;flex-wrap: wrap">
+ <div  style="display: flex;flex-wrap: wrap;justify-content: space-around">
    <template v-for="(goodsInfo,index) in goodsList">
      <div class="total_box"  v-if="index%2===1" >
        <MerchandiseInfo :goodsInfo="goodsList[index-1]" v-on:click="ReturnOrShopping"></MerchandiseInfo>
@@ -101,12 +101,8 @@
      </div>
    </template>
  </div>
+
   </van-list>
-
-
-
-
-
 </div>
   <van-popup
     v-model:show="showBottom"

@@ -484,7 +484,7 @@ public class ApiShoppingIController extends BaseController {
             List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectOrders(usersPhone);
             return AjaxResult.success(fOrderPartslists);
         } catch (Exception ex) {
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
