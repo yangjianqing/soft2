@@ -250,7 +250,7 @@ export default {
     //购物车功能
     handleBarcodeInput() {
       clearTimeout(this.timer);// 清除之前的定时器
-      // 设置延迟时间为 500 毫秒
+      // 设置延迟时间为 100 毫秒
       this.timer = setTimeout(() => {
       if (this.barcode !== '') {//判断用户输入订单编号是否为null
         getGoodsList(this.barcode).then(response => {//发送订单编号查询数据
@@ -276,7 +276,7 @@ export default {
           this.barcode = ''; // 清空条形码输入
         });
       }
-      }, 500); // 设置延迟时间为 500 毫秒
+      }, 100); // 设置延迟时间为 100 毫秒
     },
     //会员功能
     handleMemberAccountInput() {
