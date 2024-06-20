@@ -453,6 +453,25 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
+     * 手机端订单状态修改接口
+     * @param usersPhone 手机电话
+     * @param ordersNumber 商品条码
+     *
+     */
+    @ApiOperation("手机端订单状态修改接口")
+    @PostMapping  (value = "/updateSettlement")
+    public AjaxResult updateSettlement(@PathVariable("usersPhone") String usersPhone,@PathVariable("ordersNumber") String ordersNumber)
+    {
+        try {
+            fOrdeersService.updateSettlement(usersPhone,ordersNumber);
+            return AjaxResult.success("修改成功");
+        } catch (Exception ex){
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
+        }
+    }
+
+    /**
      * 手机端用户全部订单
      *
      * @param usersPhone 用户电话号码
@@ -461,8 +480,13 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping  (value = "/selectOrders/{usersPhone}")
     public AjaxResult selectOrders(@PathVariable("usersPhone") String usersPhone)
     {
-        List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectOrders(usersPhone);
-        return AjaxResult.success(fOrderPartslists);
+        try {
+            List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectOrders(usersPhone);
+            return AjaxResult.success(fOrderPartslists);
+        } catch (Exception ex) {
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -474,8 +498,13 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping  (value = "/selectpaymentOrders/{usersPhone}")
     public AjaxResult selectpaymentOrders(@PathVariable("usersPhone") String usersPhone)
     {
-        List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectpaymentOrders(usersPhone);
-        return AjaxResult.success(fOrderPartslists);
+        try {
+            List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectpaymentOrders(usersPhone);
+            return AjaxResult.success(fOrderPartslists);
+        } catch (Exception ex) {
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -487,8 +516,13 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping  (value = "/selectwaitingOrders/{usersPhone}")
     public AjaxResult selectwaitingOrders(@PathVariable("usersPhone") String usersPhone)
     {
-        List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectwaitingOrders(usersPhone);
-        return AjaxResult.success(fOrderPartslists);
+        try {
+            List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectwaitingOrders(usersPhone);
+            return AjaxResult.success(fOrderPartslists);
+        } catch (Exception ex) {
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -500,8 +534,13 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping  (value = "/selectReceiveOrders/{usersPhone}")
     public AjaxResult selectReceiveOrders(@PathVariable("usersPhone") String usersPhone)
     {
-        List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectReceiveOrders(usersPhone);
-        return AjaxResult.success(fOrderPartslists);
+        try {
+            List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectReceiveOrders(usersPhone);
+            return AjaxResult.success(fOrderPartslists);
+        } catch (Exception ex) {
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -513,7 +552,12 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping  (value = "/selectevaluateOrders/{usersPhone}")
     public AjaxResult selectevaluateOrders(@PathVariable("usersPhone") String usersPhone)
     {
-        List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectevaluateOrders(usersPhone);
-        return AjaxResult.success(fOrderPartslists);
+        try {
+            List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectevaluateOrders(usersPhone);
+            return AjaxResult.success(fOrderPartslists);
+        } catch (Exception ex) {
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
+        }
     }
 }

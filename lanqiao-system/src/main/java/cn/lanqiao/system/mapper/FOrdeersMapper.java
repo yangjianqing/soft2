@@ -93,4 +93,11 @@ public interface FOrdeersMapper
      * @param usersId 用户Id
      */
     public List<FOrdeers> selectevaluateOrders(Long usersId);
+
+    /**
+     * 根据订单编号修改订单数据
+     *
+     * @param ordersNumber 订单编号
+     */
+    public int updateOrdersStatus(String ordersNumber);
 }

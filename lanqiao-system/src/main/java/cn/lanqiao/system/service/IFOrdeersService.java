@@ -112,4 +112,12 @@ public interface IFOrdeersService
      * @param usersPhone 用户电话号码
      */
     public List<FOrderPartslist> selectevaluateOrders(String usersPhone);
+
+    /**
+     * 手机端订单状态修改接口
+     * @param usersPhone 手机电话
+     * @param ordersNumber 商品条码
+     *
+     */
+     public void updateSettlement(String usersPhone, String ordersNumber);
 }

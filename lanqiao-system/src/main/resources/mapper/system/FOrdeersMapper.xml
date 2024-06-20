@@ -110,4 +110,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFOrdeersVo"/>
         where orders_users_id = #{usersId} AND orders_sysuser_id IS NOT NULL and orders_status = 2
     </select>
+
+    <update id="updateOrdersStatus" parameterType="FOrdeers">
+        UPDATE f_ordeers SET orders_status = 1 WHERE orders_number = #{ordersNumber}
+    </update>
 </mapper>

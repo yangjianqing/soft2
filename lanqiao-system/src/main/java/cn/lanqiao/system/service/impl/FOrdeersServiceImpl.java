@@ -280,7 +280,6 @@ public class FOrdeersServiceImpl implements IFOrdeersService
             List<FGoods> GoodsList = ifShoppingCartService.selectShopData(settlement.getUsersPhone());
             if (GoodsList != null) {
                 // TODO: 进行新增订单操作
-//                String OrderNu = OrderNumberGenerator.generateOrderNumber();//创建订单编号
                 FUsers fUsers = fUsersMapper.selectUsersusersPhone(settlement.getUsersPhone());//根据电话查询用户id
                 List<SysUser> sysUsers = sysUserMapper.selectSysUserAll();//查询全部配送员信息
                 if (deliveryIndex >= sysUsers.size()) {
@@ -293,19 +292,35 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
                 // TODO: 进行新增订单明细操作
                 for (FGoods fGoods : GoodsList) {
-                    //利用前端传递的商品编号(fGood.getId())，查询商品信息
-//                    FGoods fGoods1 = fGoodsService.selectGoodsList(fGoods.getId());
+                    //利用前端传递的商品编号(fGood.getId()) 查询商品信息
+                    FGoods fGoods1 = fGoodsService.selectGoodsList(fGoods.getCoding());
                     //创建订单详情传值,调用新增订单详情
                     fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods.getId(),settlement.getOrdersNumber(),fGoods.getQuantity()));
                     //更新商品数量
-                    fGoods.setNum(fGoods.getNum()-fGoods.getQuantity());
-                    fGoodsService.updateFGoods(fGoods);
+                    fGoods1.setNum(fGoods1.getNum()-fGoods.getQuantity());
+                    fGoodsService.updateFGoods(fGoods1);
                 }
 
                 // TODO: 进行清空redis购物车数据操作
                 // 生成唯一标识 Key
                 String verKey = CacheConstants.Query_Shopping_KEY + settlement.getUsersPhone();
                 redisCache.deleteObject(verKey);
+            }
+        }
+    }
+
+    /**
+     * 手机端订单状态修改接口
+     * @param usersPhone 手机电话
+     * @param ordersNumber 商品条码
+     *
+     */
+    @Override
+    public void updateSettlement(String usersPhone, String ordersNumber) {
+        if (usersPhone != null) {
+            FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
+            if (fUsers != null && ordersNumber != null) {
+                fOrdeersMapper.updateOrdersStatus(ordersNumber);
             }
         }
     }
