@@ -15,10 +15,11 @@
         <result property="addressTude"    column="address_tude"    />
         <result property="addressLatit"    column="address_latit"    />
         <result property="addressDetail"    column="address_detail"    />
+        <result property="addressLevel"    column="address_level"    />
     </resultMap>
 
     <sql id="selectFAddressVo">
-        select address_id, adderss_users_id, address_sort, address_name, address_sex, address_phone, address_label, address_tude, address_latit, address_detail from f_address
+        select address_id, adderss_users_id, address_sort, address_name, address_sex, address_phone, address_label, address_tude, address_latit, address_detail,address_level from f_address
     </sql>
 
     <select id="selectFAddressList" parameterType="FAddress" resultMap="FAddressResult">
