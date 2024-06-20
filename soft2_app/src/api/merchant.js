@@ -102,6 +102,42 @@ export function addCarList(phone,code){
   })
 }
 //获取商品到购物车
+
+//用户地址列表查询
+export function addressList(keyword){
+  return request({
+    url: '/api/fresh/selectUsersAddressList/'+keyword,
+    method: 'get',
+    params: {keyword},
+  })
+}
+
+//新增地址
+export function addAddress(address){
+  return request({
+    url: 'api/fresh/addUsersAddressList',
+    method: 'post',
+    data: address
+  })
+}
+
+//修改地址
+export function editUsersAddress(address){
+  return request({
+    url: 'api/fresh/editUsersAddressList',
+    method: 'put',
+    data: address
+  })
+}
+
+//删除地址
+export function removeUsersAddress(addressIds){
+  return request({
+    url: 'api/fresh/removeUsersAddressList/'+addressIds,
+    method: 'delete'
+  })
+}
+
 export function getCarList(phone){
   return request({
     url: '/api/fresh/selectShopData/'+phone,

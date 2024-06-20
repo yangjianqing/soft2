@@ -1,68 +1,160 @@
 <template>
   <van-nav-bar
-      title="地址管理"
-      left-text="返回"
-      left-arrow
-      @click-left="onClickLeft"
+    title="地址管理"
+    left-text="返回"
+    left-arrow
+    @click-left="onClickLeft"
+    class="fixed-navbar"
   />
-  <van-address-list
-      v-model="chosenAddressId"
-      :list="list"
+  <div style="height: 3rem"></div>
+  <template v-for="(address,index) in addressList">
+    <van-swipe-cell>
 
-      @add="onAdd"
-      @edit="onEdit"
-  />
+    <div class="address-container">
+      <!--    左侧单选按钮-->
+      <div class="address-line">
+        <input type="radio" :name="'address'+index" :value="0" v-model.number="address.addressSort" @change="selectAddress(index)">
+      </div>
+      <!--右侧-->
+      <div class="address-management">
+        <!-- 第一行：地址渲染 -->
+        <div class="address-line">
+          <p class="address-detail">{{ address.addressDetail }}</p>
+        </div>
+        <!-- 第三行：用户名、电话号码和地址标签渲染 -->
+        <div class="address-line">
+          <p>{{ address.addressName }}</p>
+        </div>
+        <div class="address-line">
+          <p>{{ address.addressPhone }}</p>
+        </div>
+      </div>
+    </div>
+    <template #right>
+      <van-button @click="clickBot(address.addressId)" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
+    </template>
+  </van-swipe-cell>
+  </template>
+  <button @click="onAdd" class="add-address-button">新增地址</button>
+  <div style="height: 4rem"></div>
 </template>
 <script>
-import { ref } from 'vue';
-import { showToast } from 'vant';
+import {ref} from 'vue';
+import {showConfirmDialog, showNotify, showToast} from 'vant';
 import router from "@/router";
-const chosenAddressId = ref('1');
-const list = [
-  {
-    id: '1',
-    name: '张三',
-    tel: '13000000000',
-    address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室',
-    isDefault: true,
-  },
-  {
-    id: '2',
-    name: '李四',
-    tel: '1310000000',
-    address: '浙江省杭州市拱墅区莫干山路 50 号',
-  },
-];
-const disabledList = [
-  {
-    id: '3',
-    name: '王五',
-    tel: '1320000000',
-    address: '浙江省杭州市滨江区江南大道 15 号',
-  },
-];
+import {addressList, editUsersAddress, removeUsersAddress} from "@/api/merchant";
+
 const onClickLeft = () => history.back();
-const onAdd = () => router.push({ path: '/mine/addadres' });
-const onEdit = (item, index) => showToast('编辑地址:' + index);
+const onAdd = () => router.push({path: '/mine/addadres'});
 export default {
-  name:"AddressEdit",
-  data(){
-    return{
-      list,
+  name: "AddressEdit",
+  data() {
+    return {
       onAdd,
-      onEdit,
-      disabledList,
-      chosenAddressId,
-      onClickLeft
+      onClickLeft,
+      usersPhone: "",
+      addressList: [],
     }
   },
-  methods:{
-
-  }
+  created() {
+    //获取地址列表
+    this.getAddressList();
+  },
+  methods: {
+    //获取地址列表
+    getAddressList() {
+      const userInfoString = localStorage.getItem("userInfo");
+      // 将字符串解析回对象
+      const userInfo = JSON.parse(userInfoString);
+      // 现在可以访问对象中的属性了
+      this.usersPhone = userInfo.usersPhone;
+      addressList(this.usersPhone).then(res => {
+        this.addressList = res.data.data;
+        console.log(this.addressList)
+      })
+    },
+    selectAddress(selectedIndex) {
+      this.addressList.forEach((address, index) => {
+        address.addressSort = (index === selectedIndex) ? 0 : 1;
+      });
+    },
+    clickBot(coding){
+      showConfirmDialog({
+        message:
+          '将这个地址删除',
+      })
+        .then(() => {
+          removeUsersAddress(coding).then(res=>{
+            if (res.data.code === 200) {
+              showNotify({type: 'success', message: '地址删除成功'});
+            } else {
+              showNotify({type: 'danger', message: '地址删除失败'});
+            }
+            // 刷新页面
+            location.reload();
+          })
+        })
+        .catch(() => {
+          // on cancel
+        });
+    },
+  },
 
 }
 
 </script>
 <style scoped>
 
+.address-container {
+  border-top: 1px solid #ccc; /* 上边框 */
+  border-bottom: 1px solid #ccc; /* 下边框 */
+  display: flex; /* 使用 flexbox 布局 */
+  align-items: center; /* 垂直居中对齐 */
+}
+
+.fixed-navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* 可以根据需要设置 z-index */
+}
+
+.add-address-button {
+  margin-bottom: 0px; /* 适当调整按钮与上方内容的间距 */
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.address-management {
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 90%;
+}
+
+.address-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 10px;
+}
+
+.address-detail {
+  white-space: nowrap; /* 防止文本换行 */
+  overflow: hidden; /* 隐藏溢出的内容 */
+  text-overflow: ellipsis; /* 显示省略号 */
+  max-width: 80%; /* 根据需要设置最大宽度 */
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
 </style>

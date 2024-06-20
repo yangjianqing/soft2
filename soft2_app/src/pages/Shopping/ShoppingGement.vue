@@ -120,7 +120,7 @@ export default {
     this.getGoodsList();
     // 从路由参数中获取商品id
     this.selectById();
-  },
+  }
 }
 
 
