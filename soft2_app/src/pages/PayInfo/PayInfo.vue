@@ -1,16 +1,20 @@
 
 <template>
   <div class="custom-cell">
-    <van-cell class="payinfo" is-link size="large">
-      <!-- 这里只显示地址或其他内容 -->
-      <div class="address-content">{{ labels.tel }}</div>
-      <div class="address-content">{{ labels.address }}</div>
+   <router-link to="/mine/addadres">
+     <van-cell class="payinfo" is-link size="large">
+       <!-- 这里只显示地址或其他内容 -->
+       <div class="address-content">{{ labels.tel }}</div>
+       <div class="address-content">{{ labels.address }}</div>
 
-    </van-cell>
+     </van-cell>
+   </router-link>
   </div>
-  <OrderInfo style="margin-top: 10px">
+  <template  v-for="(goodsInfo,index) in goodsList" >
+    <OrderListInfo :goodsInfo="goodsInfo">
 
-  </OrderInfo>
+    </OrderListInfo>
+  </template>
   <van-cell title="单元格" class="payinfo" icon="alipay" color="blue" is-link>
     <template #title>
       <span class="custom-title">支付宝</span>
@@ -31,10 +35,12 @@
 
 import OrderInfo from "@/components/OrderInfo.vue";
 import {showToast} from "vant";
+import OrderListInfo from "@/components/OrderlistInfo.vue";
+import {getCarList} from "@/api/merchant";
 const onSubmit = () => showToast('点击按钮');
 export default {
   name:"PayInfo",
-  components: {OrderInfo},
+  components: {OrderListInfo, OrderInfo},
   data(){
     return{
       onSubmit,
@@ -45,11 +51,24 @@ export default {
         address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室',
         isDefault: true,
       },
+      goodsList:"",
     }
   },
   methods:{
 
-  }
+  },
+  created() {
+    //取购物车的数据
+    const userInfoString = localStorage.getItem("userInfo");
+    // 将字符串解析回对象
+    this.userInfo = JSON.parse(userInfoString);
+    // 现在可以访问对象中的属性了
+    getCarList(this.userInfo.usersPhone).then(res =>{
+      console.log(res)
+      this.goodsList=res.data.data;
+    });
+
+  },
 }
 
 </script>
