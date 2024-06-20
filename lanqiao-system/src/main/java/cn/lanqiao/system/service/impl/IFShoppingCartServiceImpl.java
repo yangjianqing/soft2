@@ -27,6 +27,7 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService {
 
     @Autowired
     private FGoodsMapper fGoodsMapper;
+
     /**
      * 手机端添加购物车数据到redis
      *
@@ -35,11 +36,12 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService {
      * 商品数量(每次添加数据到redis同一商品的数量)
      */
     @Override
-    public void insertShopData(String usersPhone, Long coding,Long quantity) {
+    public void insertShopData(String usersPhone, Long coding) {
         // 生成唯一标识 Key
         String verKey = CacheConstants.Query_Shopping_KEY + usersPhone;
         // 获取现有的购物车数据
         Map<Long, Long> shoppingCart = redisCache.getShoppingCart(verKey);
+        Long quantity = 1L;//定义商品数量默认值为1
         if (shoppingCart != null && shoppingCart.containsKey(coding)) {
             // 如果购物车中已经存在相同的商品，则更新数量
             Long existingQuantity = shoppingCart.get(coding);
@@ -51,6 +53,57 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService {
         redisCache.setShoppingCart(verKey,shoppingCart,Constants.Query_Shopping,TimeUnit.HOURS);
     }
 
+    /**
+     * 手机端减除购物车redis商品数量
+     *
+     * @param usersPhone 用户号码
+     * @param coding 商品编码(根据商品编码查询商品数据)
+     * 商品数量(每次添加数据到redis同一商品的数量)
+     */
+    @Override
+    public void deductionShopData(String usersPhone, Long coding) {
+        // 生成唯一标识 Key
+        String verKey = CacheConstants.Query_Shopping_KEY + usersPhone;
+        // 获取现有的购物车数据
+        Map<Long, Long> shoppingCart = redisCache.getShoppingCart(verKey);
+        if (shoppingCart != null && shoppingCart.containsKey(coding)) {
+            Long existingQuantity = shoppingCart.get(coding);
+            if (existingQuantity > 1) {
+                // 如果商品数量大于1，则减少数量
+                shoppingCart.put(coding, existingQuantity - 1);
+            } else {
+                // 如果商品数量为1，则直接移除该商品
+                shoppingCart.remove(coding);
+                // TODO: 进行清空redis购物车数据操作
+                redisCache.deleteObject(verKey);
+            }
+            // 将购物车数据存储到 Redis
+            redisCache.setShoppingCart(verKey, shoppingCart, Constants.Query_Shopping, TimeUnit.HOURS);
+        }
+    }
+
+    /**
+     * 手机端删除购物车redis数据
+     *
+     * @param usersPhone 用户号码
+     * @param coding 商品编码(根据商品编码查询商品数据)
+     * 商品数量(每次添加数据到redis同一商品的数量)
+     */
+    @Override
+    public void deleteShopData(String usersPhone, Long coding) {
+        // 生成唯一标识 Key
+        String verKey = CacheConstants.Query_Shopping_KEY + usersPhone;
+        // 获取现有的购物车数据
+        Map<Long, Long> shoppingCart = redisCache.getShoppingCart(verKey);
+        if (shoppingCart != null && shoppingCart.containsKey(coding)) {
+            // 删除指定的商品
+            shoppingCart.remove(coding);
+            // TODO: 进行清空redis购物车数据操作
+            redisCache.deleteObject(verKey);
+            // 将购物车数据存储到 Redis
+            redisCache.setShoppingCart(verKey,shoppingCart,Constants.Query_Shopping,TimeUnit.HOURS);
+        }
+    }
 
     /**
      * 手机端购物车页面数据
@@ -82,4 +135,6 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService {
         }
         return shoppingList;
     }
+
+
 }

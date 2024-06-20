@@ -373,8 +373,48 @@ public class ApiShoppingIController extends BaseController {
     public AjaxResult insertShopData(@PathVariable("usersPhone") String usersPhone, @PathVariable("coding") Long coding)
     {
         try {
-            ifShoppingCartService.insertShopData(usersPhone,coding,1L);
+            ifShoppingCartService.insertShopData(usersPhone,coding);
             return AjaxResult.success("加入购物车成功");
+        } catch (Exception ex){
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
+        }
+    }
+
+    /**
+     * 手机端删除购物车redis数据
+     *
+     * @param usersPhone 用户号码
+     * @param coding 商品编码(根据商品编码查询商品数据)
+     * 商品数量(每次添加数据到redis同一商品的数量)
+     */
+    @ApiOperation("手机端删除购物车redis数据")
+    @GetMapping(value = "/deleteShopData/{usersPhone}/{coding}")
+    public AjaxResult deleteShopData(@PathVariable("usersPhone") String usersPhone, @PathVariable("coding") Long coding)
+    {
+        try {
+            ifShoppingCartService.deleteShopData(usersPhone,coding);
+            return AjaxResult.success("删除购物车指定数据成功");
+        } catch (Exception ex){
+            ex.getMessage();
+            return AjaxResult.error("系统异常");
+        }
+    }
+
+    /**
+     * 手机端减除购物车redis商品数量
+     *
+     * @param usersPhone 用户号码
+     * @param coding 商品编码(根据商品编码查询商品数据)
+     * 商品数量(每次添加数据到redis同一商品的数量)
+     */
+    @ApiOperation("手机端减除购物车redis商品数量")
+    @GetMapping(value = "/deductionShopData/{usersPhone}/{coding}")
+    public AjaxResult deductionShopData(@PathVariable("usersPhone") String usersPhone, @PathVariable("coding") Long coding)
+    {
+        try {
+            ifShoppingCartService.deductionShopData(usersPhone,coding);
+            return AjaxResult.success("减掉商品数量成功");
         } catch (Exception ex){
             ex.getMessage();
             return AjaxResult.error("系统异常");
