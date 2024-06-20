@@ -164,9 +164,6 @@
         }
       },
       methods:{
-        toPhone() {
-        },
-        //退出登录
         showConfirmDialog(){
           showConfirmDialog({
             title: '退出登录',
@@ -184,7 +181,6 @@
               // on cancel
             });
         },
-
         //加载名字
         ReturnPoMa(){
           router.push({ path: '/mine/poma' });

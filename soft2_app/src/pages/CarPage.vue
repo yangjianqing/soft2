@@ -1,15 +1,14 @@
 <template>
     <div>
       <van-nav-bar   title="购物车"></van-nav-bar>
-      <van-pull-refresh v-model="loading" @refresh="onRefresh">
-
-          <template  v-for="(goodsInfo,index) in goodsList" >
-              <OrderInfo :goodsInfo="goodsInfo"></OrderInfo>
-          </template>
-      </van-pull-refresh>
+      <div style="margin-bottom: 75px">
+        <template  v-for="(goodsInfo,index) in goodsList" >
+            <OrderInfo :goodsInfo="goodsInfo"></OrderInfo>
+        </template>
+      </div>
     </div>
   <van-action-bar  safe-area-inset-bottom style="bottom: 48px">
-    <van-action-bar-button color="#be99ff" type="warning" :text="'总净额:'+{total}" :click="addToCar" />
+    <van-action-bar-button color="#be99ff" type="warning" :text="'总金额:'+{}" />
     <van-action-bar-button color="#7232dd" type="danger" text="去付款" @click="Retrunshoppings" />
   </van-action-bar>
 
@@ -19,6 +18,8 @@
 
 import OrderInfo from "@/components/OrderInfo.vue";
 import {getCarList} from "@/api/merchant";
+import {ref} from "vue";
+import router from "@/router";
 
     export default {
         name: "CarPage",
@@ -30,7 +31,9 @@ import {getCarList} from "@/api/merchant";
           }
         },
       methods:{
-
+        Retrunshoppings(){
+          router.push({ path: '/mine/ordermanagement' });
+        }
       },
       created() {
         //取购物车的数据
@@ -39,9 +42,14 @@ import {getCarList} from "@/api/merchant";
          this.userInfo = JSON.parse(userInfoString);
         // 现在可以访问对象中的属性了
         getCarList(this.userInfo.usersPhone).then(res =>{
-          console.log(res)
+            console.log(res)
             this.goodsList=res.data.data;
         })
+      },
+      mounted() {
+          totalPrice:{
+
+        }
       }
     }
 

@@ -2,7 +2,7 @@
   <div class="order">
     <router-link to="/cart/shoppinggement">
     <div class="title">
-      <span>{{ goodsInfo.name }}</span>
+      <span style="font-size:16px ;font-weight: bold">{{ goodsInfo.name }}</span>
       <span style="color: #FFB366">未支付</span>
     </div>
     <div class="content">
@@ -11,16 +11,16 @@
         <img :src="this.baseUrl+imgUrl[0]" alt="">
       </div>
       <div class="content_txt">
-        <div style="height: 40px">
+        <div style="margin-top: 10px;margin-bottom: 5px">
           <h4 style="font-size: 12px">{{ goodsInfo.description }}</h4>
         </div>
-        <p>规格：一个</p>
-        <p>单价：￥{{ goodsInfo.specification }}</p>
-        <p>数量：{{goodsInfo.quantity}}个</p>
+        <p>规格：{{ goodsInfo.specification }}</p>
+        <p>单价：{{ goodsInfo.price }}￥</p>
+        <p>数量：{{goodsInfo.quantity}}{{goodsInfo.unit}}</p>
       </div>
     </div>
     </router-link>
-      <p class="totals">金额:{{ goodsInfo.price }}元</p>
+      <p class="totals">金额:{{ goodsInfo.price * goodsInfo.quantity }}元</p>
     <div class="bottom_btn">
       <div>
         <van-button plain hairline round  type="primary" size="mini" @add="addNum" >再次购买</van-button>

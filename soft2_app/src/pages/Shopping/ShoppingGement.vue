@@ -5,15 +5,15 @@
     @click-left="onClickLeft"
   >
     <template #right>
-      <router-link to="/mine/ordermanagement">
-        <div class="right_nav">
-          <van-icon name="cart-o" size="20" badge="1"/>
-        </div>
+      <router-link to="/cart">
+      <div class="right_nav">
+        <van-icon name="cart-o" size="20" badge="1"/>
+      </div>
       </router-link>
     </template>
   </van-nav-bar>
 
-  <!--  <MerchandiseInfo></MerchandiseInfo>-->
+<!--  <MerchandiseInfo></MerchandiseInfo>-->
   <van-swipe :autoplay="3000" lazy-render>
     <van-swipe-item v-for="(goodsInfo,index) in imgUrls">
       <img style="width: 375px;height: 375px;" :src="this.baseUrl+goodsInfo" class="custom-image-size" alt=""/>
@@ -60,14 +60,12 @@ import router from "@/router";
 import {listShopping,addCarList,selectIdByInfo} from "@/api/merchant";
 
 const onClickLeft = () => history.back();
-const onClickButton = () => showToast('立即购买');
 export default {
   components: {MerchandiseInfo},
   props:['goodsInfo'],
   data(){
     return{
       onClickLeft,
-      onClickButton,
       goodsList:[],
       selectedGoods:[],
       baseUrl:"",
@@ -75,19 +73,32 @@ export default {
       usersPhone:"",
     }
   },
-  methods: {
-    onClickIcon() {
+  methods:{
+    //点击加入购物车
+    onClickIcon(){
       const userInfoString = localStorage.getItem("userInfo");
       // 将字符串解析回对象
       const userInfo = JSON.parse(userInfoString);
 
       // 现在可以访问对象中的属性了
       this.usersPhone = userInfo.usersPhone; // 假设属性名为 phone
-      console.log(this.usersPhone)
-      //加入购物车
-      addCarList(this.usersPhone, this.selectedGoods.coding).then(res => {
-        if (res.code == 200) {
-          alert("成功")
+      addCarList(this.usersPhone,this.selectedGoods.coding).then(res=>{
+          if ( res.data.msg === '加入购物车成功'){
+            showToast('加入成功'); // 在成功时显示提示
+          }
+      })
+    },
+    //点击立即购买
+    onClickButton(){
+      const userInfoString = localStorage.getItem("userInfo");
+      // 将字符串解析回对象
+      const userInfo = JSON.parse(userInfoString);
+
+      // 现在可以访问对象中的属性了
+      this.usersPhone = userInfo.usersPhone; // 假设属性名为 phone
+      addCarList(this.usersPhone,this.selectedGoods.coding).then(res=>{
+        if ( res.data.msg === '加入购物车成功'){
+          router.push("/mine/ordermanagement");
         }
       })
     },
@@ -96,9 +107,8 @@ export default {
         this.goodsList = res.data.rows;
       })
     },
-    selectById() {
-      selectIdByInfo(this.$route.params.id).then(res => {
-        console.log(res.data);
+    selectById(){
+      selectIdByInfo(this.$route.params.id).then(res=>{
         this.selectedGoods = res.data.id;
         this.imgUrls = this.selectedGoods.image.split(',');
 
@@ -124,20 +134,17 @@ export default {
   text-align: center;
   background-color: #39a9ed;
 }
-
 .custom-image-size {
   width: 100%; /* 设置图片宽度 */
   height: auto; /* 保持图片宽高比 */
 }
-
 .list-src {
   font-size: 0.9rem;
   background-color: rgb(242, 242, 242);;
 
   border-radius: 7px;
 }
-
-.list-ts {
+.list-ts{
   font-size: 0.9rem;
   color: #A6C9E2;
 }

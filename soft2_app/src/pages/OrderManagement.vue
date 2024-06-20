@@ -54,10 +54,8 @@
         </AddressGement>
       </van-tab>
       <van-tab title="待收货">
-        <van-swipe-cell v-for="list in 3">
-          <OrderInfo>
-
-          </OrderInfo>
+        <van-swipe-cell>
+          <OrderInfo> </OrderInfo>
         </van-swipe-cell>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
         <div style="display: flex;flex-wrap: wrap;">
