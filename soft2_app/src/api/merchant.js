@@ -93,16 +93,26 @@ export function selectFadvertisementList(query){
   })
 }
 
+
+//添加商品到购物车
 export function addCarList(phone,code){
   return request({
     url: '/api/fresh/insertShopData/'+phone+'/'+code,
     method: 'get',
   })
 }
-
+//获取商品到购物车
 export function getCarList(phone){
   return request({
     url: '/api/fresh/selectShopData/'+phone,
+    method: 'get',
+  })
+}
+
+//获取商品到购物车
+export function deleteCarList(phone,code){
+  return request({
+    url: '/api/fresh/deleteShopData/'+phone+'/'+code,
     method: 'get',
   })
 }

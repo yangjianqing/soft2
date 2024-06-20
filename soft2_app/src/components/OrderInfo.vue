@@ -23,9 +23,8 @@
       </router-link>
       <p class="totals">金额:{{ goodsInfo.price * goodsInfo.quantity }}元</p>
     </div>
-
     <template #right>
-      <van-button @click="clickBot()" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
+      <van-button @click="clickBot(goodsInfo.coding)" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
     </template>
   </van-swipe-cell>
 
@@ -33,6 +32,7 @@
 <script >
 
 import { showConfirmDialog } from 'vant';
+import {deleteCarList} from "@/api/merchant";
 
 export default {
   name: "OrderInfo",
@@ -44,18 +44,28 @@ export default {
     }
   },
   methods:{
-    clickBot(){
+    clickBot(coding){
       showConfirmDialog({
         message:
           '将此款商品删除',
       })
         .then(() => {
           // on confirm
+          const userInfoString = localStorage.getItem("userInfo");
+          // 将字符串解析回对象
+          const userInfo = JSON.parse(userInfoString);
+          //购物车的数据
+          this.deleteShopping(userInfo.usersPhone,coding);
         })
         .catch(() => {
           // on cancel
         });
     },
+    deleteShopping(userInfo,coding){
+      deleteCarList(userInfo,coding).then(res=>{
+        this.$router.go(0)
+      })
+    }
 
 
   },
