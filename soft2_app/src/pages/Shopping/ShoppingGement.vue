@@ -93,7 +93,6 @@ export default {
       const userInfoString = localStorage.getItem("userInfo");
       // 将字符串解析回对象
       const userInfo = JSON.parse(userInfoString);
-
       // 现在可以访问对象中的属性了
       this.usersPhone = userInfo.usersPhone; // 假设属性名为 phone
       addCarList(this.usersPhone,this.selectedGoods.coding).then(res=>{

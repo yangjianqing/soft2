@@ -1,38 +1,38 @@
 <template>
-  <div class="order">
-    <router-link to="/cart/shoppinggement">
-    <div class="title">
-      <span style="font-size:16px ;font-weight: bold">{{ goodsInfo.name }}</span>
-      <span style="color: #FFB366">未支付</span>
-    </div>
-    <div class="content">
-
-      <div class="img_info">
-        <img :src="this.baseUrl+imgUrl[0]" alt="">
-      </div>
-      <div class="content_txt">
-        <div style="margin-top: 10px;margin-bottom: 5px">
-          <h4 style="font-size: 12px">{{ goodsInfo.description }}</h4>
+  <van-swipe-cell>
+    <div class="order">
+      <router-link to="/cart/shoppinggement">
+        <div class="title">
+          <span style="font-size:16px ;font-weight: bold">{{ goodsInfo.name }}</span>
+          <span style="color: #FFB366">未支付</span>
         </div>
-        <p>规格：{{ goodsInfo.specification }}</p>
-        <p>单价：{{ goodsInfo.price }}￥</p>
-        <p>数量：{{goodsInfo.quantity}}{{goodsInfo.unit}}</p>
-      </div>
-    </div>
-    </router-link>
+        <div class="content">
+
+          <div class="img_info">
+            <img :src="this.baseUrl+imgUrl[0]" alt="">
+          </div>
+          <div class="content_txt">
+            <div style="margin-top: 10px;margin-bottom: 5px">
+              <h4 style="font-size: 12px">{{ goodsInfo.description }}</h4>
+            </div>
+            <p>规格：{{ goodsInfo.specification }}</p>
+            <p>单价：{{ goodsInfo.price }}￥</p>
+            <p>数量：{{goodsInfo.quantity}}{{goodsInfo.unit}}</p>
+          </div>
+        </div>
+      </router-link>
       <p class="totals">金额:{{ goodsInfo.price * goodsInfo.quantity }}元</p>
-    <div class="bottom_btn">
-      <div>
-        <van-button plain hairline round  type="primary" size="mini" @add="addNum" >再次购买</van-button>
-        <router-link to="/mine/ordermanagement">
-          <van-button plain hairline round  type="danger" size="mini">评价</van-button>
-        </router-link>
-      </div>
     </div>
-  </div>
+
+    <template #right>
+      <van-button @click="clickBot()" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
+    </template>
+  </van-swipe-cell>
+
 </template>
 <script >
 
+import { showConfirmDialog } from 'vant';
 
 export default {
   name: "OrderInfo",
@@ -44,6 +44,18 @@ export default {
     }
   },
   methods:{
+    clickBot(){
+      showConfirmDialog({
+        message:
+          '将此款商品删除',
+      })
+        .then(() => {
+          // on confirm
+        })
+        .catch(() => {
+          // on cancel
+        });
+    },
 
 
   },
@@ -56,7 +68,7 @@ export default {
 </script>
 <style scoped>
 .order{
-  height: 230px;
+  height: 180px;
   background-color: #ffffff;
   margin: 1%;
   border-radius: 3%;

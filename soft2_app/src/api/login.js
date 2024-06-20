@@ -1,7 +1,11 @@
 import request from "@/axios/request"
-import axios from 'axios';
+
 export function login(user) {
-  return axios.post('http://localhost:8082/dev-api/api/fresh/LoginUsers', user);
+  return request({
+    url: '/api/fresh/LoginUsers',
+    method: 'post',
+    data:user,
+  })
 }
 
 // 登录方法

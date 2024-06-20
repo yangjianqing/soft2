@@ -14,7 +14,8 @@
     <template #left>
       <van-icon name="location-o" size="20" />
       <span >
-            {{ address || '获取位置中...' }}
+<!--            {{ address || '获取位置中...' }}-->
+        泸州市
       </span>
     </template>
     <template #title>
@@ -323,7 +324,7 @@ export default {
 .van-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content:  space-evenly;
 }
 .row_swipe{
   margin: 2% 2%;

@@ -9,9 +9,9 @@
     <van-tabs v-model:active="active">
       <van-tab title="全部订单">
         <van-swipe-cell v-for="list in 3">
-          <OrderInfo>
+<!--          <OrderInfo>-->
 
-          </OrderInfo>
+<!--          </OrderInfo>-->
         </van-swipe-cell>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
 
@@ -27,9 +27,9 @@
       <van-tab title="待付款">
 
         <van-swipe-cell v-for="list in 3">
-          <OrderInfo>
+<!--          <OrderInfo>-->
 
-          </OrderInfo>
+<!--          </OrderInfo>-->
         </van-swipe-cell>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
         <div style="display: flex;flex-wrap: wrap;">
@@ -55,7 +55,7 @@
       </van-tab>
       <van-tab title="待收货">
         <van-swipe-cell>
-          <OrderInfo> </OrderInfo>
+<!--          <OrderInfo> </OrderInfo>-->
         </van-swipe-cell>
         <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
         <div style="display: flex;flex-wrap: wrap;">
