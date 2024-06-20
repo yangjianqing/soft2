@@ -74,13 +74,13 @@ public class FOrderPartslist extends BaseEntity
     @Excel(name = "图片")
     private String image;
 
-    private int ordersStatus;
+    private Long ordersStatus;
 
-    public int getOrdersStatus() {
+    public Long getOrdersStatus() {
         return ordersStatus;
     }
 
-    public void setOrdersStatus(int ordersStatus) {
+    public void setOrdersStatus(Long ordersStatus) {
         this.ordersStatus = ordersStatus;
     }
 
@@ -170,6 +170,21 @@ public class FOrderPartslist extends BaseEntity
     public FOrderPartslist() {
     }
 
+    public FOrderPartslist(Long id, Long goodsId, String orderId, Long goodsid, Long goodsNum, FGoods goods, String name, String specification, BigDecimal price, Long coding, String image, Long  ordersStatus) {
+        this.id = id;
+        this.goodsId = goodsId;
+        this.orderId = orderId;
+        this.goodsid = goodsid;
+        this.goodsNum = goodsNum;
+        this.goods = goods;
+        this.name = name;
+        this.specification = specification;
+        this.price = price;
+        this.coding = coding;
+        this.image = image;
+        this.ordersStatus = ordersStatus;
+    }
+
     @Override
     public String toString() {
         return "FOrderPartslist{" +
@@ -184,6 +199,7 @@ public class FOrderPartslist extends BaseEntity
                 ", price=" + price +
                 ", coding=" + coding +
                 ", image='" + image + '\'' +
+                ", ordersStatus=" + ordersStatus +
                 '}';
     }
 }
