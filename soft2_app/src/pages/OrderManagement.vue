@@ -9,82 +9,26 @@
     <van-tabs v-model:active="active">
       <van-tab title="全部订单">
         <template  v-for="(goodsInfo,index) in goodsList" >
-          <OrderListInfo :goodsInfo="goodsInfo">
-
-          </OrderListInfo>
+          <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
         </template>
-        <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
-
-        <div style="display: flex;flex-wrap: wrap;">
-          <template v-for="(goodsInfo,index) in goodsList">
-            <div class="total_box" v-if="index%2===1">
-              <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
-              <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
-            </div>
-          </template>
-        </div>
       </van-tab>
       <van-tab title="待付款">
-
-        <template  v-for="(goodsInfo,index) in goodsList" >
-          <OrderListInfo :goodsInfo="goodsInfo">
-
-          </OrderListInfo>
+        <template  v-for="(goodsInfo,index) in filterType(1)" >
+          <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
         </template>
-        <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
-        <div style="display: flex;flex-wrap: wrap;">
-          <template v-for="(goodsInfo,index) in goodsList">
-            <div class="total_box" v-if="index%2===1">
-              <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
-              <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
-            </div>
-            <van-action-bar  safe-area-inset-bottom>
-              <van-action-bar-button color="#be99ff" type="warning" :text="'总净额:'+{total}" />
-              <van-action-bar-button color="#7232dd" type="danger" text="付款" @click="showPopup" />
-            </van-action-bar>
-          </template>
-
-        </div>
-
       </van-tab>
-
       <van-tab title="待发货">
-        <AddressGement>
-
-        </AddressGement>
+        <template  v-for="(goodsInfo,index) in filterType(1)" >
+          <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
+        </template>
       </van-tab>
+
       <van-tab title="待收货">
-        <van-swipe-cell>
-          <template  v-for="(goodsInfo,index) in goodsList" >
-            <OrderListInfo :goodsInfo="goodsInfo">
-
-            </OrderListInfo>
-          </template>
-        </van-swipe-cell>
-        <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
-        <div style="display: flex;flex-wrap: wrap;">
-          <template v-for="(goodsInfo,index) in goodsListInfo">
-            <div class="total_box" v-if="index%2===1">
-              <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
-              <MerchandiseInfo :goodsInfo="goodsList[index]"></MerchandiseInfo>
-            </div>
-          </template>
-        </div>
+        <template  v-for="(goodsInfo,index) in filterType(1)" >
+          <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
+        </template>
       </van-tab>
-      <van-tab title="评价">
-      <AssessMent>
 
-      </AssessMent>
-        <h6 style="padding-top:15px;padding-bottom: 10px">猜你喜欢</h6>
-        <div style="display: flex;flex-wrap: wrap;">
-          <template v-for="(goodsInfo,index) in goodsListInfo">
-            <div class="total_box" v-if="index%2===1">
-              <MerchandiseInfo :goodsInfo="goodsListInfo[index-1]"></MerchandiseInfo>
-              <MerchandiseInfo :goodsInfo="goodsListInfo[index]"></MerchandiseInfo>
-            </div>
-          </template>
-        </div>
-      </van-tab>
     </van-tabs>
   </van-pull-refresh>
   <van-popup
@@ -107,7 +51,7 @@ import AddressGement from "@/components/address/AddressGement.vue";
 import ShoppingCard from "@/components/card/ShoppingCard.vue";
 import OrderInfo from "@/components/OrderInfo.vue";
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
-import {getCarList, listShopping} from "@/api/merchant";
+import {selectOrders} from "@/api/merchant";
 import router from "@/router";
 import PayInfo from "@/pages/PayInfo/PayInfo.vue";
 import OrderListInfo from "@/components/OrderlistInfo.vue";
@@ -133,12 +77,17 @@ export default {
     }
   },
   methods:{
-    getGoodsList(){
-      listShopping().then(res=>{
-        console.log(res.data.rows);
-        this.goodsListInfo=res.data.rows;
+
+    getTotal(){
+      let count=0;
+      this.goodsList.forEach(e=>{
+        count+=e.price * e.quantity
       })
+      return count;
     },
+    filterType(status){
+      return this.goodsList.filter(obj=>obj.ordersStatus===status);
+    }
 
   },
   created() {
@@ -147,7 +96,7 @@ export default {
       // 将字符串解析回对象
       this.userInfo = JSON.parse(userInfoString);
       // 现在可以访问对象中的属性了
-      getCarList(this.userInfo.usersPhone).then(res =>{
+    selectOrders(this.userInfo.usersPhone).then(res =>{
         console.log(res)
         this.goodsList=res.data.data;
       })
@@ -173,33 +122,8 @@ const active = ref(0);
 :root {
   --van-font-size-lg: 30px; /* 定义一个较大的字体大小 */
 }
-.goods-card {
-  margin: 0;
-  background-color: @white;
-}
 
-.delete-button {
-  height: 100%;
-}
->>> .van-cell__title {
-  text-align: left !important;
-}
-.goods-card {
-  display: flex;
-  flex-direction: column;
-}
 
-.goods-card__title {
-  order: 3; /* 将标题移至最后 */
-}
-
-.goods-card__price {
-  order: 1; /* 将价格移至上方 */
-}
-
-.goods-card__desc {
-  order: 2; /* 将描述保持在中间 */
-}
 .bottoms{
   background-color: #e3e3e3;
 }

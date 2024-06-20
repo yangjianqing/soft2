@@ -276,11 +276,11 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     @Override
     public void insertShopping(Settlement settlement)
     {
-        if (settlement != null && settlement.getUsersPhone() != null && settlement.getOrdersPayStatuds() != null) {
+        if (settlement != null && settlement.getUsersPhone() != null) {
             List<FGoods> GoodsList = ifShoppingCartService.selectShopData(settlement.getUsersPhone());
             if (GoodsList != null) {
                 // TODO: 进行新增订单操作
-                String OrderNu = OrderNumberGenerator.generateOrderNumber();//创建订单编号
+//                String OrderNu = OrderNumberGenerator.generateOrderNumber();//创建订单编号
                 FUsers fUsers = fUsersMapper.selectUsersusersPhone(settlement.getUsersPhone());//根据电话查询用户id
                 List<SysUser> sysUsers = sysUserMapper.selectSysUserAll();//查询全部配送员信息
                 if (deliveryIndex >= sysUsers.size()) {
@@ -288,18 +288,18 @@ public class FOrdeersServiceImpl implements IFOrdeersService
                 }
                 SysUser sysUser = sysUsers.get(deliveryIndex);//根据索引取配送员信息
                 //创建订单对象传值,调用新增订单
-                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu,fUsers.getUsersId(),sysUser.getUserId(),settlement.getOrdersPayMethod(),settlement.getOrdersPayStatuds(),0L,settlement.getOrdersRemark()));
+                fOrdeersService.insertFOrdeers(new FOrdeers(settlement.getOrdersNumber(),fUsers.getUsersId(),sysUser.getUserId(),settlement.getOrdersPayMethod(),0L,0L,settlement.getOrdersRemark()));
                 deliveryIndex++; // 为下一次调用准备索引
 
                 // TODO: 进行新增订单明细操作
                 for (FGoods fGoods : GoodsList) {
                     //利用前端传递的商品编号(fGood.getId())，查询商品信息
-                    FGoods fGoods1 = fGoodsService.selectGoodsList(fGoods.getId());
+//                    FGoods fGoods1 = fGoodsService.selectGoodsList(fGoods.getId());
                     //创建订单详情传值,调用新增订单详情
-                    fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods1.getId(),OrderNu,fGoods.getQuantity()));
+                    fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods.getId(),settlement.getOrdersNumber(),fGoods.getQuantity()));
                     //更新商品数量
-                    fGoods1.setNum(fGoods1.getNum()-fGoods.getQuantity());
-                    fGoodsService.updateFGoods(fGoods1);
+                    fGoods.setNum(fGoods.getNum()-fGoods.getQuantity());
+                    fGoodsService.updateFGoods(fGoods);
                 }
 
                 // TODO: 进行清空redis购物车数据操作

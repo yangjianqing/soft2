@@ -144,6 +144,12 @@ export function getCarList(phone){
     method: 'get',
   })
 }
+export function selectOrders(phone){
+  return request({
+    url: '/api/fresh/selectOrders/'+phone,
+    method: 'get',
+  })
+}
 
 //获取商品到购物车
 export function deleteCarList(phone,code){
@@ -160,4 +166,13 @@ export function selectUsersAddressList(userPhone){
 
   })
 }
+export function insertSettlement(data){
+  return request({
+    url:"/api/fresh/insertSettlement",
+    method: 'post',
+    data:data,
+  })
+}
+
+
 

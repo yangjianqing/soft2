@@ -1,42 +1,51 @@
 <template>
-  <van-nav-bar
-    title="地址管理"
-    left-text="返回"
-    left-arrow
-    @click-left="onClickLeft"
-    class="fixed-navbar"
-  />
-  <div style="height: 3rem"></div>
-  <template v-for="(address,index) in addressList">
-    <van-swipe-cell>
+  <div>
 
-    <div class="address-container">
-      <!--    左侧单选按钮-->
-      <div class="address-line">
-        <input type="radio" :name="'address'+index" :value="0" v-model.number="address.addressSort" @change="selectAddress(index)">
-      </div>
-      <!--右侧-->
-      <div class="address-management">
-        <!-- 第一行：地址渲染 -->
-        <div class="address-line">
-          <p class="address-detail">{{ address.addressDetail }}</p>
+    <van-nav-bar
+      title="地址管理"
+      left-text="返回"
+      left-arrow
+      @click-left="onClickLeft"
+      class="fixed-navbar"
+    />
+    <div style="height: 3rem"></div>
+    <template v-for="(address,index) in addressList">
+      <van-swipe-cell>
+
+        <div class="address-container">
+          <!--    左侧单选按钮-->
+          <div class="address-line">
+            <input type="radio" :name="'address'+index" :value="0" v-model.number="address.addressSort" @change="selectAddress(index)">
+          </div>
+          <!--右侧-->
+          <div class="address-management">
+            <!-- 第一行：地址渲染 -->
+            <div class="address-line">
+              <p class="address-detail">{{ address.addressDetail }}</p>
+            </div>
+            <!-- 第三行：用户名、电话号码和地址标签渲染 -->
+            <div class="address-line">
+              <p>{{ address.addressName }}</p>
+            </div>
+            <div class="address-line">
+              <p>{{ address.addressPhone }}</p>
+            </div>
+          </div>
         </div>
-        <!-- 第三行：用户名、电话号码和地址标签渲染 -->
-        <div class="address-line">
-          <p>{{ address.addressName }}</p>
-        </div>
-        <div class="address-line">
-          <p>{{ address.addressPhone }}</p>
-        </div>
-      </div>
-    </div>
-    <template #right>
-      <van-button @click="clickBot(address.addressId)" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
+        <template #right>
+          <van-button @click="clickBot(address.addressId)" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
+        </template>
+      </van-swipe-cell>
     </template>
-  </van-swipe-cell>
-  </template>
-  <button @click="onAdd" class="add-address-button">新增地址</button>
-  <div style="height: 4rem"></div>
+    <button @click="onAdd" class="add-address-button">新增地址</button>
+    <div style="height: 4rem"></div>
+  </div>
+<!--  <van-action-bar>-->
+<!--    <van-action-bar-icon icon="chat-o" text="客服" @click="onClickIcon" />-->
+<!--    <van-action-bar-icon icon="cart-o" text="购物车" @click="onClickIcon" />-->
+<!--    <van-action-bar-icon icon="shop-o" text="店铺" @click="onClickIcon" />-->
+<!--    <van-action-bar-button type="danger" text="立即购买" @click="onClickButton" />-->
+<!--  </van-action-bar>-->
 </template>
 <script>
 import {ref} from 'vue';

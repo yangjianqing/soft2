@@ -29,6 +29,7 @@ const DiscountPage =() =>import("@/pages/DiscountPage.vue")
 // 3. 定义一些路由。
 const HistoryInfo = () => import("@/pages/history/HistoryInfo.vue")
 const ResultShopping = () => import("@/pages/ResultShopping.vue")
+
 // 每个路由都需要映射到一个组件。
 const routes = [
     //一级路由
@@ -53,16 +54,6 @@ const routes = [
                 meta: {
                     title: "分类",
                 },
-            },
-
-
-            {
-                path:"/mine/address",
-                component:AddressEdit,
-                name:"address",
-                meta: {
-                    title: "地址",
-                }
             },
 
 
@@ -183,7 +174,22 @@ const routes = [
         title: "搜索",
       },
     },
-
+  {
+    path:"/mine/address",
+    component:AddressEdit,
+    name:"address",
+    meta: {
+      title: "地址",
+    }
+  },
+  {
+    path:"/paySuccess",
+    component:import("@/pages/PaySuccess.vue"),
+    name:"paySuccess",
+    meta: {
+      title: "支付成功",
+    }
+  },
 ];
 
 // 4. 使用 createRouter 方法创建一个路由实例 router

@@ -20,9 +20,10 @@
 <script>
 
 import OrderInfo from "@/components/OrderInfo.vue";
-import {getCarList} from "@/api/merchant";
+import {getCarList,insertSettlement} from "@/api/merchant";
 import {ref} from "vue";
 import router from "@/router";
+import {showToast} from "vant";
 
     export default {
         name: "CarPage",
@@ -34,10 +35,23 @@ import router from "@/router";
           }
         },
       methods:{
-        Retrunshoppings(){
-          window.open(process.env.VUE_APP_BASE_API+"/api/alipay/pay?subject=绿源生鲜"+"&traceNo="+Math.floor(Math.random() * 900000) + 100000+"&totalAmount="+this.getTotal(),'_self')
+        generateOrderNumber() {
+          const timestamp = new Date().getTime(); // 获取当前时间戳
+          const random = Math.floor(Math.random() * 1000); // 生成一个随机数
+          const orderNumber = `${timestamp}${random}`; // 拼接订单号，可以根据自己的需要调整格式
+          return orderNumber;
+        },
 
-          // router.push({ path: '/mine/ordermanagement' });
+        Retrunshoppings(){
+            let orderNum = this.generateOrderNumber();
+          insertSettlement({ordersNumber:orderNum,usersPhone:this.userInfo.usersPhone}).then(res=>{
+            if (res.data.code===200){
+              window.open(process.env.VUE_APP_BASE_API+"/api/alipay/pay?subject=绿源生鲜"+"&traceNo="+orderNum+"&totalAmount="+this.getTotal(),'_self')
+            }else{
+              showToast('订单添加失败');
+            }
+          });
+
         },
         getTotal(){
           let count=0;
