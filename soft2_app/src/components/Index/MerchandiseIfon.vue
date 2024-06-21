@@ -43,7 +43,10 @@ export default {
   created() {
     this.baseUrl=process.env.VUE_APP_BASE_API;
     this.imgUrls = this.goodsInfo.image.split(',');
-  }
+  },
+  methods:{
+
+  },
 
 }
 

@@ -137,7 +137,7 @@ export function removeUsersAddress(addressIds){
     method: 'delete'
   })
 }
-
+//获取购物车列表
 export function getCarList(phone){
   return request({
     url: '/api/fresh/selectShopData/'+phone,
@@ -166,6 +166,7 @@ export function selectUsersAddressList(userPhone){
 
   })
 }
+//手机端购物车结算
 export function insertSettlement(data){
   return request({
     url:"/api/fresh/insertSettlement",
@@ -174,5 +175,22 @@ export function insertSettlement(data){
   })
 }
 
+//手机端结算修改订单状态
+export function updateSettlement(data){
+  return request({
+    url:"/api/fresh/updateSettlement",
+    method: 'post',
+    data:data,
+  })
+}
 
+
+//月下单数量
+export function listPeopleNum(query){
+  return request({
+    url:"/api/fresh/peopleNum",
+    method: 'get',
+    params: query,
+  })
+}
 

@@ -11,9 +11,7 @@
       <!-- 右侧购物车图标 -->
       <template #right>
         <router-link :to="{ path: '/cart' }">
-          <van-badge :content="cartCount > 0 ? displayCartCount : ''">
-            <van-icon name="shopping-cart-o" />
-          </van-badge>
+            <van-icon name="cart-o" size="18"  :badge="this.dataCount"/>
         </router-link>
       </template>
 
@@ -37,7 +35,7 @@
 
 <script >
 import MerchandiseList from "@/components/Index/MerchandiseList.vue";
-import {selectFGoodsByFavorable} from "@/api/merchant";
+import {getCarList, selectFGoodsByFavorable} from "@/api/merchant";
 
 export default {
   components: {
@@ -46,12 +44,28 @@ export default {
   data() {
     return {
       favorableList:[],
-      cartCount: 3 // 示例购物车商品数量
+      cartCount: 3, // 示例购物车商品数量
+      dataCount:0,
     };
   },
   created() {
     //获取超盒算列表
     this.getFavorableList();
+    //取购物车的数据,取给购物车数量
+    const userInfoString = localStorage.getItem("userInfo");
+    // 将字符串解析回对象
+    this.userInfo = JSON.parse(userInfoString);
+    // 现在可以访问对象中的属性了
+    getCarList(this.userInfo.usersPhone).then(res =>{
+      // 将数据赋值给 goodsList
+      this.goodsList = res.data.data;
+      // 获取数据的数量
+      // 获取数据的数量并保存到 dataCount
+      this.dataCount = this.goodsList.length;
+      // 打印数据数量到控制台
+      console.log( this.dataCount)
+
+    });
   },
   computed: {
     displayCartCount() {

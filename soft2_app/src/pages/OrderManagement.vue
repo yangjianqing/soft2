@@ -5,32 +5,30 @@
       left-arrow
       @click-left=" this.$router.go(-1)"
   />
-  <van-pull-refresh v-model="loading" >
     <van-tabs v-model:active="active">
       <van-tab title="全部订单">
-        <template  v-for="(goodsInfo,index) in goodsList" >
+        <template  v-for="(goodsInfo,index) in reversedGoodsList" >
           <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
         </template>
       </van-tab>
-<!--      <van-tab title="待付款">-->
-<!--        <template  v-for="(goodsInfo,index) in filterType(1)" >-->
-<!--          <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>-->
-<!--        </template>-->
-<!--      </van-tab>-->
-<!--      <van-tab title="待发货">-->
-<!--        <template  v-for="(goodsInfo,index) in filterType(2)" >-->
-<!--          <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>-->
-<!--        </template>-->
-<!--      </van-tab>-->
+      <van-tab title="待付款">
+        <template  v-for="(goodsInfo,index) in filterType(1)" >
+          <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
+        </template>
+      </van-tab>
+      <van-tab title="待发货">
+        <template  v-for="(goodsInfo,index) in filterType(2)" >
+          <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
+        </template>
+      </van-tab>
 
-<!--      <van-tab title="待收货">-->
-<!--        <template  v-for="(goodsInfo,index) in filterType(3)" >-->
-<!--          <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>-->
-<!--        </template>-->
-<!--      </van-tab>-->
+      <van-tab title="待收货">
+        <template  v-for="(goodsInfo,index) in filterType(3)" >
+          <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
+        </template>
+      </van-tab>
 
     </van-tabs>
-  </van-pull-refresh>
 
 </template>
 <!-- 底部弹出 -->
@@ -45,11 +43,15 @@ export default {
   components: {OrderListInfo},
   data(){
     return{
-      loading:false,
       active:0,
       goodsList:[],
       goodsListInfo:""
     }
+  },
+  computed: {
+    reversedGoodsList() {
+      return [...this.goodsList].reverse();
+    },
   },
   methods:{
     filterType(status){

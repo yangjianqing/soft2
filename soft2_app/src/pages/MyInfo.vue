@@ -93,14 +93,16 @@
     finished-text="没有数据了"
     @load="onLoad"
   >
- <div  style="display: flex;flex-wrap: wrap;justify-content: space-around">
+
+
    <template v-for="(goodsInfo,index) in goodsList">
      <div class="total_box"  v-if="index%2===1" >
        <MerchandiseInfo :goodsInfo="goodsList[index-1]" v-on:click="ReturnOrShopping"></MerchandiseInfo>
        <MerchandiseInfo :goodsInfo="goodsList[index]" v-on:click="ReturnOrShopping"></MerchandiseInfo>
      </div>
    </template>
- </div>
+
+<!-- </div>-->
 
   </van-list>
 </div>
@@ -276,4 +278,13 @@
   font-size: 30px;
   border-radius: 30px;
 }
+
+.total_box{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color:rgb(245,245,245) ;
+  border-radius: 10px;
+}
+
 </style>

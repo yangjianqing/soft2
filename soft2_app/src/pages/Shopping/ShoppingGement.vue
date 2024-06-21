@@ -7,7 +7,7 @@
     <template #right>
       <router-link to="/cart">
       <div class="right_nav">
-        <van-icon name="cart-o" size="20" badge="1"/>
+        <van-icon name="cart-o" size="18"  :badge="this.dataCount"/>
       </div>
       </router-link>
     </template>
@@ -57,7 +57,7 @@
 import { showToast } from 'vant';
 import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 import router from "@/router";
-import {listShopping,addCarList,selectIdByInfo} from "@/api/merchant";
+import {listShopping, addCarList, selectIdByInfo, getCarList} from "@/api/merchant";
 
 const onClickLeft = () => history.back();
 export default {
@@ -71,6 +71,7 @@ export default {
       baseUrl:"",
       imgUrls:"",
       usersPhone:"",
+      dataCount:0,
     }
   },
   methods:{
@@ -85,6 +86,7 @@ export default {
       addCarList(this.usersPhone,this.selectedGoods.coding).then(res=>{
           if ( res.data.msg === '加入购物车成功'){
             showToast('加入成功'); // 在成功时显示提示
+            this.$router.go(0)
           }
       })
     },
@@ -120,6 +122,20 @@ export default {
     this.getGoodsList();
     // 从路由参数中获取商品id
     this.selectById();
+    //取购物车的数据,取给购物车数量
+    const userInfoString = localStorage.getItem("userInfo");
+    // 将字符串解析回对象
+    this.userInfo = JSON.parse(userInfoString);
+    // 现在可以访问对象中的属性了
+    getCarList(this.userInfo.usersPhone).then(res =>{
+      // 将数据赋值给 goodsList
+      this.goodsList = res.data.data;
+      // 获取数据的数量
+      // 获取数据的数量并保存到 dataCount
+      this.dataCount = this.goodsList.length;
+      // 打印数据数量到控制台
+      console.log( this.dataCount)
+    });
   }
 }
 
@@ -148,4 +164,11 @@ export default {
   color: #A6C9E2;
 }
 
+.total_box{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color:rgb(245,245,245) ;
+  border-radius: 10px;
+}
 </style>

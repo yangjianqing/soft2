@@ -3,7 +3,7 @@
     <router-link to="/cart/shoppinggement">
     <div class="title">
       <span style="font-size:16px ;font-weight: bold">{{ goodsInfo.name }}</span>
-      <span style="color: #FFB366">未支付</span>
+      <span style="color: #FFB366">{{ paymentStatus }}</span>
     </div>
     <div class="content">
 
@@ -20,7 +20,7 @@
       </div>
     </div>
     </router-link>
-      <p class="totals">金额:{{ goodsInfo.price * goodsInfo.goodsNum }}元</p>
+      <p class="totals">金额:{{ (goodsInfo.price * goodsInfo.goodsNum).toFixed(2)}}元</p>
     <div class="bottom_btn">
       <div>
         <router-link to="/mine/ordermanagement">
@@ -37,8 +37,14 @@ export default {
   data(){
     return{
       baseUrl:"",
-      imgUrl:""
+      imgUrl:"",
+      paymentStatus:0,
     }
+  },
+  computed: {
+    paymentStatus() {
+      return this.goodsInfo.ordersPayStatuds === 1 ? '待付款' : '已付款';
+    },
   },
   methods:{
 
@@ -47,6 +53,7 @@ export default {
   created() {
     this.baseUrl=process.env.VUE_APP_BASE_API;
     this.imgUrl = this.goodsInfo.image.split(",");
+
   },
 
 }

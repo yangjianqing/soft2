@@ -9,11 +9,11 @@
         <p class="tit">订单支付成功</p>
         <p class="tip">我们将尽快为您发货，收货期间请保持手机畅通</p>
         <p>支付方式：<span>支付宝支付</span></p>
-        <p>支付金额：<span>¥1899.00</span></p>
+        <p>支付金额：<span>¥{{this.totalAmount}}</span></p>
         <div class="btn">
 
-          <van-button @click="" type="success" style="margin-right:20px">查看订单</van-button>
-          <van-button @click="" type="primary">进入首页</van-button>
+          <van-button @click="ViewOrder()" type="success" style="margin-right:20px">查看订单</van-button>
+          <van-button @click="EnterIndex()" type="primary">进入首页</van-button>
         </div>
         <p class="alert">
           <van-icon name="bulb-o" />
@@ -23,6 +23,46 @@
     </div>
   </div>
 </template>
+
+
+<script>
+
+import {updateSettlement} from "@/api/merchant";
+
+export default {
+  name: "PaySuccess",
+  data(){
+    return{
+      totalAmount:0,
+    }
+  },
+  created() {
+    //获取订单金额
+    this.totalAmount = this.$route.query.total_amount;
+    // 根据 out_trade_no 修改订单状态
+    //获取用户登陆信息
+    const userInfoString = localStorage.getItem("userInfo");
+    // 将用户信息字符串解析回对象
+    this.userInfo = JSON.parse(userInfoString);
+    updateSettlement({usersPhone:this.userInfo.usersPhone,ordersNumber:this.$route.query.out_trade_no}).then(res=>{
+         if (res.data.msg ===200){
+           console.log("修改成功")
+         }
+    })
+
+  },
+  methods:{
+    ViewOrder() {
+      this.total = this.$router.push('/mine/ordermanagement');
+    },
+    EnterIndex() {
+      this.$router.push('/index');
+    }
+  }
+
+
+}
+</script>
 
 
 <style scoped>
@@ -55,19 +95,3 @@
 }
 </style>
 
-
-<script>
-export default {
-  name: "PaySuccess",
-  created() {
-    this.$route.query;
-    console.log(this.$route.query)
-    console.log(this.$route.query.out_trade_no)
-    // 根据 out_trade_no 修改订单状态
-
-  },
-  methods(){
-
-  }
-}
-</script>
