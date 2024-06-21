@@ -44,6 +44,22 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.selectFGoodsById(id);
     }
 
+//    /**
+//     * 查询商品列表
+//     *
+//     * @param fGoods 商品
+//     * @return 商品
+//     */
+//    @Override
+//    public List<FGoods> selectFGoodsListApi(FGoods fGoods) {
+//
+//        List<FGoods> fGoods1 = fGoodsMapper.selectFGoodsList(fGoods);
+//
+//
+//
+//        return fGoods1;
+//    }
+
     /**
      * 查询商品列表
      * 
@@ -123,7 +139,6 @@ public class FGoodsServiceImpl implements IFGoodsService
                     fm.setCategoryName(User2.getDeptName());
                 }
             }
-
         }
         return fGoods1;
     }
@@ -277,10 +292,37 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.selectFGoodsByFavorable(fGoods);
     }
 
+    /**
+     * 查询下单人数
+     * @param fGoods 商品
+     * @return
+     */
+    @Override
+    public List<FGoods> selectPeopleNum(FGoods fGoods) {
+        List<FGoods> fGoods1 = fGoodsMapper.selectPeopleNum(fGoods);
+        Map<Long,FGoods> mapGoods = new HashMap();
+        for (FGoods goods : fGoods1) {
+            FGoods data = mapGoods.get(goods.getId());
+            if(data!=null){
+                long quantity = goods.getQuantity() + data.getQuantity()-data.getNum();
+                data.setQuantity(quantity);
+                mapGoods.put(data.getId(),data);
+            }else{
+                mapGoods.put(goods.getId(),goods);
+            }
+        }
+       List<FGoods> newList = new ArrayList<>();
+        Set<Long> longs = mapGoods.keySet();
+        longs.forEach(e->{
+           newList.add(mapGoods.get(e));
+        });
 
+        return newList;
+    }
 
 
     /**
+     *
      * 新增商品分类信息
      *
      * @param fGoods 商品对象

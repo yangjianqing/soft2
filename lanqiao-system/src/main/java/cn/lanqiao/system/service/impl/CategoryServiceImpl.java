@@ -232,10 +232,6 @@ public class CategoryServiceImpl implements ICategoryService
 
 //结束
 
-
-
-
-
     public List<Category> buildDeptTree(List<Category> cats)
     {
         List<Category> returnList = new ArrayList<Category>();

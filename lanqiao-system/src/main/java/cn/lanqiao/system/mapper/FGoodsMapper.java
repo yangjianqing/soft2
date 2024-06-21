@@ -28,7 +28,13 @@ public interface FGoodsMapper
      * @param fGoods 商品
      * @return 商品集合
      */
-    public List<FGoods> selectFGoodsList(FGoods fGoods);
+    public List<FGoods> selectFGoodsList(FGoods fGoods); /**
+     * 查询下单人数
+     *
+     * @param fGoods 商品
+     * @return 商品集合
+     */
+    public List<FGoods> selectPeopleNum(FGoods fGoods);
     /**
      * 查询商品列表手机端
      *
@@ -173,5 +179,6 @@ public interface FGoodsMapper
      * @return
      */
      List<FGoods> selectFGoodsByDailyList(FGoods fGoods);
+
 
 }

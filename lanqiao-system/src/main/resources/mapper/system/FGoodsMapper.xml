@@ -64,10 +64,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectFGoodsList" parameterType="FGoods" resultMap="FGoodsResult">
-        select g.id, g.name, g.category_id, g.price, g.unit, g.coding, g.specification, g.image, g.num, g.description, g.status, g.create_time, g.update_time, g.create_user,po.quantity
+        select g.id, g.name, g.category_id, g.price, g.unit, g.coding, g.specification, g.image, g.num, g.description, g.status, g.create_time, g.update_time, g.create_user
         from f_goods g
         LEFT JOIN category c ON c.dept_id = g.category_id
-        LEFT JOIN f_purchase_orders po ON po.goods_id = g.id
         <where>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="status != null "> and status = #{status}</if>
@@ -75,6 +74,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 AND (c.dept_id = #{categoryId} OR c.dept_id IN ( SELECT t.dept_id FROM category t WHERE find_in_set(#{categoryId}, ancestors) ))
             </if>
         </where>
+    </select>
+<!--查询下单人数-->
+    <select id="selectPeopleNum" parameterType="FGoods" resultMap="FGoodsResult">
+        select g.id,g.name,po.quantity,g.num
+        from f_goods g
+        LEFT JOIN category c ON c.dept_id = g.category_id
+        LEFT JOIN f_purchase_orders po ON po.goods_id = g.id
     </select>
 
 <!--    根据部门大分类查询-->

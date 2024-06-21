@@ -216,6 +216,19 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
+     * 查询下单人数
+     */
+    @ApiOperation("查询商品")
+    @GetMapping("/peopleNum")
+    public TableDataInfo listPeopleNum(FGoods fGoods)
+    {
+        startPage();
+        List<FGoods> list = fGoodsService.selectPeopleNum(fGoods);
+        return getDataTable(list);
+    }
+
+
+    /**
      * 根据电话号码获取用户手机app会员信息
      * @param usersPhone 电话号码
      *

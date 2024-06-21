@@ -11,6 +11,8 @@ import cn.lanqiao.system.domain.FGoods;
  * @date 2024-05-15
  */
 public interface IFGoodsService {
+
+//    public List<FGoods> selectFGoodsListApi(FGoods fGoods);
     /**
      * 查询商品
      *
@@ -117,7 +119,10 @@ public interface IFGoodsService {
      */
     List<FGoods> selectFGoodsByFavorable( FGoods fGoods);
 
-
-
-
+    /** 查询下单人数
+     *
+     * @param fGoods 商品
+     * @return 商品集合
+     */
+    public List<FGoods> selectPeopleNum(FGoods fGoods);
 }
