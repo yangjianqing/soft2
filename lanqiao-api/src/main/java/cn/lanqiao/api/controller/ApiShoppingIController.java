@@ -218,7 +218,7 @@ public class ApiShoppingIController extends BaseController {
     /**
      * 查询下单人数
      */
-    @ApiOperation("查询商品")
+    @ApiOperation("下单人数")
     @GetMapping("/peopleNum")
     public TableDataInfo listPeopleNum(FGoods fGoods)
     {
