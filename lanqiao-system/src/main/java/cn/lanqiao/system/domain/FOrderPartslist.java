@@ -74,7 +74,21 @@ public class FOrderPartslist extends BaseEntity
     @Excel(name = "图片")
     private String image;
 
+    /** 订单状态 */
+    @Excel(name = "订单状态")
     private Long ordersStatus;
+
+    /** 订单支付状态 */
+    @Excel(name = "订单支付状态")
+    private Long ordersPayStatuds;
+
+    public Long getOrdersPayStatuds() {
+        return ordersPayStatuds;
+    }
+
+    public void setOrdersPayStatuds(Long ordersPayStatuds) {
+        this.ordersPayStatuds = ordersPayStatuds;
+    }
 
     public Long getOrdersStatus() {
         return ordersStatus;
