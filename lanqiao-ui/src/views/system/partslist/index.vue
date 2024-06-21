@@ -92,7 +92,7 @@
       <el-table-column label="商品数量" align="center" prop="goodsNum" />
       <el-table-column label="总金额" align="center" >
         <template slot-scope="scope">
-          <span>{{ scope.row.goods.price*scope.row.goodsNum}}</span>
+          <span>{{ (scope.row.goods.price*scope.row.goodsNum).toFixed(2) }}</span>
         </template>
       </el-table-column>
 <!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->

@@ -357,8 +357,8 @@ export default {
       clearTimeout(this.timer);// 清除之前的定时器
       // 设置延迟时间为 100 毫秒
       this.timer = setTimeout(() => {
-      if (this.barcode !== '') {//判断用户输入订单编号是否为null
-        getGoodsList(this.barcode).then(response => {//发送订单编号查询数据
+      if (this.barcode !== '') {//判断用户输入商品编码是否为null
+        getGoodsList(this.barcode).then(response => {//发送商品编码查询数据
           var product = response.GoodsList;
           //判断商品数据是否查询为null
           if (product) {
@@ -391,7 +391,6 @@ export default {
       this.timer = setTimeout(() => {
           if (this.member.memberPhone !== '') {//判断用户输入会员账号是否为null
             selectMemberName(this.member.memberPhone).then(response => {
-              console.log(response);
               if (response.code === 200) {
                 this.member.memberName = response.data.usersName;
                 this.member.memberTotal = response.data.memberTotal;

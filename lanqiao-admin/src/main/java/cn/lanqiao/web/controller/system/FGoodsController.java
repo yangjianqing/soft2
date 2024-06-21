@@ -166,6 +166,7 @@ public class FGoodsController extends BaseController
 
     /**
      * 收银结算
+     * @param formData 购物车数据对象
      *
      */
     @PostMapping(value = "/addGoodsList")
@@ -175,12 +176,7 @@ public class FGoodsController extends BaseController
             if (formData.getProductsInCart() == null) {
                 return AjaxResult.error("结账异常 请重新结账");
             } else {
-                // 获取前端发送的数据
-                String memberPhone = formData.getMemberPhone();
-                BigDecimal totalPrice = formData.getTotalPrice();
-                BigDecimal memberJian = formData.getMemberJian();
-                List<FGoods> productsInCart = formData.getProductsInCart();
-                fOrdeersService.settle(memberPhone, totalPrice, memberJian, productsInCart);
+                fOrdeersService.settle(formData);
                 return AjaxResult.success("结账成功");
             }
         } catch (Exception ex) {

@@ -220,14 +220,15 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
     /**
      * 电脑端结算
+     * @param formData 购物车数据对象
      *
-     * @param productsInCart 订单集合
      */
     @Override
-    public void settle(String memberPhone, BigDecimal totalPrice, BigDecimal memberJian, List<FGoods> productsInCart)
+    public void settle(FormData formData)
     {
-        if (productsInCart.size() != 0) {
+        if (formData.getProductsInCart().size() != 0) {
             // 设置 memberJian 默认值为 0
+            BigDecimal memberJian = formData.getMemberJian();
             if (memberJian == null) {
                 memberJian = new BigDecimal(0);
             }
@@ -235,7 +236,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
             //创建订单编号
             String OrderNu = OrderNumberGenerator.generateOrderNumber();
             //根据用户电话查询用户数据，获取用户id
-            FUsers fUsers = ifUsersService.selectUsersusersPhone(memberPhone);
+            FUsers fUsers = ifUsersService.selectUsersusersPhone(formData.getMemberPhone());
             Long usersId = null;//定义usersId的默认值
             if (fUsers != null && fUsers.getUsersId() != null) {//判断查询是否为空
                 usersId = fUsers.getUsersId();//给usersId赋值
@@ -243,7 +244,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
             //创建订单对象传值,调用新增订单
             fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu,usersId,2L,0L,2L));
             // TODO: 进行新增订单明细操作
-            for (FGoods fGood : productsInCart) {
+            for (FGoods fGood : formData.getProductsInCart()) {
                 //利用前端传递的商品编号(fGood.getId())，查询商品信息
                 FGoods fGoods1 = fGoodsService.selectGoodsList(fGood.getId());
                 //创建订单详情传值,调用新增订单详情
@@ -253,7 +254,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
                 fGoodsService.updateFGoods(fGoods1);
             }
             //更新会员数据
-            fUsers.setMemberTotal(fUsers.getMemberTotal().add(totalPrice).subtract(memberJian));
+            fUsers.setMemberTotal(fUsers.getMemberTotal().add(formData.getTotalPrice()).subtract(memberJian));
             ifUsersService.updateFUsers(fUsers);
             //更新会员等级为高等会员
             if (fUsers.getMemberTotal().compareTo(new BigDecimal(100)) >= 0 && fUsers.getMemberGrade() != 1L) {

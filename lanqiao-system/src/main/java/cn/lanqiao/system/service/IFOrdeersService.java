@@ -6,6 +6,7 @@ import java.util.List;
 import cn.lanqiao.system.domain.FGoods;
 import cn.lanqiao.system.domain.FOrdeers;
 import cn.lanqiao.system.domain.FOrderPartslist;
+import cn.lanqiao.system.domain.FormData;
 import cn.lanqiao.system.domain.vo.Settlement;
 
 /**
@@ -66,9 +67,10 @@ public interface IFOrdeersService
 
     /**
      * 电脑端结算
-     * @param productsInCart
+     * @param formData 购物车数据对象
+     *
      */
-    public void settle(String memberPhone, BigDecimal totalPrice, BigDecimal memberJian, List<FGoods> productsInCart);
+    public void settle(FormData formData);
 
     /**
      * 手机端结算
