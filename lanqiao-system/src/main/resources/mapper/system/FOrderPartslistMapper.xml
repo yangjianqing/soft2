@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="goodsId"    column="goods_id"    />
         <result property="orderId"    column="order_id"    />
         <result property="goodsNum"    column="goods_num"    />
+        <result property="ordersPayStatuds"    column="orders_pay_statuds"   />
         <result property="ordersStatus"    column="orders_status"   />
     </resultMap>
 
@@ -67,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <select id="selectFOrderPartslist" parameterType="FOrderPartslist" resultMap="FOrderPartslistResult">
-        SELECT fp.id,fg.name AS name,fp.goods_num ,fg.price,fg.coding,fg.specification,fg.image,orders_status  FROM f_goods fg
+        SELECT fp.id,fg.name AS name,fp.goods_num ,fg.price,fg.coding,fg.specification,fg.image,orders_pay_statuds,orders_status  FROM f_goods fg
         LEFT JOIN f_order_partslist fp  ON fp.goods_id = fg.id
         LEFT JOIN f_ordeers fo  ON fp.order_id = fo.orders_number WHERE fp.order_id = #{orderId}
     </select>

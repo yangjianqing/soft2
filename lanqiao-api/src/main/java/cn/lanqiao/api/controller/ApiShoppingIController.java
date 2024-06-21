@@ -212,7 +212,12 @@ public class ApiShoppingIController extends BaseController {
     @PostMapping("/insertFAppraise")
     public AjaxResult add(@RequestBody FAppraise fAppraise)
     {
-        return toAjax(fAppraiseService.insertFAppraise(fAppraise));
+        try {
+            return toAjax(fAppraiseService.insertFAppraise(fAppraise));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -237,7 +242,12 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping("/getUsers/{usersPhone}")
     public AjaxResult getUsers(@PathVariable("usersPhone") String usersPhone)
     {
-        return AjaxResult.success().put("users",ifUsersService.selectUsersusersPhone(usersPhone));
+        try {
+            return AjaxResult.success().put("users",ifUsersService.selectUsersusersPhone(usersPhone));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -249,9 +259,14 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping("/selectUsersAddressList/{usersPhone}")
     public AjaxResult selectUsersAddressList(@PathVariable("usersPhone") String usersPhone)
     {
-        FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
-        List<FAddress> fAddresses = fAddressMapper.selectUsersIdByType(String.valueOf(fUsers.getUsersId()));
-        return AjaxResult.success(fAddresses);
+        try {
+            FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
+            List<FAddress> fAddresses = fAddressMapper.selectUsersIdByType(String.valueOf(fUsers.getUsersId()));
+            return AjaxResult.success(fAddresses);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -261,7 +276,12 @@ public class ApiShoppingIController extends BaseController {
     @PostMapping("/addUsersAddressList")
     public AjaxResult addUsersAddressList(@RequestBody FAddress fAddress)
     {
-        return toAjax(fAddressService.insertFAddress(fAddress));
+        try {
+            return toAjax(fAddressService.insertFAddress(fAddress));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -271,7 +291,12 @@ public class ApiShoppingIController extends BaseController {
     @PutMapping("/editUsersAddressList")
     public AjaxResult editUsersAddressList(@RequestBody FAddress fAddress)
     {
-        return toAjax(fAddressService.updateFAddress(fAddress));
+        try {
+            return toAjax(fAddressService.updateFAddress(fAddress));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -281,7 +306,12 @@ public class ApiShoppingIController extends BaseController {
     @DeleteMapping("removeUsersAddressList/{addressIds}")
     public AjaxResult removeUsersAddressList(@PathVariable Long[] addressIds)
     {
-        return toAjax(fAddressService.deleteFAddressByAddressIds(addressIds));
+        try {
+            return toAjax(fAddressService.deleteFAddressByAddressIds(addressIds));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -293,7 +323,12 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping("/updateFUsers")
     public AjaxResult updateFUsers(@RequestBody FUsers fUsers)
     {
-       return toAjax(ifUsersService.updateFUsers(fUsers));
+        try {
+            return toAjax(ifUsersService.updateFUsers(fUsers));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -306,10 +341,14 @@ public class ApiShoppingIController extends BaseController {
     @PostMapping("/updatePassword")
     public void updatePassword(@RequestParam("usersPhone") String usersPhone,@RequestParam("usersPassword") String usersPassword)
     {
-        if (usersPhone != null && usersPassword != null) {
-            FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
-            fUsers.setUsersPassword(SecurityUtils.encryptPassword(usersPassword));
-            ifUsersService.updateFUsers(fUsers);
+        try {
+            if (usersPhone != null && usersPassword != null) {
+                FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
+                fUsers.setUsersPassword(SecurityUtils.encryptPassword(usersPassword));
+                ifUsersService.updateFUsers(fUsers);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -332,7 +371,8 @@ public class ApiShoppingIController extends BaseController {
             //将验证码唯一标识符放入AjaxResult对象中。
             return AjaxResult.success("验证码发送成功").put("uuid", uuid);
         } catch (Exception e) {
-            return AjaxResult.error("验证码发送失败");
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
         }
     }
 
@@ -343,34 +383,39 @@ public class ApiShoppingIController extends BaseController {
     @PostMapping("/LoginUsers")
     public AjaxResult LoginUsers(@RequestBody LoginVo user)
     {
-        // TODO: 在这里进行电话号码是否有效校验操作
-        if (user.getUsersPhone().matches("^(0\\d{2,3}-\\d{7,8}|1[34578]\\d{9})$")) {
-            FUsers fUsers = ifUsersService.selectUsersusersPhone(user.getUsersPhone());
-            String verKey = CacheConstants.PHONE_CODE_KEY + user.getUuid();
-            Object cacheObject = redisCache.getCacheObject(verKey);//获取redis缓存的验证码
-            String cacheString = cacheObject.toString();
-            // TODO: 在这里进行查询用户电话是否为空判断校验操作
-            if (fUsers != null) {
-                // TODO: 在这里进行登录操作
-                if (cacheString.equals(user.getCode())) {
-                    String token = tokenService.createApiToken(fUsers);
-                    fUsers.setToken(token);
-                    return AjaxResult.success("登录成功", fUsers);
+        try {
+            // TODO: 在这里进行电话号码是否有效校验操作
+            if (user.getUsersPhone().matches("^(0\\d{2,3}-\\d{7,8}|1[34578]\\d{9})$")) {
+                FUsers fUsers = ifUsersService.selectUsersusersPhone(user.getUsersPhone());
+                String verKey = CacheConstants.PHONE_CODE_KEY + user.getUuid();
+                Object cacheObject = redisCache.getCacheObject(verKey);//获取redis缓存的验证码
+                String cacheString = cacheObject.toString();
+                // TODO: 在这里进行查询用户电话是否为空判断校验操作
+                if (fUsers != null) {
+                    // TODO: 在这里进行登录操作
+                    if (cacheString.equals(user.getCode())) {
+                        String token = tokenService.createApiToken(fUsers);
+                        fUsers.setToken(token);
+                        return AjaxResult.success("登录成功", fUsers);
+                    } else {
+                        return AjaxResult.error("登录失败,验证码错误");
+                    }
+                } else if (cacheString.equals(user.getCode())) {
+                    // TODO: 在这里进行注册操作
+                    FUsers fUser =  new FUsers(RandomUsernameGenerator.generateRandomUsername(), "2", user.getUsersPhone(), 0L,new BigDecimal(0));
+                    ifUsersService.insertFUsers(fUser);
+                    String token = tokenService.createApiToken(fUser);
+                    fUser.setToken(token);
+                    return AjaxResult.success("保存成功", fUser);
+                    } else {
+                        return AjaxResult.error("注册失败,验证码错误");
+                    }
                 } else {
-                    return AjaxResult.error("登录失败,验证码错误");
-                }
-            } else if (cacheString.equals(user.getCode())) {
-                // TODO: 在这里进行注册操作
-                FUsers fUser =  new FUsers(RandomUsernameGenerator.generateRandomUsername(), "2", user.getUsersPhone(), 0L,new BigDecimal(0));
-                ifUsersService.insertFUsers(fUser);
-                String token = tokenService.createApiToken(fUser);
-                fUser.setToken(token);
-                return AjaxResult.success("保存成功", fUser);
-                } else {
-                    return AjaxResult.error("注册失败,验证码错误");
-                }
-            } else {
-            return AjaxResult.error("电话号码无效");
+                return AjaxResult.error("电话号码无效");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
         }
     }
 
@@ -389,7 +434,7 @@ public class ApiShoppingIController extends BaseController {
             ifShoppingCartService.insertShopData(usersPhone,coding);
             return AjaxResult.success("加入购物车成功");
         } catch (Exception ex){
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
@@ -409,7 +454,7 @@ public class ApiShoppingIController extends BaseController {
             ifShoppingCartService.deleteShopData(usersPhone,coding);
             return AjaxResult.success("删除购物车指定数据成功");
         } catch (Exception ex){
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
@@ -429,7 +474,7 @@ public class ApiShoppingIController extends BaseController {
             ifShoppingCartService.deductionShopData(usersPhone,coding);
             return AjaxResult.success("减掉商品数量成功");
         } catch (Exception ex){
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
@@ -443,8 +488,13 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping("/selectShopData/{usersPhone}")
     public AjaxResult selectShopData(@PathVariable("usersPhone") String usersPhone)
     {
-        List<FGoods> fGoods = ifShoppingCartService.selectShopData(usersPhone);
-        return AjaxResult.success(fGoods);
+        try {
+            List<FGoods> fGoods = ifShoppingCartService.selectShopData(usersPhone);
+            return AjaxResult.success(fGoods);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
     }
 
     /**
@@ -460,7 +510,7 @@ public class ApiShoppingIController extends BaseController {
             fOrdeersService.insertShopping(settlement);
             return AjaxResult.success("付款成功");
         } catch (Exception ex){
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
@@ -479,7 +529,7 @@ public class ApiShoppingIController extends BaseController {
             fOrdeersService.updateSettlement(usersPhone,ordersNumber);
             return AjaxResult.success("修改成功");
         } catch (Exception ex){
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
@@ -515,7 +565,7 @@ public class ApiShoppingIController extends BaseController {
             List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectpaymentOrders(usersPhone);
             return AjaxResult.success(fOrderPartslists);
         } catch (Exception ex) {
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
@@ -533,7 +583,7 @@ public class ApiShoppingIController extends BaseController {
             List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectwaitingOrders(usersPhone);
             return AjaxResult.success(fOrderPartslists);
         } catch (Exception ex) {
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
@@ -551,7 +601,7 @@ public class ApiShoppingIController extends BaseController {
             List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectReceiveOrders(usersPhone);
             return AjaxResult.success(fOrderPartslists);
         } catch (Exception ex) {
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
@@ -569,7 +619,7 @@ public class ApiShoppingIController extends BaseController {
             List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectevaluateOrders(usersPhone);
             return AjaxResult.success(fOrderPartslists);
         } catch (Exception ex) {
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
