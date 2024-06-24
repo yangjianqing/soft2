@@ -51,10 +51,13 @@ public class FGoodsServiceImpl implements IFGoodsService
 //     * @return 商品
 //     */
 //    @Override
-//    public List<FGoods> selectFGoodsListApi(FGoods fGoods) {
+//    public List<FGoods> selectPeopleNum(FGoods fGoods) {
 //
-//        List<FGoods> fGoods1 = fGoodsMapper.selectFGoodsList(fGoods);
+//        List<FGoods> fGoods1 = fGoodsMapper.selectPeopleNum2(fGoods);
+//        Map<Long,Long> mapGoods= new HashMap<>();
+//        for (FGoods goods :fGoods1){
 //
+//        }
 //
 //
 //        return fGoods1;
@@ -215,8 +218,6 @@ public class FGoodsServiceImpl implements IFGoodsService
         return fGoodsMapper.deleteFGoodsById(id);
     }
 
-
-
     /**
      * 根据商品名称查询
      * @param goodsName
@@ -278,10 +279,6 @@ public class FGoodsServiceImpl implements IFGoodsService
         }
         return fGoods1;
     }
-
-
-
-
     /**
      * 查询超盒算
      * @param fGoods
@@ -291,6 +288,8 @@ public class FGoodsServiceImpl implements IFGoodsService
     public List<FGoods> selectFGoodsByFavorable(FGoods fGoods) {
         return fGoodsMapper.selectFGoodsByFavorable(fGoods);
     }
+
+
 
     /**
      * 查询下单人数
@@ -318,6 +317,11 @@ public class FGoodsServiceImpl implements IFGoodsService
         });
 
         return newList;
+    }
+
+    @Override
+    public int updateFGoodsStatus(FGoods fGoods) {
+        return fGoodsMapper.updateFGoodsStatus(fGoods);
     }
 
 

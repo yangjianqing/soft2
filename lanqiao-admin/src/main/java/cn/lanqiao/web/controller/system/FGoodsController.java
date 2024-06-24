@@ -64,6 +64,11 @@ public class FGoodsController extends BaseController
     {
         startPage();
         List<FGoods> list = fGoodsService.selectFGoodsList(fGoods);
+        for (FGoods goods :list){
+            if (fGoods.getNum()==0){
+                fGoodsService.updateFGoods(goods);
+            }
+        }
         return getDataTable(list);
     }
 
@@ -111,7 +116,6 @@ public class FGoodsController extends BaseController
     {
         return toAjax(fGoodsService.updateFGoods(fGoods));
     }
-
 
 
     /**
