@@ -89,7 +89,7 @@
     </el-row>
 
     <el-table v-loading="loading" :data="ordersList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+<!--      <el-table-column type="selection" width="55" align="center" />-->
       <el-table-column label="采购ID" align="center" prop="orderId" />
       <el-table-column label="商品名称" align="center" prop="goodsName"  class-name="goods-shippingAddress":show-overflow-tooltip="true">
         <template slot-scope="scope">

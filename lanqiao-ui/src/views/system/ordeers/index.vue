@@ -101,7 +101,7 @@
     </el-row>
 
     <el-table v-loading="loading" :data="ordeersList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+<!--      <el-table-column type="selection" width="55" align="center" />-->
       <!--<el-table-column label="订单ID" align="center" prop="ordersId" />-->
       <!--<el-table-column label="订单编号" align="center" prop="ordersNumber" />-->
       <el-table-column label="订单编号" align="center" prop="ordersNumber">

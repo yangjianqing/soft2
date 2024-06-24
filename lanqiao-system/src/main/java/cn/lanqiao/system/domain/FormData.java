@@ -4,6 +4,15 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class FormData {
+    /**
+     * 电脑端结算
+     *
+     * @param memberPhone 用户电话号码
+     * @param totalPrice 总金额积分
+     * @param memberJian 折扣积分
+     * @param productsInCart 购物车数据
+     */
+
     private String memberPhone;
     private BigDecimal totalPrice;
     private BigDecimal memberJian;

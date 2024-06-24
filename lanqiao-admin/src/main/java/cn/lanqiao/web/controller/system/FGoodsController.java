@@ -159,7 +159,7 @@ public class FGoodsController extends BaseController
                 }
             }
         } catch (Exception ex) {
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
@@ -180,10 +180,8 @@ public class FGoodsController extends BaseController
                 return AjaxResult.success("结账成功");
             }
         } catch (Exception ex) {
-            ex.getMessage();
+            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
-
-
 }

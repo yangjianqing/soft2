@@ -7,25 +7,21 @@ public class Settlement {
      *
      * @param usersPhone 用户电话号码
      * @param ordersPayMethod 支付方式
-     * @param ordersPayStatuds 支付状态
      * @param ordersRemark 订单备注信息
      * @param ordersNumber 订单编号
      */
     private String ordersNumber;
-
     private String usersPhone;
     private Long ordersPayMethod;
-    private Long ordersPayStatuds;
     private String ordersRemark;
 
     public Settlement() {
     }
 
-    public Settlement(String ordersNumber, String usersPhone, Long ordersPayMethod, Long ordersPayStatuds, String ordersRemark) {
+    public Settlement(String ordersNumber, String usersPhone, Long ordersPayMethod, String ordersRemark) {
         this.ordersNumber = ordersNumber;
         this.usersPhone = usersPhone;
         this.ordersPayMethod = ordersPayMethod;
-        this.ordersPayStatuds = ordersPayStatuds;
         this.ordersRemark = ordersRemark;
     }
 
@@ -43,14 +39,6 @@ public class Settlement {
 
     public void setOrdersPayMethod(Long ordersPayMethod) {
         this.ordersPayMethod = ordersPayMethod;
-    }
-
-    public Long getOrdersPayStatuds() {
-        return ordersPayStatuds;
-    }
-
-    public void setOrdersPayStatuds(Long ordersPayStatuds) {
-        this.ordersPayStatuds = ordersPayStatuds;
     }
 
     public String getOrdersRemark() {

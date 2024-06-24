@@ -78,7 +78,7 @@
     </el-row>
 
     <el-table v-loading="loading" :data="partslistList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+<!--      <el-table-column type="selection" width="55" align="center" />-->
       <el-table-column label="明细ID" align="center" prop="id" />
       <el-table-column label="商品编码" align="center" prop="goods.coding" />
       <el-table-column label="商品名称" align="center" prop="goods.name" />

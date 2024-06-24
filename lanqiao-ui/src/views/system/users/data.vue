@@ -80,7 +80,7 @@
 <!--    </el-row>-->
 
     <el-table v-loading="loading" :data="addressList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+<!--      <el-table-column type="selection" width="55" align="center" />-->
       <el-table-column label="地址ID" align="center" prop="addressId" />
       <el-table-column label="地址排序" align="center" prop="addressSort" />
       <el-table-column label="收货人" align="center" prop="addressName" />

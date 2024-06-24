@@ -88,7 +88,7 @@
     </el-row>
 
     <el-table v-loading="loading" :data="usersList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+<!--      <el-table-column type="selection" width="55" align="center" />-->
       <el-table-column label="会员ID" align="center" prop="usersId" />
       <el-table-column label="会员姓名" align="center" prop="usersName" />
       <el-table-column label="会员性别" align="center" prop="usersSex">
