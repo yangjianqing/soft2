@@ -231,6 +231,17 @@ public class ApiShoppingIController extends BaseController {
         List<FGoods> list = fGoodsService.selectPeopleNum(fGoods);
         return getDataTable(list);
     }
+//    /**
+//     * 查询下单人数
+//     */
+//    @ApiOperation("下单人数")
+//    @GetMapping("/peopleNum2")
+//    public TableDataInfo listPeopleNum2(FGoods fGoods)
+//    {
+//        startPage();
+//        List<FGoods> list = fGoodsService.selectPeopleNum2(fGoods);
+//        return getDataTable(list);
+//    }
 
 
     /**

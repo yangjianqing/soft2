@@ -83,6 +83,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         LEFT JOIN f_purchase_orders po ON po.goods_id = g.id
     </select>
 
+<!--    根据订单表查询下单人数-->
+<!--    <select id="selectPeopleNum2" parameterType="FGoods" resultMap="FGoodsResult">-->
+<!--        select goods_id,count(*) from f_order_partslist   GROUP BY goods_id-->
+<!--    </select>-->
+
 <!--    根据部门大分类查询-->
     <select id="selectFGoodsByParentId" parameterType="FGoods" resultMap="FGoodsResult">
         SELECT g.id,g.name, g.category_id,g.price,g.unit,g.image,g.description, g.status,g.coding,g.create_time,g.update_time,g.num, g.specification, g.profit
@@ -202,7 +207,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="specification != null">specification = #{specification},</if>
             <if test="image != null and image != ''">image = #{image},</if>
             <if test="description != null and description != ''">description = #{description},</if>
-            <if test="status != null">status = #{status},</if>
+            <if test="num == 0">status = 1,</if>
+            <if test="num !=0">status = 0,</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="createUser != null">create_user = #{createUser},</if>
@@ -210,6 +216,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="num != null">num = #{num},</if>
         </trim>
         where id = #{id}
+    </update>
+    <update id="updateFGoodsStatus" parameterType="FGoods">
+        UPDATE f_goods
+        SET status = 1
+        WHERE num = 0;
     </update>
 
     <delete id="deleteFGoodsById" parameterType="Long">
@@ -284,7 +295,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </set>
         where coding = #{coding}
     </update>
-
-
-
 </mapper>

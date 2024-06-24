@@ -309,10 +309,10 @@ export default {
           { required: true, message: "编码不能为空", trigger: "blur" },
           { pattern:/^[1-9]\d{12}$/, message: '编码必须为13位数字', trigger: 'blur' }
         ],
-        num: [
-          { required: true, message: "库存不能为空", trigger: "blur" },
-          { pattern: /^[1-9]\d*$/, message: '库存必须为正整数', trigger: 'blur' }
-        ],
+        // num: [
+        //   { required: true, message: "库存不能为空", trigger: "blur" },
+        //   { pattern: /^[1-9]\d*$/, message: '库存必须为正整数', trigger: 'blur' }
+        // ],
       }
     };
   },

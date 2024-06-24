@@ -69,19 +69,18 @@ public class FGoods extends BaseEntity
     /** 商品价格 */
     @Excel(name = "商品价格")
     private BigDecimal price;
-//
-    public Long getQuantitys() {
-        return quantitys;
+
+    public Long getOrderPartsCount() {
+        return orderPartsCount;
     }
 
-    public void setQuantitys(Long quantitys) {
-        this.quantitys = quantitys;
+    public void setOrderPartsCount(Long orderPartsCount) {
+        this.orderPartsCount = orderPartsCount;
     }
 
     /** 下单个数 */
     @Excel(name = "下单个数")
-    private Long quantitys;
-
+    private Long orderPartsCount;
 
 
     /** 商品优惠 */
@@ -307,7 +306,7 @@ public class FGoods extends BaseEntity
                 ", createUserName='" + createUserName + '\'' +
                 ", updateUser=" + updateUser +
                 ", updateUserName='" + updateUserName + '\'' +
-                ", quantitys='" + quantitys + '\'' +
+                ", orderPartsCount='" + orderPartsCount + '\'' +
                 ", num=" + num +
                 ", quantity='" + quantity +'\''+
                 ", specifications='" + specification + '\'' +
