@@ -342,8 +342,6 @@ export default {
       })
     },
 
-
-
     handleSelect(item) {
       this.form.goodsId=item.id
       console.log(item);
@@ -386,6 +384,7 @@ export default {
         requiredDate: null,
         orderComments: null
       };
+      this.state=null,
       this.resetForm("form");
     },
     /** 搜索按钮操作 */

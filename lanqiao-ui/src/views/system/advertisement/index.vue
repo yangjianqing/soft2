@@ -106,8 +106,23 @@
         <el-form-item label="广告名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入广告名称" />
         </el-form-item>
-        <el-form-item label="商品名称" prop="goodsId">
-          <el-input v-model="form.goodsId" placeholder="请输入商品名称" />
+<!--        <el-form-item label="商品id" prop="goodsId">-->
+<!--          <el-input disabled v-model="form.goodsId" placeholder="默认值" />-->
+<!--        </el-form-item>-->
+        <el-form-item label="商品名称">
+          <el-autocomplete
+            class="inline-input"
+            v-model="state"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入内容"
+            :trigger-on-focus="false"
+            @select="handleSelect"
+          >
+            <template slot-scope="{ item }">
+              <div class="name">{{ item.name }}</div>
+              <!--              <span class="addr">{{ item.id }}</span>-->
+            </template>
+          </el-autocomplete>
         </el-form-item>
         <el-form-item label="广告图片">
           <image-upload v-model="form.img"/>
@@ -126,6 +141,7 @@
 
 <script>
 import { listAdvertisement, getAdvertisement, delAdvertisement, addAdvertisement, updateAdvertisement } from "@/api/system/advertisement";
+import {goodsListAll} from "@/api/system/orders";
 
 export default {
   name: "Advertisement",
@@ -159,14 +175,29 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+
+      },
+      state: '',
+      displayValue: '',//用于控制输入框状态
     };
   },
   created() {
     this.getList();
   },
+
   methods: {
-    /** 查询广告管理列表 */
+    querySearch(queryString, cb) {
+      goodsListAll({name:queryString}).then(res=>{
+        cb(res);
+      })
+    },
+    handleSelect(item) {
+      this.form.goodsId=item.id
+      console.log(item);
+      this.state=item.name;
+      this.displayValue=''
+    },
+    /** 查询广告列表 */
     getList() {
       this.loading = true;
       listAdvertisement(this.queryParams).then(response => {
@@ -187,8 +218,9 @@ export default {
         name: null,
         goodsId: null,
         img: null,
-        price: null
+        price: null,
       };
+      this.state=null,
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -209,9 +241,10 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
       this.open = true;
-      this.title = "添加广告管理";
+      this.title = "添加广告";
+      this.reset();
+
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -220,7 +253,7 @@ export default {
       getAdvertisement(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改广告管理";
+        this.title = "修改广告";
       });
     },
     /** 提交按钮 */
