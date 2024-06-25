@@ -3,6 +3,7 @@ package cn.lanqiao.system.service;
 import java.util.List;
 
 import cn.lanqiao.system.domain.FGoods;
+import io.lettuce.core.dynamic.annotation.Param;
 
 /**
  * 商品Service接口
@@ -125,4 +126,19 @@ public interface IFGoodsService {
      * @return 商品集合
      */
     public List<FGoods> selectPeopleNum(FGoods fGoods);
+
+//    /**
+//     * 查询下单人数
+//     *
+//     * @param fGoods 商品
+//     * @return 商品集合
+//     */
+//    public List<FGoods> selectPeopleNum2(FGoods fGoods);
+    /**
+     * 修改商品状态
+     * @param fGoods
+     * @return
+     */
+    int  updateFGoodsStatus(FGoods fGoods);
+
 }
