@@ -12,25 +12,27 @@ import java.math.BigDecimal;
  * @date 2024-06-17
  */
 public class Fadvertisement extends BaseEntity {
-    /** 广告id */
-    @Excel(name = "广告id")
-    private Long fadvertisementId;
+    private static final long serialVersionUID = 1L;
+
+    /** 广告ID */
+    @Excel(name = "广告ID")
+    private Long id;
 
     /** 广告名称 */
     @Excel(name = "广告名称")
-    private String fadvertisementName;
+    private String name;
 
-    /** 商品id */
-    @Excel(name = "商品id")
+    /** 商品名称 */
+    @Excel(name = "商品名称")
     private Long goodsId;
 
     /** 广告图片 */
     @Excel(name = "广告图片")
-    private String fadvertisementImg;
+    private String img;
 
-    /** 广告费用 */
-    @Excel(name = "广告费用")
-    private BigDecimal fadvertisementprice;
+    /** 广告价格 */
+    @Excel(name = "广告价格")
+    private BigDecimal price;
 
     /** 商品数据 */
     @Excel(name = "商品数据")
@@ -39,20 +41,20 @@ public class Fadvertisement extends BaseEntity {
     public Fadvertisement() {
     }
 
-    public Long getFadvertisementId() {
-        return fadvertisementId;
+    public Long getId() {
+        return id;
     }
 
-    public void setFadvertisementId(Long fadvertisementId) {
-        this.fadvertisementId = fadvertisementId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getFadvertisementName() {
-        return fadvertisementName;
+    public String getName() {
+        return name;
     }
 
-    public void setFadvertisementName(String fadvertisementName) {
-        this.fadvertisementName = fadvertisementName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getGoodsId() {
@@ -63,20 +65,20 @@ public class Fadvertisement extends BaseEntity {
         this.goodsId = goodsId;
     }
 
-    public String getFadvertisementImg() {
-        return fadvertisementImg;
+    public String getImg() {
+        return img;
     }
 
-    public void setFadvertisementImg(String fadvertisementImg) {
-        this.fadvertisementImg = fadvertisementImg;
+    public void setImg(String img) {
+        this.img = img;
     }
 
-    public BigDecimal getFadvertisementprice() {
-        return fadvertisementprice;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setFadvertisementprice(BigDecimal fadvertisementprice) {
-        this.fadvertisementprice = fadvertisementprice;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public FGoods getfGoods() {
@@ -90,11 +92,11 @@ public class Fadvertisement extends BaseEntity {
     @Override
     public String toString() {
         return "Fadvertisement{" +
-                "fadvertisementId=" + fadvertisementId +
-                ", fadvertisementName='" + fadvertisementName + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", goodsId=" + goodsId +
-                ", fadvertisementImg='" + fadvertisementImg + '\'' +
-                ", fadvertisementprice=" + fadvertisementprice +
+                ", img='" + img + '\'' +
+                ", price=" + price +
                 ", fGoods=" + fGoods +
                 '}';
     }

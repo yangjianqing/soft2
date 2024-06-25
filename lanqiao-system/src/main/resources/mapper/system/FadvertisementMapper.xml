@@ -4,16 +4,68 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.lanqiao.system.mapper.FadvertisementMapper">
     <resultMap type="Fadvertisement" id="FadvertisementResult">
-        <result property="fadvertisementId"    column="id"    />
-        <result property="fadvertisementName"    column="name"    />
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
         <result property="goodsId"    column="goods_id"    />
-        <result property="fadvertisementImg"    column="img"    />
-        <result property="fadvertisementprice"    column="price"    />
+        <result property="img"    column="img"    />
+        <result property="price"    column="price"    />
     </resultMap>
 
     <sql id="selectFadvertisementVo">
-        select id,name,goods_id,img,price from f_advertisement
+        select id, name, goods_id, img, price from f_advertisement
     </sql>
+
+    <select id="selectFadvertisementLists" parameterType="Fadvertisement" resultMap="FadvertisementResult">
+        <include refid="selectFadvertisementVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectFadvertisementById" parameterType="Long" resultMap="FadvertisementResult">
+        <include refid="selectFadvertisementVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertFadvertisement" parameterType="Fadvertisement">
+        insert into f_advertisement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="img != null">img,</if>
+            <if test="price != null">price,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="img != null">#{img},</if>
+            <if test="price != null">#{price},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFadvertisement" parameterType="Fadvertisement">
+        update f_advertisement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="img != null">img = #{img},</if>
+            <if test="price != null">price = #{price},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFadvertisementById" parameterType="Long">
+        delete from f_advertisement where id = #{id}
+    </delete>
+
+    <delete id="deleteFadvertisementByIds" parameterType="String">
+        delete from f_advertisement where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
     <select id="selectFadvertisementList"  parameterType="Fadvertisement" resultMap="FadvertisementResult">
         <include refid="selectFadvertisementVo"/>
