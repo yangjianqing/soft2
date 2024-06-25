@@ -38,7 +38,8 @@ import VueMeta from 'vue-meta'
 // 字典数据组件
 import DictData from '@/components/DictData'
 // echarts组件
-import * as echarts from "echarts";
+import * as echarts from 'echarts';
+import print from 'vue3-print-nb';
 
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
@@ -51,6 +52,7 @@ Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 Vue.prototype.$echarts = echarts
+Vue.prototype.$print = print
 
 // 全局组件挂载
 Vue.component('DictTag', DictTag)
@@ -64,6 +66,8 @@ Vue.component('ImagePreview', ImagePreview)
 Vue.use(directive)
 Vue.use(plugins)
 Vue.use(VueMeta)
+Vue.use(echarts)
+Vue.use(print)
 DictData.install()
 
 /**

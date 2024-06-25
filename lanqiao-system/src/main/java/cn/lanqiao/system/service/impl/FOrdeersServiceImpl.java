@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import cn.lanqiao.common.constant.CacheConstants;
+import cn.lanqiao.common.constant.OrdeersConstant;
 import cn.lanqiao.common.core.domain.entity.SysUser;
 import cn.lanqiao.common.core.redis.RedisCache;
 import cn.lanqiao.common.utils.DateUtils;
@@ -79,23 +80,25 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     public List<FOrdeers> selectFOrdeersList(FOrdeers fOrdeers)
     {
         List<FOrdeers> fOrdeers1 = fOrdeersMapper.selectFOrdeersList(fOrdeers);
-        // 创建存储用户地址id的存储器
+        // 创建存储地址id的存储器
         Set<Long> addressIds = new HashSet<>();
-        // 创建存储用户id的存储器
+        // 创建存储会员用户id的存储器
         Set<Long> usersIds = new HashSet<>();
         // 创建存储配送员id的存储器
         Set<Long> SysuserId = new HashSet<>();
 
         // 遍历订单管理列表数据
         for (FOrdeers fOrdeers2 : fOrdeers1) {
+            //判断配送员id是否为null
             if (fOrdeers2.getOrdersSysuserId() == null) {
+                //判断会员用户id是否为null
                 if (fOrdeers2.getOrdersUsersId() != null) {
-                    usersIds.add(fOrdeers2.getOrdersUsersId());
+                    usersIds.add(fOrdeers2.getOrdersUsersId());//将会员用户id存入set集合
                 }
             } else {
                 //判断addressIds是否为空，不是则将addressIds存储到Set<Long> addressIds = new HashSet<>();
                 if (fOrdeers2.getOrdersUsersId() != null) {
-                    addressIds.add(fOrdeers2.getOrdersUsersId());
+                    addressIds.add(fOrdeers2.getOrdersUsersId());//将地址id存入set集合
                 }
             }
             //判断SysuserId是否为空，不是则将SysuserId存储到Set<Long> SysuserId = new HashSet<>();
@@ -132,37 +135,57 @@ public class FOrdeersServiceImpl implements IFOrdeersService
             susUserMap.put(sysUser.getUserId(), sysUser);
         }
 
-        // 进行遍历订单列表数据
+        // 进行遍历订单列表数据,添加值
         for (FOrdeers fm : fOrdeers1) {
-            if (fm.getOrdersSysuserId() == null) {
+            // TODO: 电脑端订单数据 --- 无配送员
+            if (fm.getOrdersSysuserId() == null) { //判断是否有配送员id
+                // TODO: 电脑端有会员结算类订单
+                //判断会员id是否为null
                 if (fm.getOrdersUsersId() != null) {
                     //调用map集合根据当前订单的配送员id来拿到员工人员表配送员id里面的配送员名称数据
                     FUsers fUsers = UsersMap.get(fm.getOrdersUsersId());
                     //判断拿到的员工人员列表数据是否为空
                     if (fUsers != null) {
                         //将员工人员列表的配送员名称NickName传递给订单列表的SysuserName
-                        fm.setfUsers(fUsers);
+                        fm.setOrdersUsersName(fUsers.getUsersName());
+                        fm.setUsersPhone(fUsers.getUsersPhone());
+                        fm.setOrdersSysuserName(OrdeersConstant.Order_Type_Status);
+                        fm.setAddressDetail(OrdeersConstant.Order_Type_Status);
+                        fm.setOrdersRemark(OrdeersConstant.Order_Offline_Purchase);
                     }
+                } else {
+                    // TODO: 电脑端无会员结算类订单 --- 游客
+                    fm.setOrdersUsersName(OrdeersConstant.Order_UsersName_Status);
+                    fm.setUsersPhone(OrdeersConstant.Order_Type_Status);
+                    fm.setOrdersSysuserName(OrdeersConstant.Order_Type_Status);
+                    fm.setAddressDetail(OrdeersConstant.Order_Type_Status);
+                    fm.setOrdersRemark(OrdeersConstant.Order_Offline_Purchase);
                 }
             } else {
+                // TODO: 手机端订单数据 --- 有配送员
+                //判断会员地址id是否为null
                 if (fm.getOrdersUsersId() != null) {
+                    // TODO: 替换手机端地址会员名称信息
                     //调用map集合根据当前订单的用户地址id来拿到用户地址id里面用户地址列表的数据
                     FAddress fAddress = addressMap.get(fm.getOrdersUsersId());
                     //判断拿到的用户地址列表数据是否为空
                     if (fAddress != null) {
                         //将用户地址列表数据传递给订单列表的Address对象
-                        fm.setAddress(fAddress);
+                        fm.setOrdersUsersName(fAddress.getAddressName());
+                        fm.setUsersPhone(fAddress.getAddressPhone());
+                        fm.setAddressDetail(fAddress.getAddressDetail());
+                        if (fm.getOrdersRemark() == null) {
+                            fm.setOrdersRemark(OrdeersConstant.Order_Type_Status);
+                        }
                     }
-                }
-            }
-            // 替换配送员姓名
-            if (fm.getOrdersSysuserId() != null) {
-                //调用map集合根据当前订单的配送员id来拿到员工人员表配送员id里面的配送员名称数据
-                SysUser sysUser = susUserMap.get(fm.getOrdersSysuserId());
-                //判断拿到的员工人员列表数据是否为空
-                if (sysUser != null) {
-                    //将员工人员列表的配送员名称NickName传递给订单列表的SysuserName
-                    fm.setOrdersSysuserName(sysUser.getNickName());
+                    // TODO: 替换配送员姓名
+                    //调用map集合根据当前订单的配送员id来拿到员工人员表配送员id里面的配送员名称数据
+                    SysUser sysUser = susUserMap.get(fm.getOrdersSysuserId());
+                    //判断拿到的员工人员列表数据是否为空
+                    if (sysUser != null) {
+                        //将员工人员列表的配送员名称NickName传递给订单列表的SysuserName
+                        fm.setOrdersSysuserName(sysUser.getNickName());
+                    }
                 }
             }
         }

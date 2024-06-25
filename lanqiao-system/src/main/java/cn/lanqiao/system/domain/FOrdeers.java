@@ -26,13 +26,21 @@ public class FOrdeers extends BaseEntity
     @Excel(name = "订单编号")
     private String ordersNumber;
 
-    /** 买家姓名 */
-    @Excel(name = "买家姓名")
+    /** 买家id */
+    @Excel(name = "买家id")
     private Long ordersUsersId;
 
     /** 买家姓名 */
     @Excel(name = "买家姓名")
-    private Long ordersaddressId;
+    private String ordersUsersName;
+
+    /** 联系方式 */
+    @Excel(name = "联系方式")
+    private String usersPhone;
+
+    /** 详细地址 */
+    @Excel(name = "详细地址")
+    private String addressDetail;
 
     /** 地址实体类 */
     @Excel(name = "地址实体类")
@@ -103,6 +111,30 @@ public class FOrdeers extends BaseEntity
         this.ordersRemark = ordersRemark;
     }
 
+    public String getAddressDetail() {
+        return addressDetail;
+    }
+
+    public void setAddressDetail(String addressDetail) {
+        this.addressDetail = addressDetail;
+    }
+
+    public String getUsersPhone() {
+        return usersPhone;
+    }
+
+    public void setUsersPhone(String usersPhone) {
+        this.usersPhone = usersPhone;
+    }
+
+    public String getOrdersUsersName() {
+        return ordersUsersName;
+    }
+
+    public void setOrdersUsersName(String ordersUsersName) {
+        this.ordersUsersName = ordersUsersName;
+    }
+
     public List<FOrderPartslist> getfOrderPartslist() {
         return fOrderPartslist;
     }
@@ -135,13 +167,6 @@ public class FOrdeers extends BaseEntity
         this.ordersSysuserName = ordersSysuserName;
     }
 
-    public Long getOrdersaddressId() {
-        return ordersaddressId;
-    }
-
-    public void setOrdersaddressId(Long ordersaddressId) {
-        this.ordersaddressId = ordersaddressId;
-    }
 
     public void setOrdersId(Long ordersId)
     {
@@ -225,22 +250,20 @@ public class FOrdeers extends BaseEntity
         return ordersRemark;
     }
 
-    @Override
-    public String toString() {
-        return "FOrdeers{" +
-                "ordersId=" + ordersId +
-                ", ordersNumber='" + ordersNumber + '\'' +
-                ", ordersUsersId=" + ordersUsersId +
-                ", ordersaddressId=" + ordersaddressId +
-                ", address=" + address +
-                ", fUsers=" + fUsers +
-                ", ordersSysuserId=" + ordersSysuserId +
-                ", ordersSysuserName='" + ordersSysuserName + '\'' +
-                ", ordersPayMethod=" + ordersPayMethod +
-                ", ordersPayStatuds=" + ordersPayStatuds +
-                ", ordersStatus=" + ordersStatus +
-                ", ordersCreattime=" + ordersCreattime +
-                ", ordersRemark='" + ordersRemark + '\'' +
-                '}';
+    public FOrdeers(Long ordersId, String ordersNumber, Long ordersUsersId, String ordersUsersName, FAddress address, FUsers fUsers, List<FOrderPartslist> fOrderPartslist, Long ordersSysuserId, String ordersSysuserName, Long ordersPayMethod, Long ordersPayStatuds, Long ordersStatus, Date ordersCreattime, String ordersRemark) {
+        this.ordersId = ordersId;
+        this.ordersNumber = ordersNumber;
+        this.ordersUsersId = ordersUsersId;
+        this.ordersUsersName = ordersUsersName;
+        this.address = address;
+        this.fUsers = fUsers;
+        this.fOrderPartslist = fOrderPartslist;
+        this.ordersSysuserId = ordersSysuserId;
+        this.ordersSysuserName = ordersSysuserName;
+        this.ordersPayMethod = ordersPayMethod;
+        this.ordersPayStatuds = ordersPayStatuds;
+        this.ordersStatus = ordersStatus;
+        this.ordersCreattime = ordersCreattime;
+        this.ordersRemark = ordersRemark;
     }
 }

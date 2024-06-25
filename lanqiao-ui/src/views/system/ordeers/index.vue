@@ -55,38 +55,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="primary"-->
-<!--          plain-->
-<!--          icon="el-icon-plus"-->
-<!--          size="mini"-->
-<!--          @click="handleAdd"-->
-<!--          v-hasPermi="['system:ordeers:add']"-->
-<!--        >新增</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="success"-->
-<!--          plain-->
-<!--          icon="el-icon-edit"-->
-<!--          size="mini"-->
-<!--          :disabled="single"-->
-<!--          @click="handleUpdate"-->
-<!--          v-hasPermi="['system:ordeers:edit']"-->
-<!--        >修改</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="danger"-->
-<!--          plain-->
-<!--          icon="el-icon-delete"-->
-<!--          size="mini"-->
-<!--          :disabled="multiple"-->
-<!--          @click="handleDelete"-->
-<!--          v-hasPermi="['system:ordeers:remove']"-->
-<!--        >删除</el-button>-->
-<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -101,9 +69,6 @@
     </el-row>
 
     <el-table v-loading="loading" :data="ordeersList" @selection-change="handleSelectionChange">
-<!--      <el-table-column type="selection" width="55" align="center" />-->
-      <!--<el-table-column label="订单ID" align="center" prop="ordersId" />-->
-      <!--<el-table-column label="订单编号" align="center" prop="ordersNumber" />-->
       <el-table-column label="订单编号" align="center" prop="ordersNumber">
         <template slot-scope="scope">
           <router-link :to="'/system/ordeers-data/index?ordersNumber='+ scope.row.ordersNumber" class="link-type">
@@ -111,35 +76,9 @@
           </router-link>
         </template>
       </el-table-column>
-      <!--<el-table-column label="买家姓名" align="center" prop="address.addressName" />-->
-      <el-table-column label="买家姓名" align="center" prop="address.addressName">
-        <template slot-scope="scope">
-          <div v-if="scope.row.ordersUsersId !== null" class="buyer-name">
-            {{ scope.row.ordersSysuserName === null ? scope.row.fUsers.usersName : scope.row.address.addressName }}
-          </div>
-          <div v-else class="buyer-name">游客</div>
-        </template>
-      </el-table-column>
-
-
-      <!--<el-table-column label="联系方式" align="center" prop="address.addressPhone" />-->
-      <el-table-column label="联系方式" align="center" prop="address.addressPhone">
-        <template slot-scope="scope">
-          <div v-if="scope.row.ordersUsersId !== null" class="buyer-name">
-            {{ scope.row.ordersSysuserName === null ? scope.row.fUsers.usersPhone : scope.row.address.addressPhone }}
-          </div>
-          <div v-else class="buyer-name">无</div>
-        </template>
-      </el-table-column>
-
-      <!--<el-table-column label="配送员" align="center" prop="ordersSysuserName" />-->
-      <el-table-column label="配送员" align="center" prop="ordersSysuserName">
-        <template slot-scope="scope">
-          <div v-if="scope.row.ordersSysuserName !== null" class="buyer-name">{{ scope.row.ordersSysuserName }}</div>
-          <div v-else class="buyer-name">无</div>
-        </template>
-      </el-table-column>
-
+      <el-table-column label="买家姓名" align="center" prop="ordersUsersName" />
+      <el-table-column label="联系方式" align="center" prop="usersPhone" />
+      <el-table-column label="配送员" align="center" prop="ordersSysuserName" />
       <el-table-column label="支付方式" align="center" prop="ordersPayMethod">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_model_pay" :value="scope.row.ordersPayMethod"/>
@@ -155,45 +94,13 @@
           <dict-tag :options="dict.type.f_sales_status" :value="scope.row.ordersStatus"/>
         </template>
       </el-table-column>
-      <el-table-column label="收货地址" align="center" prop="address.addressDetail" class-name="address-column" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <div v-if="scope.row.ordersSysuserName !== null" class="address-cell">
-            {{ scope.row.ordersSysuserName === null ? scope.row.fUsers.addressDetail : scope.row.address.addressDetail }}
-          </div>
-          <div v-else class="address-cell">无</div>
-        </template>
-      </el-table-column>
+      <el-table-column label="收货地址" align="center" prop="addressDetail" class-name="address-column" :show-overflow-tooltip="true" />
       <el-table-column label="下单时间" align="center" prop="ordersCreattime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.ordersCreattime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-
-      <!--<el-table-column label="备注信息" align="center" prop="ordersRemark" />-->
-      <el-table-column label="备注信息" align="center" prop="ordersRemark">
-        <template slot-scope="scope">
-          <div v-if="scope.row.ordersSysuserName !== null" class="buyer-name">{{ scope.row.ordersRemark }}</div>
-          <div v-else class="buyer-name">线下购买</div>
-        </template>
-      </el-table-column>
-<!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-edit"-->
-<!--            @click="handleUpdate(scope.row)"-->
-<!--            v-hasPermi="['system:ordeers:edit']"-->
-<!--          >修改</el-button>-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-delete"-->
-<!--            @click="handleDelete(scope.row)"-->
-<!--            v-hasPermi="['system:ordeers:remove']"-->
-<!--          >删除</el-button>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
+      <el-table-column label="备注信息" align="center" prop="ordersRemark" class-name="address-column" :show-overflow-tooltip="true" />
     </el-table>
 
     <pagination
