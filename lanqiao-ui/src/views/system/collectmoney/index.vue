@@ -62,8 +62,8 @@
         <div class="warp_info wrap_table" >
           <el-table :data="productsInCart" style="width: 100%" >
             <el-table-column prop="name" label="商品名称" />
-            <el-table-column prop="price" label="价格" />
-            <el-table-column prop="quantity" label="数量">
+            <el-table-column prop="price" label="商品价格" />
+            <el-table-column prop="quantity" label="商品数量">
               <template slot-scope="scope">
                 <el-button
                   size="mini"
@@ -102,6 +102,7 @@
           <img src="@/assets/images/collectmoney/wechat.png" alt="微信支付" @click="showQRCode('wechat')" />
           <img src="@/assets/images/collectmoney/alipay.png" alt="支付宝支付" @click="showQRCode('alipay')" />
           <img src="@/assets/images/collectmoney/cash.png" alt="现金支付" @click="checkout" />
+          <img src="@/assets/images/collectmoney/print.png" alt="现金支付" @click="printReceipt" />
         </div>
       </el-col>
       <el-dialog :visible.sync="showQR" title="扫描二维码支付">
@@ -203,6 +204,7 @@
 import { getGoodsList, addGoodsList, selectMemberName, addUsers, cateTreeSelect,addGoods } from "@/api/system/collectmoney";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import printJS from "print-js";
 
 export default {
   name: "collectmoney",
@@ -210,6 +212,9 @@ export default {
   dicts: ['f_membership_grade', 'sys_user_sex','f_goods'],
   data() {
     return {
+      MerchantName: 'John Doe',
+      UnitPrice: 'john@doe.com',
+      MerQuantity: '111-111-1111',
       // 新增会员对话框相关数据
       title: '新增会员',
       titles: '新增商品',
@@ -318,6 +323,39 @@ export default {
     this.getCateTree();
   },
   methods: {
+    printReceipt() {
+      printJS({
+        printable: this.productsInCart,
+        properties: [
+          { field: 'name', displayName: '商品名称' },
+          { field: 'price', displayName: '商品价格' },
+          { field: 'quantity', displayName: '商品数量' }
+        ],
+        header: '<h3 class="custom-h3">绿源鲜选超市小票</h3>',
+        style: `
+          .custom-h3 {
+            color: #000;
+            text-align: center;
+            margin-bottom: 10px;
+          }
+          table {
+            margin: 10px auto;
+            border-collapse: collapse;
+            width: 100%;
+          }
+          th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+          }
+          th {
+            background-color: #f2f2f2;
+          }
+        `,
+        documentSize: 'Statement',
+        type: 'json'
+      });
+    },
     showQRCode(paymentMethod) {//传参
       if (this.productsInCart.length !== 0) {//判断购物车长度是否为0
         // 根据不同的支付方式设置相应的二维码路径
@@ -590,7 +628,7 @@ h1 {
 }
 
 .pay_img {
-  margin-top: 8rem;
+  margin-top: 6rem;
   width: 64px;
   height: 64px;
 }
@@ -611,8 +649,8 @@ h1 {
   cursor: pointer; /* 更改光标样式以指示可点击 */
   transition: opacity 0.3s ease; /* 添加过渡效果 */
   opacity: 1; /* 默认不透明 */
-  width: 55px;
-  height: 55px;
+  width: 50px;
+  height: 50px;
 }
 
 .pay_img img:hover {
