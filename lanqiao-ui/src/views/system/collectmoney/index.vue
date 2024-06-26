@@ -333,7 +333,7 @@ export default {
               {field: 'quantity', displayName: '商品数量'},
               {field: 'price', displayName: '商品价格'}
             ],
-            header: '<h3 class="custom-h3">绿源鲜选超市小票</h3>',
+            header: '<h3 class="custom-h3">绿源鲜选超市发票</h3>',
             style:
             `.custom-h3 {
               color: #000;
