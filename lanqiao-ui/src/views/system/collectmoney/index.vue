@@ -91,18 +91,18 @@
           </el-table>
         </div >
         <div class="warp_info warp_bottom">
-          <p>总价：{{ this.calculateTotalPrice() }}</p>
+          <p>总金额：{{ this.calculateTotalPrice() }}</p>
           <el-button type="success" size="medium" @click="checkout">结账</el-button>
         </div>
       </el-col>
       <el-col :span="6">
         <div class="pay_img">
-          <img src="@/assets/images/collectmoney/goods.png" alt="新增会员"  @click="handleAdds" />
+          <img src="@/assets/images/collectmoney/goods.png" alt="新增商品"  @click="handleAdds" />
           <img src="@/assets/images/collectmoney/addusers.png" alt="新增会员"  @click="handleAdd" />
           <img src="@/assets/images/collectmoney/wechat.png" alt="微信支付" @click="showQRCode('wechat')" />
           <img src="@/assets/images/collectmoney/alipay.png" alt="支付宝支付" @click="showQRCode('alipay')" />
           <img src="@/assets/images/collectmoney/cash.png" alt="现金支付" @click="checkout" />
-          <img src="@/assets/images/collectmoney/print.png" alt="现金支付" @click="printReceipt" />
+          <img src="@/assets/images/collectmoney/print.png" alt="打印小票" @click="printReceipt" />
         </div>
       </el-col>
       <el-dialog :visible.sync="showQR" title="扫描二维码支付">
@@ -324,37 +324,39 @@ export default {
   },
   methods: {
     printReceipt() {
-      printJS({
-        printable: this.productsInCart,
-        properties: [
-          { field: 'name', displayName: '商品名称' },
-          { field: 'price', displayName: '商品价格' },
-          { field: 'quantity', displayName: '商品数量' }
-        ],
-        header: '<h3 class="custom-h3">绿源鲜选超市小票</h3>',
-        style: `
-          .custom-h3 {
-            color: #000;
-            text-align: center;
-            margin-bottom: 10px;
-          }
-          table {
-            margin: 10px auto;
-            border-collapse: collapse;
-            width: 100%;
-          }
-          th, td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: center;
-          }
-          th {
-            background-color: #f2f2f2;
-          }
-        `,
-        documentSize: 'Statement',
-        type: 'json'
-      });
+        const productsInCart = localStorage.getItem('productsInCart');// 获取购物车数据
+        if (productsInCart != null) {
+          printJS({
+            printable: JSON.parse(productsInCart),
+            properties: [
+              {field: 'name', displayName: '商品名称'},
+              {field: 'quantity', displayName: '商品数量'},
+              {field: 'price', displayName: '商品价格'}
+            ],
+            header: '<h3 class="custom-h3">绿源鲜选超市小票</h3>',
+            style:
+            `.custom-h3 {
+              color: #000;
+              text-align: center;
+              margin-bottom: 10px;
+            }
+            table {
+              margin: 10px auto;
+              border-collapse: collapse;
+              width: 100%;
+            }
+            th, td {
+              border: 1px solid #000;
+              padding: 8px;
+              text-align: center;
+            }
+            th {
+              background-color: #f2f2f2;
+            }`,
+            documentSize: 'Statement',
+            type: 'json'
+          });
+        }
     },
     showQRCode(paymentMethod) {//传参
       if (this.productsInCart.length !== 0) {//判断购物车长度是否为0
@@ -467,6 +469,8 @@ export default {
         addGoodsList(formData).then(response => {//发送购物车数据给后端
           // 实现结账逻辑，新增后返回状态码进行判断
           if (response.code === 200) {
+            sessionStorage.removeItem('productsInCart');// 删除上次存储的购物车数据
+            localStorage.setItem('productsInCart',JSON.stringify(formData.productsInCart));//存储购物车数据
             this.$message.success(response.msg);//结账成功
           } else if (response.code === 500) {
             this.$message.error(response.msg);//系统异常
