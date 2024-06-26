@@ -121,5 +121,5 @@ public interface IFOrdeersService
      * @param orderstatusData 订单状态接口数据
      *
      */
-     public void updateSettlement(OrderstatusData orderstatusData);
+     public int updateSettlement(OrderstatusData orderstatusData);
 }

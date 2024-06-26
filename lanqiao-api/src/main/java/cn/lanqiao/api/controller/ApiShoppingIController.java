@@ -537,8 +537,12 @@ public class ApiShoppingIController extends BaseController {
     public AjaxResult updateSettlement(@RequestBody OrderstatusData orderstatusData)
     {
         try {
-            fOrdeersService.updateSettlement(orderstatusData);
-            return AjaxResult.success("修改成功");
+            int i = fOrdeersService.updateSettlement(orderstatusData);
+            if (i==1) {
+                return AjaxResult.success("修改成功");
+            } else {
+                return AjaxResult.success("修改失败");
+            }
         } catch (Exception ex){
             ex.printStackTrace();
             return AjaxResult.error("系统异常");

@@ -43,6 +43,9 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     private FUsersMapper fUsersMapper;
 
     @Autowired
+    private FAddressMapper fAddressMapper;
+
+    @Autowired
     private FOrderPartslistMapper fOrderPartslistMapper;
 
     @Autowired
@@ -341,13 +344,20 @@ public class FOrdeersServiceImpl implements IFOrdeersService
      *
      */
     @Override
-    public void updateSettlement(OrderstatusData orderstatusData) {
-        if (orderstatusData.getUsersPhone() != null) {
-            FUsers fUsers = fUsersMapper.selectUsersusersPhone(orderstatusData.getUsersPhone());
-            if (fUsers != null && orderstatusData.getOrdersNumber() != null) {
-                fOrdeersMapper.updateOrdersStatus(orderstatusData.getOrdersNumber());
+    public int updateSettlement(OrderstatusData orderstatusData) {
+        if (orderstatusData != null && orderstatusData.getUsersPhone() != null && orderstatusData.getOrdersNumber() != null) {//判断前端传值不为null
+            FUsers fUsers = fUsersMapper.selectUsersusersPhone(orderstatusData.getUsersPhone());//根据电话查询会员用户数据获取会员用户id
+            if (fUsers != null) {
+                FOrdeers ordeers = fOrdeersMapper.selectOrder(fUsers.getUsersId(),orderstatusData.getOrdersNumber());//根据会员用户id和订单号查询订单数据
+                if (ordeers != null ) {
+                    int i = fOrdeersMapper.updateOrdersStatus(orderstatusData.getOrdersNumber());
+                    if (i > 0) {
+                        return 1;
+                    }
+                }
             }
         }
+        return 0;
     }
 
     /**

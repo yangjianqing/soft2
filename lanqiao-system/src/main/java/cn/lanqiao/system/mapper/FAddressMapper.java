@@ -74,4 +74,11 @@ public interface FAddressMapper
      * @return 字典数据集合信息
      */
     public List<FAddress> selectaddressIdByType(List<Long> addressId);
+
+    /**
+     * 根据用户usersPhone 获取信息
+     * @param usersPhone
+     * @return
+     */
+    public FAddress selectUsersusersPhone(String usersPhone);
 }

@@ -103,4 +103,9 @@
             #{addressId}
         </foreach>
     </select>
+
+    <select id="selectUsersusersPhone" resultType="FAddress" resultMap="FAddressResult">
+        <include refid="selectFAddressVo"/>
+        where address_phone = #{usersPhone}
+    </select>
 </mapper>

@@ -77,5 +77,5 @@ public interface FUsersMapper
       * @param usersPhone
      * @return
      */
-    FUsers selectUsersusersPhone(String usersPhone);
+    public FUsers selectUsersusersPhone(String usersPhone);
 }
