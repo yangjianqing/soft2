@@ -20,6 +20,7 @@ import cn.lanqiao.framework.web.service.SysLoginService;
 import cn.lanqiao.framework.web.service.TokenService;
 import cn.lanqiao.system.domain.*;
 import cn.lanqiao.system.domain.vo.LoginVo;
+import cn.lanqiao.system.domain.vo.OrderstatusData;
 import cn.lanqiao.system.domain.vo.Settlement;
 import cn.lanqiao.system.mapper.FAddressMapper;
 import cn.lanqiao.system.mapper.FadvertisementMapper;
@@ -528,16 +529,15 @@ public class ApiShoppingIController extends BaseController {
 
     /**
      * 手机端订单状态修改接口
-     * @param usersPhone 手机电话
-     * @param ordersNumber 商品条码
+     * @param orderstatusData 订单状态接口数据
      *
      */
     @ApiOperation("手机端订单状态修改接口")
-    @PostMapping  (value = "/updateSettlement")
-    public AjaxResult updateSettlement(@PathVariable("usersPhone") String usersPhone,@PathVariable("ordersNumber") String ordersNumber)
+    @PostMapping(value = "/updateSettlement")
+    public AjaxResult updateSettlement(@RequestBody OrderstatusData orderstatusData)
     {
         try {
-            fOrdeersService.updateSettlement(usersPhone,ordersNumber);
+            fOrdeersService.updateSettlement(orderstatusData);
             return AjaxResult.success("修改成功");
         } catch (Exception ex){
             ex.printStackTrace();

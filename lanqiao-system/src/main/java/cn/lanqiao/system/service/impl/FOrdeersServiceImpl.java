@@ -10,6 +10,7 @@ import cn.lanqiao.common.core.redis.RedisCache;
 import cn.lanqiao.common.utils.DateUtils;
 import cn.lanqiao.common.utils.OrderNumberGenerator;
 import cn.lanqiao.system.domain.*;
+import cn.lanqiao.system.domain.vo.OrderstatusData;
 import cn.lanqiao.system.domain.vo.Settlement;
 import cn.lanqiao.system.mapper.*;
 import cn.lanqiao.system.service.IFGoodsService;
@@ -336,16 +337,15 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
     /**
      * 手机端订单状态修改接口
-     * @param usersPhone 手机电话
-     * @param ordersNumber 商品条码
+     * @param orderstatusData 订单状态接口数据
      *
      */
     @Override
-    public void updateSettlement(String usersPhone, String ordersNumber) {
-        if (usersPhone != null) {
-            FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
-            if (fUsers != null && ordersNumber != null) {
-                fOrdeersMapper.updateOrdersStatus(ordersNumber);
+    public void updateSettlement(OrderstatusData orderstatusData) {
+        if (orderstatusData.getUsersPhone() != null) {
+            FUsers fUsers = fUsersMapper.selectUsersusersPhone(orderstatusData.getUsersPhone());
+            if (fUsers != null && orderstatusData.getOrdersNumber() != null) {
+                fOrdeersMapper.updateOrdersStatus(orderstatusData.getOrdersNumber());
             }
         }
     }

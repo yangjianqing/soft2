@@ -112,6 +112,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <update id="updateOrdersStatus" parameterType="FOrdeers">
-        UPDATE f_ordeers SET orders_status = 1 WHERE orders_number = #{ordersNumber}
+        UPDATE f_ordeers SET orders_pay_statuds = 1 WHERE orders_number = #{ordersNumber}
     </update>
 </mapper>

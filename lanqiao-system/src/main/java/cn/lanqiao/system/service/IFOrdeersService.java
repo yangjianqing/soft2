@@ -7,6 +7,7 @@ import cn.lanqiao.system.domain.FGoods;
 import cn.lanqiao.system.domain.FOrdeers;
 import cn.lanqiao.system.domain.FOrderPartslist;
 import cn.lanqiao.system.domain.FormData;
+import cn.lanqiao.system.domain.vo.OrderstatusData;
 import cn.lanqiao.system.domain.vo.Settlement;
 
 /**
@@ -117,9 +118,8 @@ public interface IFOrdeersService
 
     /**
      * 手机端订单状态修改接口
-     * @param usersPhone 手机电话
-     * @param ordersNumber 商品条码
+     * @param orderstatusData 订单状态接口数据
      *
      */
-     public void updateSettlement(String usersPhone, String ordersNumber);
+     public void updateSettlement(OrderstatusData orderstatusData);
 }
