@@ -58,5 +58,9 @@ public interface FadvertisementService {
      */
     public int deleteFadvertisementById(Long id);
 
+    /**
+     * 查询广告数据
+     *
+     */
     List<Fadvertisement> selectFadvertisementList();
 }

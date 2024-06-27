@@ -36,8 +36,8 @@
   <div class="row_swipe">
     <van-swipe style="border-radius: 10px" :autoplay="3000" lazy-render>
       <van-swipe-item v-for="Advertising in selectFadvertisement.data" >
-        <router-link :to="'/cart/shoppinggement/' +Advertising.goodsId ">
-          <img class="van_swipe_item_img" :src="this.baseUrl + Advertising.fadvertisementImg" />
+        <router-link :to="'/cart/shoppinggement/' + Advertising.goodsId ">
+          <img class="van_swipe_item_img" :src="this.baseUrl + Advertising.img" />
         </router-link>
       </van-swipe-item>
     </van-swipe>

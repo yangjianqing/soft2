@@ -125,6 +125,10 @@ public class FadvertisementSeiviceImpl implements FadvertisementService {
         return fadvertisementMapper.deleteFadvertisementById(id);
     }
 
+    /**
+     * 查询广告数据
+     *
+     */
     @Override
     public List<Fadvertisement> selectFadvertisementList() {
         List<Fadvertisement> fadvertisements = fadvertisementMapper.selectFadvertisementList();

@@ -68,8 +68,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <select id="selectFOrderPartslist" parameterType="FOrderPartslist" resultMap="FOrderPartslistResult">
-        SELECT fp.id,fg.name AS name,fp.goods_num ,fg.price,fg.coding,fg.specification,fg.image,orders_pay_statuds,orders_status  FROM f_goods fg
-        LEFT JOIN f_order_partslist fp  ON fp.goods_id = fg.id
-        LEFT JOIN f_ordeers fo  ON fp.order_id = fo.orders_number WHERE fp.order_id = #{orderId}
+        select fp.id,fg.name as name,fp.goods_num ,fg.price,fg.coding,fg.specification,fg.image,orders_pay_statuds,fp.orders_status  from f_goods fg
+        LEFT JOIN f_order_partslist fp  on fp.goods_id = fg.id
+        LEFT JOIN f_ordeers fo  on fp.order_id = fo.orders_number where fp.order_id = #{orderId}
     </select>
 </mapper>

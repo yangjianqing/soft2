@@ -121,6 +121,7 @@ public class ApiShoppingIController extends BaseController {
 
     /**
      * 查询订单明细列表
+     *
      */
     @ApiOperation("查询订单明细列表")
     @GetMapping("/orderPartsList")
@@ -175,8 +176,13 @@ public class ApiShoppingIController extends BaseController {
      @GetMapping("/selectFadvertisementList")
      public AjaxResult selectFadvertisementList()
      {
-         List<Fadvertisement> fadvertisements = fadvertisementService.selectFadvertisementList();
-         return AjaxResult.success(fadvertisements);
+         try {
+             List<Fadvertisement> fadvertisements = fadvertisementService.selectFadvertisementList();
+             return AjaxResult.success(fadvertisements);
+         } catch (Exception e) {
+             e.printStackTrace();
+             return AjaxResult.error("系统异常");
+         }
      }
 
     /**
@@ -560,78 +566,6 @@ public class ApiShoppingIController extends BaseController {
     {
         try {
             List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectOrders(usersPhone);
-            return AjaxResult.success(fOrderPartslists);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return AjaxResult.error("系统异常");
-        }
-    }
-
-    /**
-     * 手机端用户待付款订单
-     *
-     * @param usersPhone 用户电话号码
-     */
-    @ApiOperation("手机端用户待付款订单接口")
-    @GetMapping  (value = "/selectpaymentOrders/{usersPhone}")
-    public AjaxResult selectpaymentOrders(@PathVariable("usersPhone") String usersPhone)
-    {
-        try {
-            List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectpaymentOrders(usersPhone);
-            return AjaxResult.success(fOrderPartslists);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return AjaxResult.error("系统异常");
-        }
-    }
-
-    /**
-     * 手机端用户待发货订单
-     *
-     * @param usersPhone 用户电话号码
-     */
-    @ApiOperation("手机端用户待发货订单")
-    @GetMapping  (value = "/selectwaitingOrders/{usersPhone}")
-    public AjaxResult selectwaitingOrders(@PathVariable("usersPhone") String usersPhone)
-    {
-        try {
-            List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectwaitingOrders(usersPhone);
-            return AjaxResult.success(fOrderPartslists);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return AjaxResult.error("系统异常");
-        }
-    }
-
-    /**
-     * 手机端用户待收货订单
-     *
-     * @param usersPhone 用户电话号码
-     */
-    @ApiOperation("手机端用户待收货订单接口")
-    @GetMapping  (value = "/selectReceiveOrders/{usersPhone}")
-    public AjaxResult selectReceiveOrders(@PathVariable("usersPhone") String usersPhone)
-    {
-        try {
-            List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectReceiveOrders(usersPhone);
-            return AjaxResult.success(fOrderPartslists);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return AjaxResult.error("系统异常");
-        }
-    }
-
-    /**
-     * 手机端用户待评价订单
-     *
-     * @param usersPhone 用户电话号码
-     */
-    @ApiOperation("手机端用户待评价订单接口")
-    @GetMapping  (value = "/selectevaluateOrders/{usersPhone}")
-    public AjaxResult selectevaluateOrders(@PathVariable("usersPhone") String usersPhone)
-    {
-        try {
-            List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectevaluateOrders(usersPhone);
             return AjaxResult.success(fOrderPartslists);
         } catch (Exception ex) {
             ex.printStackTrace();
