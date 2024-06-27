@@ -1,19 +1,19 @@
 import request from '@/utils/request'
 
 // 根据商品编码查询商品详细
-export function getGoodsList(coding) {
+export function getGoods(coding) {
   return request({
     url: '/system/goods/Goods/' + coding,
     method: 'get'
   })
 }
 
-// 新增商品
-export function addGoodsList(formData) {
+// 购物车结算
+export function addGoodsList(data) {
   return request({
-    url: '/system/goods/addGoodsList',
+    url: '/system/ordeers/addGoodsList',
     method: 'post',
-    data: formData
+    data: data
   });
 }
 

@@ -1,18 +1,23 @@
 package cn.lanqiao.system.domain.vo;
+import cn.lanqiao.common.annotation.Excel;
 
 
 public class Settlement {
-    /**
-     * 手机端结算
-     *
-     * @param usersPhone 用户电话号码
-     * @param ordersPayMethod 支付方式
-     * @param ordersRemark 订单备注信息
-     * @param ordersNumber 订单编号
-     */
+
+    /** 用户电话号码 */
+    @Excel(name = "用户电话号码")
     private String ordersNumber;
+
+    /** 支付方式 */
+    @Excel(name = "支付方式")
     private String usersPhone;
+
+    /** 订单备注信息 */
+    @Excel(name = "订单备注信息")
     private Long ordersPayMethod;
+
+    /** 订单编号 */
+    @Excel(name = "订单编号")
     private String ordersRemark;
 
     public Settlement() {

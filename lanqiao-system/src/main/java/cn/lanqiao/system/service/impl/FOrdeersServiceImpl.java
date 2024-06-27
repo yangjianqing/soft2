@@ -261,7 +261,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
             FUsers fUsers = ifUsersService.selectUsersusersPhone(formData.getMemberPhone());
             if(fUsers == null) {//判断是否为游客支付
                 //创建订单对象传值,调用新增订单
-                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu,null,2L,1L,3L));
+                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu,null,Long.parseLong(formData.getOrdersPayMethod()),1L,3L));
             } else {
                 // 设置 memberJian 默认值为 0
                 BigDecimal memberJian = formData.getMemberJian();
@@ -270,7 +270,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
                 }
 
                 //创建订单对象传值,调用新增订单
-                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu,fUsers.getUsersId(),2L,1L,3L));
+                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu,fUsers.getUsersId(),Long.parseLong(formData.getOrdersPayMethod()),1L,3L));
                 //更新会员数据（会员积分+总金额积分-抵扣积分)
                 fUsers.setMemberTotal(fUsers.getMemberTotal().add(formData.getTotalPrice()).subtract(memberJian));
                 //更新会员等级为高等会员

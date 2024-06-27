@@ -1,14 +1,15 @@
 package cn.lanqiao.system.domain.vo;
 
+import cn.lanqiao.common.annotation.Excel;
 
 public class OrderstatusData {
-    /**
-     * 手机端订单状态修改接口
-     * @param usersPhone 手机电话
-     * @param ordersNumber 商品条码
-     *
-     */
+
+    /** 用户电话号码 */
+    @Excel(name = "用户电话号码")
     private String usersPhone;
+
+    /** 商品条码 */
+    @Excel(name = "商品条码")
     private String ordersNumber;
 
     public String getUsersPhone() {

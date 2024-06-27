@@ -2,6 +2,7 @@ package cn.lanqiao.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+import cn.lanqiao.system.domain.FormData;
 import cn.lanqiao.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,5 +106,27 @@ public class FOrdeersController extends BaseController
         AjaxResult success = AjaxResult.success();
         success.put("Delivery",iSysUserService.selectSysUserAll());
         return success;
+    }
+
+    /**
+     * 收银结算
+     * @param formData 购物车数据对象
+     *
+     */
+    @PostMapping(value = "/addGoodsList")
+    public AjaxResult addGoodsList(@RequestBody FormData formData)
+    {
+        try {
+            if (formData.getProductsInCart() == null) {
+                return AjaxResult.error("购物车数据异常 请重新结账");
+            } else {
+                System.out.println(formData);
+                fOrdeersService.settle(formData);
+                return AjaxResult.success("结账成功");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
     }
 }

@@ -92,7 +92,7 @@
         </div >
         <div class="warp_info warp_bottom">
           <p>总金额：{{ this.calculateTotalPrice() }}</p>
-          <el-button type="success" size="medium" @click="checkout">结账</el-button>
+          <el-button type="success" size="medium" @click="SettleAccount">结账</el-button>
         </div>
       </el-col>
       <el-col :span="6">
@@ -100,8 +100,8 @@
           <img src="@/assets/images/collectmoney/goods.png" alt="新增商品"  @click="handleAdds" />
           <img src="@/assets/images/collectmoney/addusers.png" alt="新增会员"  @click="handleAdd" />
           <img src="@/assets/images/collectmoney/wechat.png" alt="微信支付" @click="showQRCode('wechat')" />
-          <img src="@/assets/images/collectmoney/alipay.png" alt="支付宝支付" @click="showQRCode('alipay')" />
-          <img src="@/assets/images/collectmoney/cash.png" alt="现金支付" @click="checkout" />
+          <img src="@/assets/images/collectmoney/alipay.png" alt="支付宝支付" @click="Alipay" />
+          <img src="@/assets/images/collectmoney/cash.png" alt="现金支付" @click="SettleAccount" />
           <img src="@/assets/images/collectmoney/print.png" alt="打印小票" @click="printReceipt" />
         </div>
       </el-col>
@@ -201,7 +201,7 @@
 </template>
 
 <script>
-import { getGoodsList, addGoodsList, selectMemberName, addUsers, cateTreeSelect,addGoods } from "@/api/system/collectmoney";
+import { getGoods, addGoodsList, selectMemberName, addUsers, cateTreeSelect,addGoods } from "@/api/system/collectmoney";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import printJS from "print-js";
@@ -223,6 +223,9 @@ export default {
       open: false,
       opens: false,
       showPassword: false,
+      ordersPayMethod: '',//订单支付方式
+      CashPayment: '2',
+      AlipayPayment: '0',
       barcode: '', //条形码
       productsInCart: [], //购物车
       showQR: false,// 是否显示对话框
@@ -365,9 +368,6 @@ export default {
           case 'wechat':
             this.currentQRCode = require('@/assets/images/collectmoney/weChatCode.png');
             break;
-          case 'alipay':
-            this.currentQRCode = require('@/assets/images/collectmoney/alipayCode.jpg');
-            break;
           default:
             this.currentQRCode = '';
         }
@@ -398,7 +398,7 @@ export default {
       // 设置延迟时间为 100 毫秒
       this.timer = setTimeout(() => {
       if (this.barcode !== '') {//判断用户输入商品编码是否为null
-        getGoodsList(this.barcode).then(response => {//发送商品编码查询数据
+        getGoods(this.barcode).then(response => {//发送商品编码查询数据
           var product = response.GoodsList;
           //判断商品数据是否查询为null
           if (product) {
@@ -456,6 +456,23 @@ export default {
         }
         }, 1000);
     },
+    //生成订单编号
+    generateOrderNumber() {
+      const PREFIX = '222';
+      const LENGTH = 12;
+      const usedOrderNumbers = new Set();
+      let orderNumber;
+      do {
+        let randomNumber = PREFIX;
+        for (let i = 2; i < LENGTH; i++) {
+          randomNumber += Math.floor(Math.random() * 10); // 生成0到9之间的随机数字
+        }
+        orderNumber = randomNumber;
+      } while (usedOrderNumbers.has(orderNumber)); // 如果订单号已存在，则重新生成
+
+      usedOrderNumbers.add(orderNumber); // 添加到已使用的订单号集合中
+      return orderNumber;
+    },
     //结算功能
     checkout() {
       if (this.productsInCart.length !== 0) {//判断购物车是否为null
@@ -464,6 +481,7 @@ export default {
           memberPhone: this.member.memberPhone,
           totalPrice: this.calculateTotalPrice()/10,
           memberJian: this.member.memberJian/10,
+          ordersPayMethod: this.ordersPayMethod,
           productsInCart: this.productsInCart
         };
         addGoodsList(formData).then(response => {//发送购物车数据给后端
@@ -479,6 +497,24 @@ export default {
           }
         });
         this.clearCartMembers(); // 调用清空购物车+会员方法
+      }
+    },
+    //购物车页面结算功能
+    SettleAccount() {
+      this.ordersPayMethod = this.CashPayment;
+      //购物车结算
+      this.checkout();
+    },
+    //生成支付宝页面+结算功能
+    Alipay() {// 前端路径参数格式?subject=xxx&traceNo=xxx&totalAmount=xxx
+      if (this.productsInCart.length !== 0) {//判断购物车是否为null
+        const subject = "绿源鲜选超市";//超市名称
+        const OrderNumber = this.generateOrderNumber();//订单编号
+        const totalAmount = this.calculateTotalPrice();//总金额
+        this.ordersPayMethod = this.AlipayPayment;//支付方式
+        const path = "http://localhost:8088/api/system/alipay/pay?subject=" + subject + "&traceNo=" + OrderNumber + "&totalAmount=" + totalAmount;
+        window.open(path ,'_self'); //发送请求给后端支付宝接口,生成支付宝收款页面
+        this.checkout();//购物车结算
       }
     },
     //新增会员用户功能

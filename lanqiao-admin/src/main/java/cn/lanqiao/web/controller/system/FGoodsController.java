@@ -1,23 +1,10 @@
 package cn.lanqiao.web.controller.system;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
-
 import cn.lanqiao.common.core.domain.entity.Category;
-import cn.lanqiao.common.core.domain.entity.SysDept;
-import cn.lanqiao.common.utils.OrderNumberGenerator;
-import cn.lanqiao.system.domain.FOrdeers;
-import cn.lanqiao.system.domain.FOrderPartslist;
-import cn.lanqiao.system.domain.FormData;
 import cn.lanqiao.system.service.ICategoryService;
 import cn.lanqiao.system.service.IFOrdeersService;
-import cn.lanqiao.system.service.impl.FOrderPartslistServiceImpl;
-import io.swagger.models.auth.In;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,9 +38,6 @@ public class FGoodsController extends BaseController
     private IFGoodsService fGoodsService;
     @Autowired
     private ICategoryService IcategoryService ;
-
-    @Autowired
-    private IFOrdeersService fOrdeersService;
 
     /**
      * 查询商品列表
@@ -143,7 +127,7 @@ public class FGoodsController extends BaseController
      * 根据编号获取商品详细信息
      */
     @GetMapping(value = "/Goods/{coding}")
-    public AjaxResult getGoodsList(@PathVariable("coding") String coding)
+    public AjaxResult getGoods(@PathVariable("coding") String coding)
     {
         try {
             if (coding == null) {
@@ -161,27 +145,6 @@ public class FGoodsController extends BaseController
                         return AjaxResult.success().put("GoodsList",fGoods);
                     }
                 }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return AjaxResult.error("系统异常");
-        }
-    }
-
-    /**
-     * 收银结算
-     * @param formData 购物车数据对象
-     *
-     */
-    @PostMapping(value = "/addGoodsList")
-    public AjaxResult addGoodsList(@RequestBody FormData formData)
-    {
-        try {
-            if (formData.getProductsInCart() == null) {
-                return AjaxResult.error("结账异常 请重新结账");
-            } else {
-                fOrdeersService.settle(formData);
-                return AjaxResult.success("结账成功");
             }
         } catch (Exception ex) {
             ex.printStackTrace();

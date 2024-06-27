@@ -1,32 +1,31 @@
 package cn.lanqiao.system.domain;
 
+import cn.lanqiao.common.annotation.Excel;
+
 import java.math.BigDecimal;
 import java.util.List;
 
 public class FormData {
-    /**
-     * 电脑端结算
-     *
-     * @param memberPhone 用户电话号码
-     * @param totalPrice 总金额积分
-     * @param memberJian 折扣积分
-     * @param productsInCart 购物车数据
-     */
 
+    /** 用户电话号码 */
+    @Excel(name = "用户电话号码")
     private String memberPhone;
+
+    /** 总金额积分 */
+    @Excel(name = "总金额积分")
     private BigDecimal totalPrice;
+
+    /** 折扣积分 */
+    @Excel(name = "折扣积分")
     private BigDecimal memberJian;
+
+    /** 订单支付方式 */
+    @Excel(name = "订单支付方式")
+    private String ordersPayMethod;
+
+    /** 购物车数据 */
+    @Excel(name = "购物车数据")
     private List<FGoods> productsInCart;
-
-    public FormData() {
-    }
-
-    public FormData(String memberPhone, BigDecimal totalPrice, BigDecimal memberJian, List<FGoods> productsInCart) {
-        this.memberPhone = memberPhone;
-        this.totalPrice = totalPrice;
-        this.memberJian = memberJian;
-        this.productsInCart = productsInCart;
-    }
 
     public String getMemberPhone() {
         return memberPhone;
@@ -52,21 +51,19 @@ public class FormData {
         this.memberJian = memberJian;
     }
 
+    public String getOrdersPayMethod() {
+        return ordersPayMethod;
+    }
+
+    public void setOrdersPayMethod(String ordersPayMethod) {
+        this.ordersPayMethod = ordersPayMethod;
+    }
+
     public List<FGoods> getProductsInCart() {
         return productsInCart;
     }
 
     public void setProductsInCart(List<FGoods> productsInCart) {
         this.productsInCart = productsInCart;
-    }
-
-    @Override
-    public String toString() {
-        return "FormData{" +
-                "memberPhone='" + memberPhone + '\'' +
-                ", totalPrice=" + totalPrice +
-                ", memberJian=" + memberJian +
-                ", productsInCart=" + productsInCart +
-                '}';
     }
 }
