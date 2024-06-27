@@ -175,28 +175,20 @@ public class FOrderPartslist extends BaseEntity
         return goodsNum;
     }
 
+    public FOrderPartslist() {
+    }
+
     public FOrderPartslist( Long goodsId, String orderId, Long goodsNum) {
         this.goodsId = goodsId;
         this.orderId = orderId;
         this.goodsNum = goodsNum;
     }
 
-    public FOrderPartslist() {
-    }
-
-    public FOrderPartslist(Long id, Long goodsId, String orderId, Long goodsid, Long goodsNum, FGoods goods, String name, String specification, BigDecimal price, Long coding, String image, Long  ordersStatus) {
-        this.id = id;
+    public FOrderPartslist( Long goodsId, String orderId, Long goodsNum, Long ordersStatus) {
         this.goodsId = goodsId;
         this.orderId = orderId;
-        this.goodsid = goodsid;
         this.goodsNum = goodsNum;
-        this.goods = goods;
-        this.name = name;
-        this.specification = specification;
-        this.price = price;
-        this.coding = coding;
-        this.image = image;
-        this.ordersStatus = ordersStatus;
+        this.ordersStatus= ordersStatus;
     }
 
     @Override

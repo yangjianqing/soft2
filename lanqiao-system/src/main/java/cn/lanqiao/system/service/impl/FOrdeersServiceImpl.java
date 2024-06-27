@@ -245,45 +245,52 @@ public class FOrdeersServiceImpl implements IFOrdeersService
      * @param formData 购物车数据对象
      */
     @Override
-    public void settle(FormData formData) {
-        if (formData.getProductsInCart().size() != 0) {
-            // TODO: 进行新增订单操作
-            //创建订单编号
-            String OrderNu = OrderNumberGenerator.generateOrderNumber();
-            //根据用户电话查询用户数据，获取用户id
-            FUsers fUsers = ifUsersService.selectUsersusersPhone(formData.getMemberPhone());
-            if (fUsers == null) {//判断是否为游客支付
-                //创建订单对象传值,调用新增订单
-                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu, null, Long.parseLong(formData.getOrdersPayMethod()), 1L, 3L));
-            } else {
-                // 设置 memberJian 默认值为 0
-                BigDecimal memberJian = formData.getMemberJian();
-                if (memberJian == null) {
-                    memberJian = new BigDecimal(0);
-                }
-
-                //创建订单对象传值,调用新增订单
-                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu, fUsers.getUsersId(), Long.parseLong(formData.getOrdersPayMethod()), 1L, 3L));
-                //更新会员数据（会员积分+总金额积分-抵扣积分)
-                fUsers.setMemberTotal(fUsers.getMemberTotal().add(formData.getTotalPrice()).subtract(memberJian));
-                //更新会员等级为高等会员
-                if (fUsers.getMemberTotal().compareTo(new BigDecimal(100)) >= 0 && fUsers.getMemberGrade() != 1L) {
-                    fUsers.setMemberGrade(1L);
-                }
-                //更新会员数据
-                ifUsersService.updateFUsers(fUsers);
-            }
-            // TODO: 进行新增订单明细操作
-            for (FGoods fGood : formData.getProductsInCart()) {
-                //利用前端传递的商品编号(fGood.getId())，查询商品信息
-                FGoods fGoods1 = fGoodsService.selectGoodsList(fGood.getId());
-                //创建订单详情传值,调用新增订单详情
-                fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods1.getId(), OrderNu, fGood.getQuantity()));
-                //更新商品数量
-                fGoods1.setNum(fGoods1.getNum() - fGood.getQuantity());
-                fGoodsService.updateFGoods(fGoods1);
-            }
+    public int settle(FormData formData)
+    {
+        if (formData.getMemberPhone() == null || formData.getMemberJian() == null || formData.getTotalPrice() == null
+            || formData.getOrdersPayMethod() == null || formData.getProductsInCart().size() == 0) // 检查必要字段是否为空
+        {
+            return 0;
         }
+
+        // TODO: 进行新增订单操作
+        //创建订单编号
+        String OrderNu = OrderNumberGenerator.generateOrderNumber();
+        //根据用户电话查询用户数据，获取用户id
+        FUsers fUsers = ifUsersService.selectUsersusersPhone(formData.getMemberPhone());
+        if (fUsers == null) {//判断是否为游客支付
+            //创建订单对象传值,调用新增订单
+            fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu, null, Long.parseLong(formData.getOrdersPayMethod()), 1L, 3L));
+        } else {
+            // 设置 memberJian 默认值为 0
+            BigDecimal memberJian = formData.getMemberJian();
+            if (memberJian == null) {
+                memberJian = new BigDecimal(0);
+            }
+
+            //创建订单对象传值,调用新增订单
+            fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu, fUsers.getUsersId(), Long.parseLong(formData.getOrdersPayMethod()), 1L, 3L));
+            //更新会员数据（会员积分+总金额积分-抵扣积分)
+            fUsers.setMemberTotal(fUsers.getMemberTotal().add(formData.getTotalPrice()).subtract(memberJian));
+            //更新会员等级为高等会员
+            if (fUsers.getMemberTotal().compareTo(new BigDecimal(100)) >= 0 && fUsers.getMemberGrade() != 1L) {
+                fUsers.setMemberGrade(1L);
+            }
+            //更新会员数据
+            ifUsersService.updateFUsers(fUsers);
+        }
+
+        // TODO: 进行新增订单明细操作
+        for (FGoods fGood : formData.getProductsInCart()) {
+            //利用前端传递的商品编号(fGood.getId())，查询商品信息
+            FGoods fGoods1 = fGoodsService.selectGoodsList(fGood.getId());
+            //创建订单详情传值,调用新增订单详情
+            fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods1.getId(), OrderNu, fGood.getQuantity()));
+            //更新商品数量
+            fGoods1.setNum(fGoods1.getNum() - fGood.getQuantity());
+            fGoodsService.updateFGoods(fGoods1);
+        }
+        return 1;
     }
 
     /**
@@ -298,7 +305,8 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     private int deliveryIndex = 0; // 将deliveryIndex定义为类的成员变量，以保持索引状态
 
     @Override
-    public int insertShopping(Settlement settlement) {
+    public int insertShopping(Settlement settlement)
+    {
         if (settlement == null || settlement.getUsersPhone() == null) {
             return 0;
         }
@@ -332,7 +340,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
         // TODO: 进行新增订单明细操作
         for (FGoods fGoods : GoodsList) {
             fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods.getId(),//创建订单详情传值,调用新增订单详情
-                    settlement.getOrdersNumber(), fGoods.getQuantity()));
+                    settlement.getOrdersNumber(), fGoods.getQuantity(), 0L));
             fGoods.setNum(fGoods.getNum() - fGoods.getQuantity());//更新商品数量
             fGoodsService.updateFGoods(fGoods);//更新商品数据
         }
@@ -353,7 +361,8 @@ public class FOrdeersServiceImpl implements IFOrdeersService
      * @param usersPhone 用户电话号码
      */
     @Override
-    public List<FOrderPartslist> selectOrders(String usersPhone) {
+    public List<FOrderPartslist> selectOrders(String usersPhone)
+    {
         FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
         if (fUsers == null) {
             return Collections.emptyList(); // 如果用户不存在，返回空列表
@@ -363,10 +372,10 @@ public class FOrdeersServiceImpl implements IFOrdeersService
         if (fOrdeers.size() == 0) {
             return Collections.emptyList(); // 如果集合为0，返回空列表
         }
-        List<FOrderPartslist> fOrderPartslist = new ArrayList<>();
 
+        List<FOrderPartslist> fOrderPartslist = new ArrayList<>();//创建手机端app订单集合数据
         for (FOrdeers fOrdeer : fOrdeers) {
-            List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());
+            List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());//三表联查，查询数据
             fOrderPartslist.addAll(fOrderPartslists);
         }
 
@@ -379,7 +388,8 @@ public class FOrdeersServiceImpl implements IFOrdeersService
      *
      */
     @Override
-    public int updateSettlement(ordersPayMethod ordersPayMethod) {
+    public int updateSettlement(ordersPayMethod ordersPayMethod)
+    {
         if (ordersPayMethod == null || ordersPayMethod.getUsersPhone() == null || ordersPayMethod.getOrdersNumber() == null) {//判断前端传值不为null
             return 0; // 提前返回，参数为空时直接返回失败
         }
@@ -404,7 +414,8 @@ public class FOrdeersServiceImpl implements IFOrdeersService
      *
      */
     @Override
-    public int updateOrdersStatus(OrdersStatus orderstatus) {
+    public int updateOrdersStatus(OrdersStatus orderstatus)
+    {
         if (orderstatus == null || orderstatus.getUsersPhone() == null || orderstatus.getPartListId() == null) {
             return 0; // 提前返回，参数为空时直接返回失败
         }

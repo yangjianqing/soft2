@@ -7,8 +7,8 @@ public class ordersPayMethod {
     @Excel(name = "用户电话号码")
     private String usersPhone;
 
-    /** 商品条码 */
-    @Excel(name = "商品条码")
+    /** 订单编号 */
+    @Excel(name = "订单编号")
     private String ordersNumber;
 
     public String getUsersPhone() {

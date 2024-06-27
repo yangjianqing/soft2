@@ -246,7 +246,7 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
-     * 根据电话号码获取用户手机app会员地址信息
+     * 查询地址
      * @param usersPhone 电话号码
      *
      */
@@ -258,6 +258,28 @@ public class ApiShoppingIController extends BaseController {
             FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
             List<FAddress> fAddresses = fAddressMapper.selectUsersIdByType(String.valueOf(fUsers.getUsersId()));
             return AjaxResult.success(fAddresses);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
+    }
+
+    /**
+     * 根据id查询地址
+     * @param addressId 地址id
+     *
+     */
+    @ApiOperation("手机端个人地址详情页面接口")
+    @GetMapping("/selectUsersAddress/{addressId}")
+    public AjaxResult selectUsersAddress(@PathVariable("addressId") Long addressId)
+    {
+        try {
+            FAddress fAddress = fAddressMapper.selectFAddressByAddressId(addressId);
+            if (fAddress == null) {
+                return AjaxResult.error("查无此地址信息");
+            } else {
+                return AjaxResult.success(fAddress);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -485,7 +507,11 @@ public class ApiShoppingIController extends BaseController {
     {
         try {
             List<FGoods> fGoods = ifShoppingCartService.selectShopData(usersPhone);
-            return AjaxResult.success(fGoods);
+            if (fGoods.isEmpty()) {
+                return AjaxResult.success("查无购物车数据");
+            } else {
+                return AjaxResult.success(fGoods);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -515,7 +541,7 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
-     * 手机端订单支付状态修改接口
+     * 手机端订单支付状态修改接口(修改支付状态为1：已付款)
      * @param ordersPayMethod 订单状态接口数据
      *
      */
@@ -537,7 +563,7 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
-     * 手机端订单订单状态修改接口
+     * 手机端订单+订单明细的订单状态修改接口(修改订单状态为3：已完成)
      * @param orderstatus 订单状态接口数据
      *
      */
@@ -547,10 +573,10 @@ public class ApiShoppingIController extends BaseController {
     {
         try {
             int i = fOrdeersService.updateOrdersStatus(orderstatus);
-            if (i ==1 ) {
-                return AjaxResult.success("修改成功");
-            } else {
+            if (i == 0 ) {
                 return AjaxResult.success("修改失败");
+            } else {
+                return AjaxResult.success("修改成功");
             }
         } catch (Exception ex){
             ex.printStackTrace();

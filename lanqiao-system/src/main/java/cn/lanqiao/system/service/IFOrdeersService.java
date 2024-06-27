@@ -67,7 +67,7 @@ public interface IFOrdeersService
      * @param formData 购物车数据对象
      *
      */
-    public void settle(FormData formData);
+    public int settle(FormData formData);
 
     /**
      * 手机端结算
