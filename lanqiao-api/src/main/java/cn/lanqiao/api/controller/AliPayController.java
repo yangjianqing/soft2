@@ -1,9 +1,8 @@
 package cn.lanqiao.api.controller;
  
 import cn.lanqiao.api.config.AliPayConfig;
-import cn.lanqiao.system.domain.vo.AliPay;
+import cn.lanqiao.system.domain.argument.AliPay;
 import com.alipay.easysdk.factory.Factory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +17,6 @@ import com.alipay.api.request.AlipayTradePagePayRequest;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 /**

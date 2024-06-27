@@ -1,4 +1,4 @@
-package cn.lanqiao.system.domain.vo;
+package cn.lanqiao.system.domain.argument;
 
 import cn.lanqiao.common.utils.StringUtils;
 

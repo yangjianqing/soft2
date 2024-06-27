@@ -1,14 +1,10 @@
 package cn.lanqiao.system.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-import cn.lanqiao.system.domain.FGoods;
 import cn.lanqiao.system.domain.FOrdeers;
 import cn.lanqiao.system.domain.FOrderPartslist;
-import cn.lanqiao.system.domain.FormData;
-import cn.lanqiao.system.domain.vo.OrderstatusData;
-import cn.lanqiao.system.domain.vo.Settlement;
+import cn.lanqiao.system.domain.argument.*;
 
 /**
  * 订单管理Service接口
@@ -79,7 +75,7 @@ public interface IFOrdeersService
      * @param settlement 手机端结算数据对象
      *
      */
-    public void insertShopping(Settlement settlement);
+    public int insertShopping(Settlement settlement);
 
     /**
      * 手机端用户全部订单
@@ -89,37 +85,16 @@ public interface IFOrdeersService
     public List<FOrderPartslist> selectOrders(String usersPhone);
 
     /**
-     * 手机端用户待付款订单
+     * 手机端订单支付状态修改接口
+     * @param ordersPayMethod 订单状态接口数据
      *
-     * @param usersPhone 用户电话号码
      */
-    public List<FOrderPartslist> selectpaymentOrders(String usersPhone);
+     public int updateSettlement(ordersPayMethod ordersPayMethod);
 
     /**
-     * 手机端用户待发货订单
-     *
-     * @param usersPhone 用户电话号码
-     */
-    public List<FOrderPartslist> selectwaitingOrders(String usersPhone);
-
-    /**
-     * 手机端用户待收货订单
-     *
-     * @param usersPhone 用户电话号码
-     */
-    public List<FOrderPartslist> selectReceiveOrders(String usersPhone);
-
-    /**
-     * 手机端用户待评价订单
-     *
-     * @param usersPhone 用户电话号码
-     */
-    public List<FOrderPartslist> selectevaluateOrders(String usersPhone);
-
-    /**
-     * 手机端订单状态修改接口
-     * @param orderstatusData 订单状态接口数据
+     * 手机端订单订单状态修改接口
+     * @param orderstatus 订单状态接口数据
      *
      */
-     public int updateSettlement(OrderstatusData orderstatusData);
+    public int updateOrdersStatus(OrdersStatus orderstatus);
 }

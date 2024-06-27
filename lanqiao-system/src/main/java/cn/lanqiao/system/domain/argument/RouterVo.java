@@ -1,4 +1,4 @@
-package cn.lanqiao.system.domain.vo;
+package cn.lanqiao.system.domain.argument;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;

@@ -2,7 +2,7 @@ package cn.lanqiao.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-import cn.lanqiao.system.domain.FormData;
+import cn.lanqiao.system.domain.argument.FormData;
 import cn.lanqiao.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;

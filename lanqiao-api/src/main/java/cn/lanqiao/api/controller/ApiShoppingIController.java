@@ -5,39 +5,28 @@ import cn.lanqiao.common.constant.CacheConstants;
 import cn.lanqiao.common.constant.Constants;
 import cn.lanqiao.common.core.controller.BaseController;
 import cn.lanqiao.common.core.domain.AjaxResult;
-import cn.lanqiao.common.core.domain.R;
 import cn.lanqiao.common.core.domain.entity.Category;
-import cn.lanqiao.common.core.domain.model.LoginUser;
 import cn.lanqiao.common.core.page.TableDataInfo;
 import cn.lanqiao.common.core.redis.RedisCache;
 import cn.lanqiao.common.enums.BusinessType;
 import cn.lanqiao.common.utils.*;
-import cn.lanqiao.common.utils.poi.ExcelUtil;
 import cn.lanqiao.common.utils.uuid.IdUtils;
 
 //import cn.lanqiao.system.Category;
-import cn.lanqiao.framework.web.service.SysLoginService;
 import cn.lanqiao.framework.web.service.TokenService;
 import cn.lanqiao.system.domain.*;
-import cn.lanqiao.system.domain.vo.LoginVo;
-import cn.lanqiao.system.domain.vo.OrderstatusData;
-import cn.lanqiao.system.domain.vo.Settlement;
+import cn.lanqiao.system.domain.argument.*;
 import cn.lanqiao.system.mapper.FAddressMapper;
-import cn.lanqiao.system.mapper.FadvertisementMapper;
 import cn.lanqiao.system.service.*;
-import cn.lanqiao.system.service.impl.FAddressServiceImpl;
 import cn.lanqiao.system.service.impl.IFShoppingCartServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -238,18 +227,6 @@ public class ApiShoppingIController extends BaseController {
         List<FGoods> list = fGoodsService.selectPeopleNum(fGoods);
         return getDataTable(list);
     }
-//    /**
-//     * 查询下单人数
-//     */
-//    @ApiOperation("下单人数")
-//    @GetMapping("/peopleNum2")
-//    public TableDataInfo listPeopleNum2(FGoods fGoods)
-//    {
-//        startPage();
-//        List<FGoods> list = fGoodsService.selectPeopleNum2(fGoods);
-//        return getDataTable(list);
-//    }
-
 
     /**
      * 根据电话号码获取用户手机app会员信息
@@ -525,8 +502,12 @@ public class ApiShoppingIController extends BaseController {
     public AjaxResult insertSettlement(@RequestBody Settlement settlement)
     {
         try {
-            fOrdeersService.insertShopping(settlement);
-            return AjaxResult.success("付款成功");
+            int i = fOrdeersService.insertShopping(settlement);
+            if (i == 0) {
+                return AjaxResult.success("付款失败，数据异常");
+            } else {
+                return AjaxResult.success("付款成功");
+            }
         } catch (Exception ex){
             ex.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -534,17 +515,39 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
-     * 手机端订单状态修改接口
-     * @param orderstatusData 订单状态接口数据
+     * 手机端订单支付状态修改接口
+     * @param ordersPayMethod 订单状态接口数据
      *
      */
-    @ApiOperation("手机端订单状态修改接口")
+    @ApiOperation("手机端订单支付状态修改接口")
     @PostMapping(value = "/updateSettlement")
-    public AjaxResult updateSettlement(@RequestBody OrderstatusData orderstatusData)
+    public AjaxResult updateSettlement(@RequestBody ordersPayMethod ordersPayMethod)
     {
         try {
-            int i = fOrdeersService.updateSettlement(orderstatusData);
-            if (i==1) {
+            int i = fOrdeersService.updateSettlement(ordersPayMethod);
+            if (i == 1) {
+                return AjaxResult.success("修改成功");
+            } else {
+                return AjaxResult.success("修改失败");
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
+    }
+
+    /**
+     * 手机端订单订单状态修改接口
+     * @param orderstatus 订单状态接口数据
+     *
+     */
+    @ApiOperation("手机端订单支付状态修改接口")
+    @PostMapping(value = "/updateOrdersStatus")
+    public AjaxResult updateOrdersStatus(@RequestBody OrdersStatus orderstatus)
+    {
+        try {
+            int i = fOrdeersService.updateOrdersStatus(orderstatus);
+            if (i ==1 ) {
                 return AjaxResult.success("修改成功");
             } else {
                 return AjaxResult.success("修改失败");
@@ -566,7 +569,11 @@ public class ApiShoppingIController extends BaseController {
     {
         try {
             List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectOrders(usersPhone);
-            return AjaxResult.success(fOrderPartslists);
+            if (fOrderPartslists.isEmpty()) {
+                return AjaxResult.success("此用户无订单"); // 或者其他适当的处理方式
+            } else {
+                return AjaxResult.success(fOrderPartslists);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             return AjaxResult.error("系统异常");

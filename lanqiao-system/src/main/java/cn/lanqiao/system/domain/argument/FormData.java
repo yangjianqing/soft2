@@ -1,6 +1,7 @@
-package cn.lanqiao.system.domain;
+package cn.lanqiao.system.domain.argument;
 
 import cn.lanqiao.common.annotation.Excel;
+import cn.lanqiao.system.domain.FGoods;
 
 import java.math.BigDecimal;
 import java.util.List;

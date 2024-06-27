@@ -10,8 +10,10 @@ import cn.lanqiao.common.core.redis.RedisCache;
 import cn.lanqiao.common.utils.DateUtils;
 import cn.lanqiao.common.utils.OrderNumberGenerator;
 import cn.lanqiao.system.domain.*;
-import cn.lanqiao.system.domain.vo.OrderstatusData;
-import cn.lanqiao.system.domain.vo.Settlement;
+import cn.lanqiao.system.domain.argument.FormData;
+import cn.lanqiao.system.domain.argument.OrdersStatus;
+import cn.lanqiao.system.domain.argument.Settlement;
+import cn.lanqiao.system.domain.argument.ordersPayMethod;
 import cn.lanqiao.system.mapper.*;
 import cn.lanqiao.system.service.IFGoodsService;
 import cn.lanqiao.system.service.IFUsersService;
@@ -26,7 +28,7 @@ import cn.lanqiao.system.service.IFOrdeersService;
  * @date 2024-05-21
  */
 @Service
-public class FOrdeersServiceImpl implements IFOrdeersService 
+public class FOrdeersServiceImpl implements IFOrdeersService
 {
     @Autowired
     private FOrdeersMapper fOrdeersMapper;
@@ -41,9 +43,6 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
     @Autowired
     private FUsersMapper fUsersMapper;
-
-    @Autowired
-    private FAddressMapper fAddressMapper;
 
     @Autowired
     private FOrderPartslistMapper fOrderPartslistMapper;
@@ -62,27 +61,26 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
     @Autowired
     private RedisCache redisCache;
+
     /**
      * 查询订单管理
-     * 
+     *
      * @param ordersId 订单管理主键
      * @return 订单管理
      */
     @Override
-    public FOrdeers selectFOrdeersByOrdersId(Long ordersId)
-    {
+    public FOrdeers selectFOrdeersByOrdersId(Long ordersId) {
         return fOrdeersMapper.selectFOrdeersByOrdersId(ordersId);
     }
 
     /**
      * 查询订单管理列表
-     * 
+     *
      * @param fOrdeers 订单管理
      * @return 订单管理
      */
     @Override
-    public List<FOrdeers> selectFOrdeersList(FOrdeers fOrdeers)
-    {
+    public List<FOrdeers> selectFOrdeersList(FOrdeers fOrdeers) {
         List<FOrdeers> fOrdeers1 = fOrdeersMapper.selectFOrdeersList(fOrdeers);
         // 创建存储地址id的存储器
         Set<Long> addressIds = new HashSet<>();
@@ -198,70 +196,65 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
     /**
      * 新增订单管理
-     * 
+     *
      * @param fOrdeers 订单管理
      * @return 结果
      */
     @Override
-    public int insertFOrdeers(FOrdeers fOrdeers)
-    {
+    public int insertFOrdeers(FOrdeers fOrdeers) {
         fOrdeers.setOrdersCreattime(DateUtils.getNowDate());
         return fOrdeersMapper.insertFOrdeers(fOrdeers);
     }
 
     /**
      * 修改订单管理
-     * 
+     *
      * @param fOrdeers 订单管理
      * @return 结果
      */
     @Override
-    public int updateFOrdeers(FOrdeers fOrdeers)
-    {
+    public int updateFOrdeers(FOrdeers fOrdeers) {
         return fOrdeersMapper.updateFOrdeers(fOrdeers);
     }
 
     /**
      * 批量删除订单管理
-     * 
+     *
      * @param ordersIds 需要删除的订单管理主键
      * @return 结果
      */
     @Override
-    public int deleteFOrdeersByOrdersIds(Long[] ordersIds)
-    {
+    public int deleteFOrdeersByOrdersIds(Long[] ordersIds) {
         return fOrdeersMapper.deleteFOrdeersByOrdersIds(ordersIds);
     }
 
     /**
      * 删除订单管理信息
-     * 
+     *
      * @param ordersId 订单管理主键
      * @return 结果
      */
     @Override
-    public int deleteFOrdeersByOrdersId(Long ordersId)
-    {
+    public int deleteFOrdeersByOrdersId(Long ordersId) {
         return fOrdeersMapper.deleteFOrdeersByOrdersId(ordersId);
     }
 
     /**
      * 电脑端结算
-     * @param formData 购物车数据对象
      *
+     * @param formData 购物车数据对象
      */
     @Override
-    public void settle(FormData formData)
-    {
+    public void settle(FormData formData) {
         if (formData.getProductsInCart().size() != 0) {
             // TODO: 进行新增订单操作
             //创建订单编号
             String OrderNu = OrderNumberGenerator.generateOrderNumber();
             //根据用户电话查询用户数据，获取用户id
             FUsers fUsers = ifUsersService.selectUsersusersPhone(formData.getMemberPhone());
-            if(fUsers == null) {//判断是否为游客支付
+            if (fUsers == null) {//判断是否为游客支付
                 //创建订单对象传值,调用新增订单
-                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu,null,Long.parseLong(formData.getOrdersPayMethod()),1L,3L));
+                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu, null, Long.parseLong(formData.getOrdersPayMethod()), 1L, 3L));
             } else {
                 // 设置 memberJian 默认值为 0
                 BigDecimal memberJian = formData.getMemberJian();
@@ -270,7 +263,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
                 }
 
                 //创建订单对象传值,调用新增订单
-                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu,fUsers.getUsersId(),Long.parseLong(formData.getOrdersPayMethod()),1L,3L));
+                fOrdeersService.insertFOrdeers(new FOrdeers(OrderNu, fUsers.getUsersId(), Long.parseLong(formData.getOrdersPayMethod()), 1L, 3L));
                 //更新会员数据（会员积分+总金额积分-抵扣积分)
                 fUsers.setMemberTotal(fUsers.getMemberTotal().add(formData.getTotalPrice()).subtract(memberJian));
                 //更新会员等级为高等会员
@@ -285,9 +278,9 @@ public class FOrdeersServiceImpl implements IFOrdeersService
                 //利用前端传递的商品编号(fGood.getId())，查询商品信息
                 FGoods fGoods1 = fGoodsService.selectGoodsList(fGood.getId());
                 //创建订单详情传值,调用新增订单详情
-                fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods1.getId(),OrderNu,fGood.getQuantity()));
+                fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods1.getId(), OrderNu, fGood.getQuantity()));
                 //更新商品数量
-                fGoods1.setNum(fGoods1.getNum()-fGood.getQuantity());
+                fGoods1.setNum(fGoods1.getNum() - fGood.getQuantity());
                 fGoodsService.updateFGoods(fGoods1);
             }
         }
@@ -303,61 +296,55 @@ public class FOrdeersServiceImpl implements IFOrdeersService
      * @param settlement 手机端结算对象数据
      */
     private int deliveryIndex = 0; // 将deliveryIndex定义为类的成员变量，以保持索引状态
+
     @Override
-    public void insertShopping(Settlement settlement)
-    {
-        if (settlement != null && settlement.getUsersPhone() != null) {
-            List<FGoods> GoodsList = ifShoppingCartService.selectShopData(settlement.getUsersPhone());
-            if (GoodsList != null) {
-                // TODO: 进行新增订单操作
-                FUsers fUsers = fUsersMapper.selectUsersusersPhone(settlement.getUsersPhone());//根据电话查询用户id
-                List<SysUser> sysUsers = sysUserMapper.selectSysUserAll();//查询全部配送员信息
-                if (deliveryIndex >= sysUsers.size()) {
-                    deliveryIndex = 0; // 如果超出配送员数量，重置索引
-                }
-                SysUser sysUser = sysUsers.get(deliveryIndex);//根据索引取配送员信息
-                //创建订单对象传值,调用新增订单
-                fOrdeersService.insertFOrdeers(new FOrdeers(settlement.getOrdersNumber(),fUsers.getUsersId(),sysUser.getUserId(),settlement.getOrdersPayMethod(),0L,0L,settlement.getOrdersRemark()));
-                deliveryIndex++; // 为下一次调用准备索引
-
-                // TODO: 进行新增订单明细操作
-                for (FGoods fGoods : GoodsList) {
-                    //创建订单详情传值,调用新增订单详情
-                    FOrderPartslist fOrderPartslist = new FOrderPartslist(fGoods.getId(),settlement.getOrdersNumber(),fGoods.getQuantity());
-                    fOrderPartslistService.insertFOrderPartslist(fOrderPartslist);
-                    //更新商品数量
-                    fGoods.setNum(fGoods.getNum()-fGoods.getQuantity());
-                    fGoodsService.updateFGoods(fGoods);
-                }
-
-                // TODO: 进行清空redis购物车数据操作
-                // 生成唯一标识 Key
-                String verKey = CacheConstants.Query_Shopping_KEY + settlement.getUsersPhone();
-                redisCache.deleteObject(verKey);
-            }
+    public int insertShopping(Settlement settlement) {
+        if (settlement == null || settlement.getUsersPhone() == null) {
+            return 0;
         }
-    }
 
-    /**
-     * 手机端订单状态修改接口
-     * @param orderstatusData 订单状态接口数据
-     *
-     */
-    @Override
-    public int updateSettlement(OrderstatusData orderstatusData) {
-        if (orderstatusData != null && orderstatusData.getUsersPhone() != null && orderstatusData.getOrdersNumber() != null) {//判断前端传值不为null
-            FUsers fUsers = fUsersMapper.selectUsersusersPhone(orderstatusData.getUsersPhone());//根据电话查询会员用户数据获取会员用户id
-            if (fUsers != null) {
-                FOrdeers ordeers = fOrdeersMapper.selectOrder(fUsers.getUsersId(),orderstatusData.getOrdersNumber());//根据会员用户id和订单号查询订单数据
-                if (ordeers != null ) {
-                    int i = fOrdeersMapper.updateOrdersStatus(orderstatusData.getOrdersNumber());
-                    if (i > 0) {
-                        return 1;
-                    }
-                }
-            }
+        List<FGoods> GoodsList = ifShoppingCartService.selectShopData(settlement.getUsersPhone());
+        if (GoodsList != null || GoodsList.isEmpty()) {
+            return 0;
         }
-        return 0;
+
+        FUsers fUsers = fUsersMapper.selectUsersusersPhone(settlement.getUsersPhone());//根据电话查询用户id
+        if (fUsers == null) {
+            return 0;
+        }
+
+        List<SysUser> sysUsers = sysUserMapper.selectSysUserAll();//查询全部配送员信息
+        if (sysUsers.isEmpty()) {
+            return 0;
+        }
+
+        if (deliveryIndex >= sysUsers.size()) {
+            deliveryIndex = 0; // 如果超出配送员数量，重置索引
+        }
+        SysUser sysUser = sysUsers.get(deliveryIndex);//根据索引取配送员信息
+
+        // TODO: 进行新增订单操作 (创建订单对象传值,调用新增订单)
+        fOrdeersService.insertFOrdeers(new FOrdeers(settlement.getOrdersNumber(), fUsers.getUsersId(),
+                sysUser.getUserId(), settlement.getOrdersPayMethod(), 0L, 0L,
+                settlement.getOrdersRemark()));
+        deliveryIndex++; // 为下一次调用准备索引
+
+        // TODO: 进行新增订单明细操作
+        for (FGoods fGoods : GoodsList) {
+            fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods.getId(),//创建订单详情传值,调用新增订单详情
+                    settlement.getOrdersNumber(), fGoods.getQuantity()));
+            fGoods.setNum(fGoods.getNum() - fGoods.getQuantity());//更新商品数量
+            fGoodsService.updateFGoods(fGoods);//更新商品数据
+        }
+
+        // TODO: 进行清空redis购物车数据操作
+        String verKey = CacheConstants.Query_Shopping_KEY + settlement.getUsersPhone();// 生成唯一标识 Key
+        boolean b = redisCache.deleteObject(verKey);//根据key清空redis购物车数据
+        if (b) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     /**
@@ -368,81 +355,73 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     @Override
     public List<FOrderPartslist> selectOrders(String usersPhone) {
         FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
+        if (fUsers == null) {
+            return Collections.emptyList(); // 如果用户不存在，返回空列表
+        }
+
         List<FOrdeers> fOrdeers = fOrdeersMapper.selectOrders(fUsers.getUsersId());
+        if (fOrdeers.size() == 0) {
+            return Collections.emptyList(); // 如果集合为0，返回空列表
+        }
         List<FOrderPartslist> fOrderPartslist = new ArrayList<>();
+
         for (FOrdeers fOrdeer : fOrdeers) {
             List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());
             fOrderPartslist.addAll(fOrderPartslists);
         }
+
         return fOrderPartslist;
     }
 
     /**
-     * 手机端用户待付款订单
+     * 手机端订单支付状态修改接口
+     * @param ordersPayMethod 订单状态接口数据
      *
-     * @param usersPhone 用户电话号码
      */
     @Override
-    public List<FOrderPartslist> selectpaymentOrders(String usersPhone) {
-        FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
-        List<FOrdeers> fOrdeers = fOrdeersMapper.selectpaymentOrders(fUsers.getUsersId());
-        List<FOrderPartslist> fOrderPartslist = new ArrayList<>();
-        for (FOrdeers fOrdeer : fOrdeers) {
-            List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());
-            fOrderPartslist.addAll(fOrderPartslists);
+    public int updateSettlement(ordersPayMethod ordersPayMethod) {
+        if (ordersPayMethod == null || ordersPayMethod.getUsersPhone() == null || ordersPayMethod.getOrdersNumber() == null) {//判断前端传值不为null
+            return 0; // 提前返回，参数为空时直接返回失败
         }
-        return fOrderPartslist;
-    }
 
-
-    /**
-     * 手机端用户待发货订单
-     *
-     * @param usersPhone 用户电话号码
-     */
-    @Override
-    public List<FOrderPartslist> selectwaitingOrders(String usersPhone) {
-        FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
-        List<FOrdeers> fOrdeers = fOrdeersMapper.selectwaitingOrders(fUsers.getUsersId());
-        List<FOrderPartslist> fOrderPartslist = new ArrayList<>();
-        for (FOrdeers fOrdeer : fOrdeers) {
-            List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());
-            fOrderPartslist.addAll(fOrderPartslists);
+        FUsers fUsers = fUsersMapper.selectUsersusersPhone(ordersPayMethod.getUsersPhone());//根据电话查询会员用户数据获取会员用户id
+        if (fUsers == null) { // 如果用户不存在，直接返回失败
+            return 0;
         }
-        return fOrderPartslist;
+
+        FOrdeers ordeers = fOrdeersMapper.selectOrder(fUsers.getUsersId(),ordersPayMethod.getOrdersNumber());//根据会员用户id和订单号查询订单数据
+        if (ordeers == null ) { // 如果订单不存在，直接返回失败
+            return 0;
+        }
+
+        int updateResult = fOrdeersMapper.updateOrdersStatus(ordersPayMethod.getOrdersNumber());
+        return updateResult > 0 ? 1:0; // 如果更新成功，则返回1，否则返回0
     }
 
     /**
-     * 手机端用户待收货订单
+     * 手机端订单订单状态修改接口
+     * @param orderstatus 订单状态接口数据
      *
-     * @param usersPhone 用户电话号码
      */
     @Override
-    public List<FOrderPartslist> selectReceiveOrders(String usersPhone) {
-        FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
-        List<FOrdeers> fOrdeers = fOrdeersMapper.selectReceiveOrders(fUsers.getUsersId());
-        List<FOrderPartslist> fOrderPartslist = new ArrayList<>();
-        for (FOrdeers fOrdeer : fOrdeers) {
-            List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());
-            fOrderPartslist.addAll(fOrderPartslists);
+    public int updateOrdersStatus(OrdersStatus orderstatus) {
+        if (orderstatus == null || orderstatus.getUsersPhone() == null || orderstatus.getPartListId() == null) {
+            return 0; // 提前返回，参数为空时直接返回失败
         }
-        return fOrderPartslist;
-    }
 
-    /**
-     * 手机端用户待评价订单
-     *
-     * @param usersPhone 用户电话号码
-     */
-    @Override
-    public List<FOrderPartslist> selectevaluateOrders(String usersPhone) {
-        FUsers fUsers = fUsersMapper.selectUsersusersPhone(usersPhone);
-        List<FOrdeers> fOrdeers = fOrdeersMapper.selectevaluateOrders(fUsers.getUsersId());
-        List<FOrderPartslist> fOrderPartslist = new ArrayList<>();
-        for (FOrdeers fOrdeer : fOrdeers) {
-            List<FOrderPartslist> fOrderPartslists = fOrderPartslistMapper.selectFOrderPartslist(fOrdeer.getOrdersNumber());
-            fOrderPartslist.addAll(fOrderPartslists);
+        FUsers fUsers = fUsersMapper.selectUsersusersPhone(orderstatus.getUsersPhone());
+        if (fUsers == null) {
+            return 0; // 如果用户不存在，直接返回失败
         }
-        return fOrderPartslist;
+
+        int successCount = 0;
+        for (String partListId : orderstatus.getPartListId()) {
+            int i = fOrderPartslistMapper.updateOrdersStatus(partListId);
+            if (i > 0) {
+                successCount++;
+            }
+        }
+
+        return successCount > 0 ? 1:0;
     }
 }

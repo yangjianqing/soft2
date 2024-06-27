@@ -1,6 +1,7 @@
 package cn.lanqiao.system.mapper;
 
 import java.util.List;
+
 import cn.lanqiao.system.domain.FOrderPartslist;
 
 /**
@@ -65,4 +66,12 @@ public interface FOrderPartslistMapper
      * @param orderId 订单编号
      */
     public List<FOrderPartslist> selectFOrderPartslist(String orderId);
+
+    /**
+     * 手机端根据用户id及订单编号查询订单数据
+     *
+     * @param PartListId 订单明细id
+     *
+     */
+    public int updateOrdersStatus(String PartListId);
 }

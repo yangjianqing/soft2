@@ -68,35 +68,7 @@ public interface FOrdeersMapper
     public List<FOrdeers> selectOrders(Long usersId);
 
     /**
-     * 手机端用户待付款订单
-     *
-     * @param usersId 用户Id
-     */
-    public List<FOrdeers> selectpaymentOrders(Long usersId);
-
-    /**
-     * 手机端用户待发货订单
-     *
-     * @param usersId 用户Id
-     */
-    public List<FOrdeers> selectwaitingOrders(Long usersId);
-
-    /**
-     * 手机端用户待收货订单
-     *
-     * @param usersId 用户Id
-     */
-    public List<FOrdeers> selectReceiveOrders(Long usersId);
-
-    /**
-     * 手机端用户待评价订单
-     *
-     * @param usersId 用户Id
-     */
-    public List<FOrdeers> selectevaluateOrders(Long usersId);
-
-    /**
-     * 根据订单编号修改订单数据
+     * 手机端订单支付状态修改接口
      *
      * @param ordersNumber 订单编号
      */

@@ -1,9 +1,8 @@
-package cn.lanqiao.system.domain.vo;
+package cn.lanqiao.system.domain.argument;
 
 import cn.lanqiao.common.annotation.Excel;
 
-public class OrderstatusData {
-
+public class ordersPayMethod {
     /** 用户电话号码 */
     @Excel(name = "用户电话号码")
     private String usersPhone;

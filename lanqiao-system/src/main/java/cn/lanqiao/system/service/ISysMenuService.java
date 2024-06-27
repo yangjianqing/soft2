@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 import cn.lanqiao.common.core.domain.TreeSelect;
 import cn.lanqiao.common.core.domain.entity.SysMenu;
-import cn.lanqiao.system.domain.vo.RouterVo;
+import cn.lanqiao.system.domain.argument.RouterVo;
 
 /**
  * 菜单 业务层
