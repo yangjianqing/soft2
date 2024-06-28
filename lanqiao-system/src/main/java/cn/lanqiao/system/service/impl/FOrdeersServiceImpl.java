@@ -349,6 +349,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
         String verKey = CacheConstants.Query_Shopping_KEY + settlement.getUsersPhone();// 生成唯一标识 Key
         boolean b = redisCache.deleteObject(verKey);//根据key清空redis购物车数据
         if (b) {
+
             return 1;
         } else {
             return 0;

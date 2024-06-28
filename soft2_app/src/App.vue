@@ -8,9 +8,14 @@
 <script>
 export default {
       name: 'App',
-}
+
+};
+
 
 </script>
+
+
+
 <style>
 #app{
   background-color: rgb(245, 245, 245);

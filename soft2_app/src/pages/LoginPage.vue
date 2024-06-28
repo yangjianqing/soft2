@@ -80,6 +80,7 @@
         </div>
       </div>
     </div>
+    <p @click="sendMessage">测试发送</p>
   </div>
 
 </template>
@@ -88,6 +89,7 @@
 import {login, sendCode} from "@/api/login";
 import addUser from "@/pages/AddUser/AddUser.vue";
 import {showNotify} from "vant";
+const axios = require('axios'); // 确保您已经安装了axios库
 
 const TOKEN_KEY = "X-Token";
 export default {
@@ -107,6 +109,15 @@ export default {
     }
   },
   methods: {
+    async sendMessage() {
+      try {
+        // 处理点击事件的逻辑
+        const apiUrl = `http://127.0.0.1:8089/api/sendMessage/1234`;
+        await axios.get(apiUrl);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     submitForm(form) {
       console.log(this.form.uuid)
       const user = {
