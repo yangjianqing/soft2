@@ -94,4 +94,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectOrder" resultType="FOrdeers" resultMap="FOrdeersResult">
         select * from f_ordeers WHERE orders_users_id = #{ordersUsersId} AND orders_number = #{ordersNumber}
     </select>
+
+    <update id="updateFOrdeersName">
+        update f_ordeers set orders_status = 3 where orders_number = #{ordersNumber}
+    </update>
 </mapper>

@@ -424,14 +424,18 @@ public class FOrdeersServiceImpl implements IFOrdeersService
             return 0; // 如果用户不存在，直接返回失败
         }
 
-        int successCount = 0;
-        for (String partListId : orderstatus.getPartListId()) {
-            int i = fOrderPartslistMapper.updateOrdersStatus(partListId);
-            if (i > 0) {
-                successCount++;
-            }
+        fOrderPartslistMapper.updateOrdersStatus(orderstatus.getPartsId());
+
+        FOrderPartslist fOrderPartslist = fOrderPartslistMapper.selectFOrderPartslistById(orderstatus.getPartsId());
+        if (fOrderPartslist == null) {
+            return 0;
         }
 
-        return successCount > 0 ? 1:0;
+        int i = fOrdeersMapper.updateFOrdeersName(fOrderPartslist.getOrderId());
+        if (i > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

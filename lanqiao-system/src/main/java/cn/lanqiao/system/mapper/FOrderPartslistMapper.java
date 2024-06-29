@@ -73,5 +73,5 @@ public interface FOrderPartslistMapper
      * @param PartListId 订单明细id
      *
      */
-    public int updateOrdersStatus(String PartListId);
+    public int updateOrdersStatus(Long PartListId);
 }

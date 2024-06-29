@@ -75,4 +75,12 @@ public interface FOrdeersMapper
      *
      */
     public FOrdeers selectOrder(@Param("ordersUsersId")Long ordersUsersId,@Param("ordersNumber")String ordersNumber);
+
+    /**
+     * 根据订单明细订单号修改订单表的订单状态
+     *
+     * @param ordersNumber 订单编号
+     *
+     */
+    public int updateFOrdeersName(String ordersNumber);
 }

@@ -1,7 +1,6 @@
 package cn.lanqiao.system.domain.argument;
 
 import cn.lanqiao.common.annotation.Excel;
-import java.util.List;
 
 public class OrdersStatus {
     /** 用户电话号码 */
@@ -12,9 +11,9 @@ public class OrdersStatus {
     @Excel(name = "订单编号")
     private String ordersNumber;
 
-    /** 商品条码集合 */
-    @Excel(name = "商品条码集合")
-    private List<String> partListId;
+    /** 订单明细Id */
+    @Excel(name = "订单明细Id")
+    private Long partsId;
 
     public String getUsersPhone() {
         return usersPhone;
@@ -32,11 +31,11 @@ public class OrdersStatus {
         this.ordersNumber = ordersNumber;
     }
 
-    public List<String> getPartListId() {
-        return partListId;
+    public Long getPartsId() {
+        return partsId;
     }
 
-    public void setPartListId(List<String> partListId) {
-        this.partListId = partListId;
+    public void setPartsId(Long partsId) {
+        this.partsId = partsId;
     }
 }
