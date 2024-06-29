@@ -137,6 +137,14 @@ export function removeUsersAddress(addressIds){
     method: 'delete'
   })
 }
+//根据地址id查询地址
+export function selectUsersAddress(addressId){
+  return request({
+    url: 'api/fresh/selectUsersAddress/'+addressId,
+    method: 'get'
+  })
+}
+
 //获取购物车列表
 export function getCarList(phone){
   return request({
@@ -144,6 +152,7 @@ export function getCarList(phone){
     method: 'get',
   })
 }
+//根据手机号查询订单
 export function selectOrders(phone){
   return request({
     url: '/api/fresh/selectOrders/'+phone,
@@ -183,14 +192,20 @@ export function updateSettlement(data){
     data:data,
   })
 }
-
-
-//月下单数量
-export function listPeopleNum(query){
+//手机端购物车结算
+export function updateShopData(usersPhone){
   return request({
-    url:"/api/fresh/peopleNum",
+    url:"/api/fresh/updateShopData/"+usersPhone,
     method: 'get',
-    params: query,
   })
 }
+//手机端修改购物车redis数据支付状态为
+export function updateShopData2(usersPhone){
+  return request({
+    url:"/api/fresh/updateShopData2/"+usersPhone,
+    method: 'get',
+  })
+}
+
+
 

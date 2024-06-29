@@ -7,7 +7,7 @@
     <template #right>
       <router-link to="/cart">
       <div class="right_nav">
-        <van-icon name="cart-o" size="18"  :badge="this.dataCount"/>
+        <van-icon name="cart-o" size="18" :badge="dataCount !== 0 ? dataCount : ''"/>
       </div>
       </router-link>
     </template>
@@ -40,7 +40,7 @@
   >
     猜你喜欢
   </van-divider>
-  <div style="display: flex;flex-wrap: wrap;">
+  <div style="display: flex;flex-wrap: wrap;  margin-bottom: 50px;">
     <template v-for="(goodsInfo,index) in goodsList">
       <div class="total_box" v-if="index%2===1">
         <MerchandiseInfo :goodsInfo="goodsList[index-1]"></MerchandiseInfo>
@@ -99,7 +99,7 @@ export default {
       this.usersPhone = userInfo.usersPhone; // 假设属性名为 phone
       addCarList(this.usersPhone,this.selectedGoods.coding).then(res=>{
         if ( res.data.msg === '加入购物车成功'){
-          router.push("/mine/ordermanagement");
+          router.push("/PayInfo");
         }
       })
     },
@@ -126,15 +126,17 @@ export default {
     const userInfoString = localStorage.getItem("userInfo");
     // 将字符串解析回对象
     this.userInfo = JSON.parse(userInfoString);
-    // 现在可以访问对象中的属性了
-    getCarList(this.userInfo.usersPhone).then(res =>{
-      // 将数据赋值给 goodsList
-      this.goodsList = res.data.data;
-      // 获取数据的数量
-      // 获取数据的数量并保存到 dataCount
-      this.dataCount = this.goodsList.length;
-      // 打印数据数量到控制台
-      console.log( this.dataCount)
+    getCarList(this.userInfo.usersPhone).then(res => {
+      if (res.data && res.data.data && Array.isArray(res.data.data)) {
+        this.goodsList = res.data.data;
+        this.dataCount = this.goodsList.length;
+        console.log(this.dataCount);
+      } else {
+        // 处理数据为空或者不是预期的数组情况
+        console.error('购物车没有任何商品：', res.data);
+      }
+    }).catch(error => {
+      console.error('获取购物车列表发生错误：', error);
     });
   }
 }

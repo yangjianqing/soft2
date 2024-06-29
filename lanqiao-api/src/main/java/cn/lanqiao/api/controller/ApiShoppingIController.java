@@ -603,7 +603,7 @@ public class ApiShoppingIController extends BaseController {
      * @param usersPhone 用户电话
      *
      */
-    @ApiOperation("手机端购物车结算")
+    @ApiOperation("手机端修改购物车redis数据支付状态为")
     @GetMapping(value = "/updateShopData2/{usersPhone}")
     public AjaxResult updateShopData2(@PathVariable("usersPhone") String usersPhone) {
         try {

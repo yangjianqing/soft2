@@ -26,7 +26,7 @@
 </template>
 <script>
 export default {
-  name: "OrderListInfo",
+  name: "OrderPayInfo",
   props:["goodsInfo"],
   data(){
     return{

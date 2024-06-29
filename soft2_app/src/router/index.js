@@ -190,6 +190,22 @@ const routes = [
       title: "支付成功",
     }
   },
+  {
+    path:"/PayInfo",
+    component:import("@/pages/PayInfo/PayInfo.vue"),
+    name:"PayInfo",
+    meta: {
+      title: "订单信息",
+    }
+  },
+  {
+    path:"/AddressInfo/:id",
+    component:import("@/pages/Addadress/AddressInfo.vue"),
+    name:"AddressInfo",
+    meta: {
+      title: "地址信息页面",
+    }
+  },
 ];
 
 // 4. 使用 createRouter 方法创建一个路由实例 router

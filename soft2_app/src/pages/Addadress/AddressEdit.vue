@@ -1,60 +1,41 @@
 <template>
-  <div>
+  <div >
 
+  <div style="margin-bottom: 46px">
     <van-nav-bar
       title="地址管理"
       left-text="返回"
+      right-text="删除"
       left-arrow
       @click-left="onClickLeft"
+      @click-right="clickBot(this.delId)"
       class="fixed-navbar"
-    />
-    <div style="height: 3rem"></div>
-    <template v-for="(address,index) in addressList">
-      <van-swipe-cell>
-
-        <div class="address-container">
-          <!--    左侧单选按钮-->
-          <div class="address-line">
-            <input type="radio" :name="'address'+index" :value="0" v-model.number="address.addressSort" @change="selectAddress(index)">
-          </div>
-          <!--右侧-->
-          <div class="address-management">
-            <!-- 第一行：地址渲染 -->
-            <div class="address-line">
-              <p class="address-detail">{{ address.addressDetail }}</p>
-            </div>
-            <!-- 第三行：用户名、电话号码和地址标签渲染 -->
-            <div class="address-line">
-              <p>{{ address.addressName }}</p>
-            </div>
-            <div class="address-line">
-              <p>{{ address.addressPhone }}</p>
-            </div>
-          </div>
-        </div>
-        <template #right>
-          <van-button @click="clickBot(address.addressId)" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
-        </template>
-      </van-swipe-cell>
-    </template>
-    <button @click="onAdd" class="add-address-button">新增地址</button>
-    <div style="height: 4rem"></div>
+    >
+    </van-nav-bar>
   </div>
-<!--  <van-action-bar>-->
-<!--    <van-action-bar-icon icon="chat-o" text="客服" @click="onClickIcon" />-->
-<!--    <van-action-bar-icon icon="cart-o" text="购物车" @click="onClickIcon" />-->
-<!--    <van-action-bar-icon icon="shop-o" text="店铺" @click="onClickIcon" />-->
-<!--    <van-action-bar-button type="danger" text="立即购买" @click="onClickButton" />-->
-<!--  </van-action-bar>-->
+
+    <div style="height: 90vh;">
+
+      <van-address-list
+        v-model="delId"
+        :list="addressList"
+        default-tag-text="默认"
+        @add="onAdd"
+        @edit="showBottomBox(this.delId)"
+        @select="select"
+      />
+    </div>
+  </div>
 </template>
 <script>
-import {ref} from 'vue';
-import {showConfirmDialog, showNotify, showToast} from 'vant';
+import {showConfirmDialog, showNotify} from 'vant';
 import router from "@/router";
-import {addressList, editUsersAddress, removeUsersAddress} from "@/api/merchant";
+import {addressList, removeUsersAddress} from "@/api/merchant";
 
 const onClickLeft = () => history.back();
 const onAdd = () => router.push({path: '/mine/addadres'});
+
+
 export default {
   name: "AddressEdit",
   data() {
@@ -63,13 +44,31 @@ export default {
       onClickLeft,
       usersPhone: "",
       addressList: [],
+      delId:0,
     }
   },
   created() {
     //获取地址列表
     this.getAddressList();
+
   },
   methods: {
+    //弹出层
+    showBottomBox(delId){
+      // 使用 router.push 跳转并携带参数
+      this.$router.push({ name: 'AddressInfo', params: { id: delId } });
+   },
+    //获取地址 id
+
+    select(data){
+      if (data === undefined && data.id === null ) {
+        // 如果没有数据或数据中没有id，提示用户添加地址
+        showNotify({type: 'warning', message: '请先添加地址'});
+      } else {
+
+        this.delId = data.id;
+      }
+    },
     //获取地址列表
     getAddressList() {
       const userInfoString = localStorage.getItem("userInfo");
@@ -78,14 +77,22 @@ export default {
       // 现在可以访问对象中的属性了
       this.usersPhone = userInfo.usersPhone;
       addressList(this.usersPhone).then(res => {
-        this.addressList = res.data.data;
-        console.log(this.addressList)
+        // 转换地址列表
+        const transformedList = res.data.data.map((item, index) => ({
+          id: item.addressId,
+          name: item.addressName,
+          tel: item.addressPhone,
+          address: item.addressDetail,
+          isDefault: index === 0 // 如果是第一个元素，则 isDefault 为 true
+        }));
+        this.addressList = transformedList;
+        if (this.addressList.length > 0) {
+          this.delId = this.addressList[0].id;
+        }else {
+          showNotify({type: 'warning', message: '请添加地址'});
+        }
+
       })
-    },
-    selectAddress(selectedIndex) {
-      this.addressList.forEach((address, index) => {
-        address.addressSort = (index === selectedIndex) ? 0 : 1;
-      });
     },
     clickBot(coding){
       showConfirmDialog({
@@ -107,8 +114,7 @@ export default {
           // on cancel
         });
     },
-  },
-
+}
 }
 
 </script>

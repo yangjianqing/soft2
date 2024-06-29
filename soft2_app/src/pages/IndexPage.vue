@@ -35,8 +35,8 @@
   <!--第一个模块-->
   <div class="row_swipe">
     <van-swipe style="border-radius: 10px" :autoplay="3000" lazy-render>
-      <van-swipe-item v-for="Advertising in selectFadvertisement.data" >
-        <router-link :to="'/cart/shoppinggement/' + Advertising.goodsId ">
+      <van-swipe-item v-for="Advertising in selectFadvertisement" >
+        <router-link :to="'/cart/shoppinggement/' +Advertising.goodsId ">
           <img class="van_swipe_item_img" :src="this.baseUrl + Advertising.img" />
         </router-link>
       </van-swipe-item>
@@ -307,7 +307,8 @@ export default {
     //首页轮播图显示
     selectRotationalList(){
       selectFadvertisementList().then(res=>{
-        this.selectFadvertisement  = res.data;
+        console.log(res.data.data);
+        this.selectFadvertisement  = res.data.data;
       })
 
     },

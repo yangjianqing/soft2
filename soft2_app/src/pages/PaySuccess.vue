@@ -27,7 +27,7 @@
 
 <script>
 
-import {updateSettlement} from "@/api/merchant";
+import {insertSettlement, updateSettlement, updateShopData2} from "@/api/merchant";
 
 export default {
   name: "PaySuccess",
@@ -39,12 +39,19 @@ export default {
   created() {
     //获取订单金额
     this.totalAmount = this.$route.query.total_amount;
+    console.log(this.$route.query.out_trade_no)
     // 根据 out_trade_no 修改订单状态
     //获取用户登陆信息
     const userInfoString = localStorage.getItem("userInfo");
     // 将用户信息字符串解析回对象
     this.userInfo = JSON.parse(userInfoString);
-    updateSettlement({usersPhone:this.userInfo.usersPhone,ordersNumber:this.$route.query.out_trade_no}).then(res=>{
+    updateShopData2(this.userInfo.usersPhone).then(res=>{
+      console.log(res.data)
+
+    })
+
+    insertSettlement({usersPhone:this.userInfo.usersPhone,ordersNumber:this.$route.query.out_trade_no,}).then(res=>{
+      console.log(res.data)
          if (res.data.msg ===200){
            console.log("修改成功")
          }

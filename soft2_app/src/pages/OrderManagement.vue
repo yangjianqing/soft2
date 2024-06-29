@@ -5,28 +5,35 @@
       left-arrow
       @click-left=" this.$router.go(-1)"
   />
-    <van-tabs v-model:active="active">
+    <van-tabs v-model:active="active" style="margin-bottom: 40px">
       <van-tab title="全部订单">
         <template  v-for="(goodsInfo,index) in reversedGoodsList" >
           <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
         </template>
       </van-tab>
       <van-tab title="待付款">
-        <template  v-for="(goodsInfo,index) in filterType(1)" >
+        <template  v-for="(goodsInfo,index) in reversedPayFilterType(0)" >
+
+          <OrderPayInfo :goodsInfo="goodsInfo"> </OrderPayInfo>
+        </template>
+
+      </van-tab>
+      <van-tab title="待发货">
+        <template  v-for="(goodsInfo,index) in reversedFilterType(1)" >
           <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
         </template>
       </van-tab>
-      <van-tab title="待发货">
-        <template  v-for="(goodsInfo,index) in filterType(2)" >
+      <van-tab title="待收货">
+        <template  v-for="(goodsInfo,index) in reversedFilterType(2)" >
+          <OrderConfirmInfo :goodsInfo="goodsInfo"> </OrderConfirmInfo>
+        </template>
+      </van-tab>
+      <van-tab title="已完成">
+        <template  v-for="(goodsInfo,index) in reversedFilterType(3)" >
           <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
         </template>
       </van-tab>
 
-      <van-tab title="待收货">
-        <template  v-for="(goodsInfo,index) in filterType(3)" >
-          <OrderListInfo :goodsInfo="goodsInfo"> </OrderListInfo>
-        </template>
-      </van-tab>
 
     </van-tabs>
 
@@ -35,16 +42,20 @@
 
 <script>
 
-
+// 导入 vue-router 中的 router 对象
+import router from "@/router";
 import {selectOrders} from "@/api/merchant";
 import OrderListInfo from "@/components/OrderlistInfo.vue";
+import OrderPayInfo from "@/components/OrderPayInfo.vue";
+import OrderConfirmInfo from "@/components/OrderConfirmInfo.vue";
 export default {
   name:"OrderManagement",
-  components: {OrderListInfo},
+  components: {OrderConfirmInfo, OrderPayInfo, OrderListInfo},
   data(){
     return{
       active:0,
       goodsList:[],
+      goodsPayList:[],
       goodsListInfo:""
     }
   },
@@ -53,10 +64,37 @@ export default {
       return [...this.goodsList].reverse();
     },
   },
-  methods:{
-    filterType(status){
-      return this.goodsList.filter(obj=>obj.ordersStatus===status);
-    }
+  methods: {
+    //跳转结算页面
+    RouterShopping(){
+      router.push("/PayInfoPage");
+    },
+    //计算总价
+    getTotal(){
+      let count=0;
+      this.reversedPayFilterType(0).forEach(e=>{
+        count+=e.price * e.goodsNum
+      })
+      return count.toFixed(2);
+    },
+
+
+    //筛选订单状态
+    filterType(status) {
+      return this.goodsList.filter(obj => obj.ordersStatus === status);
+    },
+    //筛选未支付
+    filterPayType(payStatus) {
+      return this.goodsList.filter(obj => obj.ordersPayStatuds === payStatus);
+    },
+    reversedPayFilterType(payStatus) {
+      const filteredGoods = this.filterPayType(payStatus);
+      return filteredGoods.reverse();
+    },
+    reversedFilterType(status) {
+      const filteredGood = this.filterType(status);
+      return filteredGood.reverse();
+    },
   },
   created() {
     //取购物车的数据
@@ -65,8 +103,9 @@ export default {
     this.userInfo = JSON.parse(userInfoString);
     // 现在可以访问对象中的属性了
     selectOrders(this.userInfo.usersPhone).then(res =>{
-      console.log(res)
       this.goodsList=res.data.data;
+    }).catch(err =>{
+      console.log(err)
     })
   }
 

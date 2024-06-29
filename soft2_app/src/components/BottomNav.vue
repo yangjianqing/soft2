@@ -1,65 +1,58 @@
 <template>
-
-      <van-tabbar route v-model="active">
-        <van-tabbar-item icon="home-o" to="/index"  >首页</van-tabbar-item>
-        <van-tabbar-item icon="apps-o"  to="/classification">分类</van-tabbar-item>
-        <van-tabbar-item icon="cart-o" :badge="this.dataCount" to="/cart" >购物车</van-tabbar-item>
-        <van-tabbar-item icon="user-o"  to="/mine">我的</van-tabbar-item>
-      </van-tabbar>
-
-
+  <van-tabbar route v-model="active">
+    <van-tabbar-item icon="home-o" to="/index">首页</van-tabbar-item>
+    <van-tabbar-item icon="apps-o" to="/classification">分类</van-tabbar-item>
+    <van-tabbar-item icon="cart-o" :badge="dataCount !== 0 ? dataCount : ''" to="/cart">购物车</van-tabbar-item>
+    <van-tabbar-item icon="user-o" to="/mine">我的</van-tabbar-item>
+  </van-tabbar>
 </template>
 
 <script>
-
-import {getCarList} from "@/api/merchant";
+import { getCarList } from "@/api/merchant";
 
 export default {
-        name: "BottomNav"
-    ,
-    data() {
-      return {
-        active: 0, // 初始化 active 属性，以防止 v-model 绑定出错
-        dataCount:0,
-      };
-    },
+  name: "BottomNav",
+  data() {
+    return {
+      active: 0,    // 初始化 active 属性，确保与实际选项对应
+      dataCount: 0, // 初始化购物车数据数量
+      userInfo: {}, // 初始化用户信息对象，以避免未定义错误
+      goodsList: [] // 初始化购物车商品列表
+    };
+  },
+  created() {
+    // 从本地存储获取用户信息
+    const userInfoString = localStorage.getItem("userInfo");
+    this.userInfo = JSON.parse(userInfoString) || {}; // 解析用户信息，注意处理可能的空字符串情况
 
-    created(){
-      //取购物车的数据,取给购物车数量
-      const userInfoString = localStorage.getItem("userInfo");
-      // 将字符串解析回对象
-      this.userInfo = JSON.parse(userInfoString);
-      // 现在可以访问对象中的属性了
-      getCarList(this.userInfo.usersPhone).then(res =>{
-        // 将数据赋值给 goodsList
-        this.goodsList = res.data.data;
-        // 获取数据的数量
-        // 获取数据的数量并保存到 dataCount
-        this.dataCount = this.goodsList.length;
-        // 打印数据数量到控制台
-        console.log( this.dataCount)
+    // 获取购物车数据并更新数量
+    if (this.userInfo.usersPhone) {
+      getCarList(this.userInfo.usersPhone).then(res => {
+        this.goodsList = res.data.data || []; // 将返回的商品数据保存到 goodsList 中
+        this.dataCount = this.goodsList.length; // 更新购物车数据数量
+        console.log("购物车商品数量:", this.dataCount);
+      }).catch(error => {
+        console.error('获取购物车数据失败:', error);
       });
     }
-}
+  }
+};
 </script>
 
 <style scoped>
-    .nav{
-        width: 100%;
-        height: 60px;
-        /*将导航栏固定到底部*/
-        position: fixed;
-        bottom: 0;
-        border-top: 1px solid #878787;
-    }
+.nav {
+  width: 100%;
+  height: 60px;
+  position: fixed;
+  bottom: 0;
+  border-top: 1px solid #878787;
+}
 
-    /*激活样式*/
-    .router-link-active{
-        color: #0381DD;
-    }
-    .active{
-        color: #0381DD;
+.router-link-active {
+  color: #0381DD;
+}
 
-    }
-
+.active {
+  color: #0381DD;
+}
 </style>

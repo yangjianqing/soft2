@@ -18,13 +18,10 @@
       />
     </div>
     <div class="management-box">
-      <div style="width: 100px" @click="ReturnPoMa"><p style="font-size: 10px">532</p>
-        <p style="text-align:center;font-size: 12px;color: #808080">积分</p></div>
-
-        <div style="width: 100px" @click="RetrunHistory"><p style="font-size: 10px">32</p>
-          <p style="text-align:center;font-size: 12px;color: #808080" >历史记录</p>
-        </div>
-
+      <div style="width: 100px"><p style="font-size: 10px"></p>
+        <p style="text-align:center;font-size: 12px;color: #808080">积分:{{ userInfo.memberTotal }}</p>
+      </div>
+      <p style="text-align:center;font-size: 12px;color: #808080" >会员等级:{{ userInfo.memberGrade?'高级会员':'普通会员' }}</p>
     </div>
   </div>
 
@@ -46,7 +43,7 @@
     </div>
       <div style="display: flex; flex-direction: column;" @click="ReturnOrMa">
       <van-icon name="comment"  size="30px" color="#228B22"/>
-      <p style="font-size: 13px;color: #808080">待评价</p>
+      <p style="font-size: 13px;color: #808080">已完成</p>
     </div>
     </div>
 
@@ -54,19 +51,19 @@
   </van-cell-group>
   <van-cell-group style="margin-top: 13px;margin-bottom: 13px"  inset>
     <van-cell />
-    <div style="display: flex;justify-content: space-around;">
-      <div style="display: flex; align-items: center;    flex-direction: column;">
+    <div style="display: flex;justify-content: space-around; ">
+      <div style="display: flex; align-items: center;  padding-top: 10px;  flex-direction: column;">
       <van-icon size="30px" name="setting" color="#1989fa" v-on:click="ReturnSetting"/>
       <p style="font-size: 13px;color: #808080;flex-direction: column;">设置</p>
     </div>
      <router-link to="/mine/address">
-       <div style="display: flex; align-items: center;    flex-direction: column;">
+       <div style="display: flex; align-items: center;  padding-top: 10px;  flex-direction: column;">
          <van-icon size="30px" name="location" color="#1989fa"/>
          <p style="font-size: 13px;color: #808080;flex-direction: column;">收货地址</p>
        </div>
      </router-link>
       <router-link to="/mine/">
-        <div style="display: flex; align-items: center;    flex-direction: column;" @click="showPopup">
+        <div style="display: flex; align-items: center; padding-top: 10px;   flex-direction: column;" @click="showPopup">
           <van-icon size="30px" name="phone-circle" color="#1989fa"/>
           <p style="font-size: 13px;color: #808080;flex-direction: column;">
             联系电话</p>
@@ -76,11 +73,9 @@
     <van-cell />
   </van-cell-group>
   <van-action-sheet v-model:show="show" @select="onSelect" />
-
   <van-cell-group style="margin-top: 13px;margin-bottom: 13px"  inset>
-    <router-link to="/mine/UpdatePassword"><van-cell title="修改密码" is-link /></router-link>
-
-  <van-cell  title="退出登录" is-link  v-on:click="showConfirmDialog()"/>
+    <van-cell title="消息通知" is-link  @click="InfoUser"/>
+    <van-cell  title="退出登录" is-link  v-on:click="showConfirmDialog()"/>
   </van-cell-group>
     <van-divider
         :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }"
@@ -96,10 +91,13 @@
 
 
    <template v-for="(goodsInfo,index) in goodsList">
+     {{goodsList.id}}
+     <router-link :to="'/cart/shoppinggement/' +goodsList.id ">
      <div class="total_box"  v-if="index%2===1" >
        <MerchandiseInfo :goodsInfo="goodsList[index-1]" v-on:click="ReturnOrShopping"></MerchandiseInfo>
        <MerchandiseInfo :goodsInfo="goodsList[index]" v-on:click="ReturnOrShopping"></MerchandiseInfo>
      </div>
+     </router-link>
    </template>
 
 <!-- </div>-->
@@ -109,9 +107,19 @@
   <van-popup
     v-model:show="showBottom"
     position="bottom"
-    :style="{ height: '10%' }"
+    round
+    :style="{ height: '20%' }"
   >
-    <div class="sousaphone" >客服电话:18881146195</div>
+    <div class="phone-call-popup">
+      <p class="phone-number">客服电话:19950886351</p>
+      <div @click="callPhone()" class="phone_call">
+        <van-icon name="phone-o" color="#1dc779" size="20" style="margin: 10px 2px 10px 40vw" />
+        <p style="margin: 10px 2px 10px 2px" >呼叫</p>
+      </div>
+
+      <!-- 取消按钮 -->
+      <div  @click="cancel" style="margin: 10px 0px">取消</div>
+    </div>
   </van-popup>
 
 
@@ -121,11 +129,9 @@
     import { ref } from 'vue';
     import {showConfirmDialog, showToast} from 'vant';
     import router from "@/router";
-    import axios from "axios";
     import ShoppingCard from "@/components/card/ShoppingCard.vue";
     import NavTitle from "@/components/Navtitle/NavTitle.vue";
-    import {listShopping, listUsers} from "@/api/merchant.js"
-    import MerchantList from "@/components/MerchantInfo.vue";
+    import {listShopping} from "@/api/merchant.js"
     import MerchantInfo from "@/components/MerchantInfo.vue";
     import MerchandiseInfo from "@/components/Index/MerchandiseIfon.vue";
 
@@ -137,10 +143,14 @@
         const showPopup = () => {
           showBottom.value = true;
         };
+        const cancel  = () => {
+          showBottom.value = false;
+        };
         return{
           location: null,
           show,
           onSelect,
+          cancel,
           count,
           onRefresh,
           showPopup,
@@ -162,6 +172,33 @@
         }
       },
       methods:{
+        InfoUser(){
+          showConfirmDialog({
+            title: '关闭消息通知吗？',
+            message:
+              '确定要关闭消息通知',
+          })
+            .then(() => {
+
+              // on confirm
+            })
+            .catch(() => {
+              showConfirmDialog({
+                title: '开启消息通知吗？',
+                message:
+                  '开启要关闭消息通知',
+              }).then(() => {
+
+              })
+                .catch(() => {
+                  // on cancel
+                });
+              // on cancel
+            });
+        },
+        callPhone(){
+          window.location.href = 'tel://19950886351'
+        },
         showConfirmDialog(){
           showConfirmDialog({
             title: '退出登录',
@@ -192,10 +229,6 @@
         ,
         ReturnSetting(){
           router.push({ path: '/mine/setting' });
-        },
-
-        RetrunHistory(){
-          router.push({ path: '/mine/history' });
         },
         //退出登录
         getGoodsList(){
@@ -287,4 +320,27 @@
   border-radius: 10px;
 }
 
+
+.phone-call-popup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.phone-number {
+  width: 100%;
+  height: 25px;
+  margin: 10px 0px;
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 8px;
+}
+.phone_call{
+  width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid #eeeeee;
+}
 </style>

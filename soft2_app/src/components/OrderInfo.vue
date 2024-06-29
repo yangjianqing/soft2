@@ -1,7 +1,6 @@
 <template>
   <van-swipe-cell>
     <div class="order">
-      <router-link to="/cart/shoppinggement">
         <div class="title">
           <span style="font-size:16px ;font-weight: bold">{{ goodsInfo.name }}</span>
           <span style="color: #FFB366">未支付</span>
@@ -20,8 +19,7 @@
             <p>数量：{{goodsInfo.quantity}}{{goodsInfo.unit}}</p>
           </div>
         </div>
-      </router-link>
-      <p class="totals">金额:{{ goodsInfo.price * goodsInfo.quantity }}元</p>
+      <p class="totals">金额:{{ (goodsInfo.price * goodsInfo.quantity).toFixed(2)}}元</p>
     </div>
     <template #right>
       <van-button @click="clickBot(goodsInfo.coding)" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
@@ -123,6 +121,7 @@ export default {
 .totals{
   text-align: right;
   margin-right: 6%;
+  margin-bottom: 1%;
 }
 .bottom_btn{
   text-align: right;

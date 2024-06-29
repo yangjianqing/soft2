@@ -34,8 +34,32 @@
     </select>
 
     <select id="selectFAddressByAddressId" parameterType="Long" resultMap="FAddressResult">
-        <include refid="selectFAddressVo"/>
-        where address_id = #{addressId}
+        SELECT
+        SUBSTRING(address_detail, 1, LOCATE('省', address_detail)) AS province,
+        SUBSTRING(address_detail, LOCATE('省', address_detail) + 1, LOCATE('市', address_detail) - LOCATE('省', address_detail)) AS city,
+        CASE
+        WHEN address_detail LIKE '%区%' THEN
+        SUBSTRING(address_detail, LOCATE('市', address_detail) + 1, LOCATE('区', address_detail) - LOCATE('市', address_detail))
+        WHEN address_detail LIKE '%县%' THEN
+        SUBSTRING(address_detail, LOCATE('市', address_detail) + 1, LOCATE('县', address_detail) - LOCATE('市', address_detail) )
+        ELSE
+        NULL
+        END AS county,
+        CASE
+        WHEN address_detail LIKE '%区%' THEN
+        SUBSTRING(address_detail, LOCATE('区', address_detail) + 1)
+        WHEN address_detail LIKE '%县%' THEN
+        SUBSTRING(address_detail, LOCATE('县', address_detail) + 1)
+        ELSE
+        NULL
+        END AS addressDetails,address_name,address_phone
+        FROM
+        f_address
+        WHERE
+        address_id = #{addressId}  AND
+        address_detail LIKE '%省%' AND
+        address_detail LIKE '%市%' AND
+        (address_detail LIKE '%区%' OR address_detail LIKE '%县%');
     </select>
 
     <insert id="insertFAddress" parameterType="FAddress" useGeneratedKeys="true" keyProperty="addressId">

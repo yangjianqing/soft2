@@ -12,7 +12,7 @@
     </div>
   <van-action-bar  safe-area-inset-bottom style="bottom: 48px">
     <van-action-bar-button color="#be99ff" type="warning" :text="'总金额:'+getTotal()+'￥'" />
-    <van-action-bar-button color="#7232dd" type="danger" text="去付款" @click="Retrunshoppings" />
+    <van-action-bar-button color="#7232dd" type="danger" text="结算" @click="RouterShopping" />
   </van-action-bar>
 
 </template>
@@ -20,13 +20,11 @@
 <script>
 
 import OrderInfo from "@/components/OrderInfo.vue";
-import {getCarList,insertSettlement} from "@/api/merchant";
-import {showToast} from "vant";
+import {getCarList} from "@/api/merchant";
+import router from "@/router";
 
 
-const PREFIX = '222';
-const LENGTH = 12;
-const usedOrderNumbers = new Set();
+
   export default {
       name: "CarPage",
       components: {OrderInfo},
@@ -39,38 +37,24 @@ const usedOrderNumbers = new Set();
       },
 
     methods:{
-     generateOrderNumber() {
-          let orderNumber;
-          do {
-            let randomNumber = PREFIX;
-            for (let i = 2; i < LENGTH; i++) {
-              randomNumber += Math.floor(Math.random() * 10); // 生成0到9之间的随机数字
-            }
-            orderNumber = randomNumber;
-          } while (usedOrderNumbers.has(orderNumber)); // 如果订单号已存在，则重新生成
-
-          usedOrderNumbers.add(orderNumber); // 添加到已使用的订单号集合中
-          return orderNumber;
-        },
-      Retrunshoppings(){
-        let orderNum = this.generateOrderNumber();
-        insertSettlement({ordersNumber:orderNum,usersPhone:this.userInfo.usersPhone,ordersPayMethod:0}).then(res=>{
-          if (res.data.code===200){
-            window.open(process.env.VUE_APP_BASE_API+"/api/alipay/pay?subject=绿源生鲜"+"&traceNo="+orderNum+"&totalAmount="+this.getTotal(),'_self')
-          }else{
-            showToast('订单添加失败');
-          }
-        });
-
+      //跳转结算页面
+      RouterShopping(){
+        router.push("/PayInfo");
       },
-      getTotal(){
-        let count=0;
-        this.goodsList.forEach(e=>{
-            count+=e.price * e.quantity
-        })
+      getTotal() {
+        let count = 0;
+        // 检查 this.goodsList 是否定义且是数组
+        if (this.goodsList && Array.isArray(this.goodsList)) {
+          this.goodsList.forEach(e => {
+            count += e.price * e.quantity;
+          });
+        } else {
+          console.error('"查无购物车数据"');
+        }
         return count.toFixed(2);
       }
     },
+
     created() {
       //取购物车的数据
       const userInfoString = localStorage.getItem("userInfo");
