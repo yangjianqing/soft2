@@ -353,9 +353,10 @@ public class FOrdeersServiceImpl implements IFOrdeersService
         }
 
         if (settlement.getOrdersPayStatuds() == 0L && !settlement.getCoDings().isEmpty()) {
+            String OrderNumber = OrderNumberGenerator.generateOrderNumber();
             // TODO: 待支付页面 (结算一个或多个商品)
             // 进行新增订单操作 (创建订单对象传值,调用新增订单)
-            fOrdeersService.insertFOrdeers(new FOrdeers(OrderNumberGenerator.generateOrderNumber(), fUsers.getUsersId(),
+            fOrdeersService.insertFOrdeers(new FOrdeers(OrderNumber, fUsers.getUsersId(),
                     sysUser.getUserId(), settlement.getOrdersPayMethod(), 1L, 2L,
                     settlement.getOrdersRemark()));
             deliveryIndex++; // 为下一次调用准备索引
@@ -369,7 +370,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
             // 进行新增订单明细操作
             for (FGoods fGoods : fGoods1) {
                 fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods.getId(),//创建订单详情传值,调用新增订单详情
-                        OrderNumberGenerator.generateOrderNumber() , fGoods.getQuantity(), 2L));
+                        OrderNumber, fGoods.getQuantity(), 2L));
                 fGoods.setNum(fGoods.getNum() - fGoods.getQuantity());//更新商品数量
                 fGoodsService.updateFGoods(fGoods);//更新商品数据
             }
