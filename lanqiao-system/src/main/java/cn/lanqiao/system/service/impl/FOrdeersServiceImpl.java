@@ -331,11 +331,11 @@ public class FOrdeersServiceImpl implements IFOrdeersService
         }
         SysUser sysUser = sysUsers.get(deliveryIndex);//根据索引取配送员信息
 
-        if (settlement.getOrdersPayMethod() == 1L) {
+        if (settlement.getOrdersPayStatuds() == 1L) {
             // TODO: 购物车页面 (结算全部商品，购物车页面支付宝结账成功)
             // 进行新增订单操作 (创建订单对象传值,调用新增订单)
             fOrdeersService.insertFOrdeers(new FOrdeers(settlement.getOrdersNumber(), fUsers.getUsersId(),
-                    sysUser.getUserId(), settlement.getOrdersPayMethod(), 0L, 2L,
+                    sysUser.getUserId(), settlement.getOrdersPayMethod(), 1L, 2L,
                     settlement.getOrdersRemark()));
             deliveryIndex++; // 为下一次调用准备索引
             String verKey = CacheConstants.Query_Shopping_KEY + settlement.getUsersPhone();// 生成唯一标识 Key
@@ -354,7 +354,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
             return 1;
         }
 
-        if (settlement.getOrdersPayMethod() == 0L && settlement.getCoDings().isEmpty()) {
+        if (settlement.getOrdersPayStatuds() == 0L && !settlement.getCoDings().isEmpty()) {
             // TODO: 待支付页面 (结算一个或多个商品)
             // 进行新增订单操作 (创建订单对象传值,调用新增订单)
             fOrdeersService.insertFOrdeers(new FOrdeers(settlement.getOrdersNumber(), fUsers.getUsersId(),
@@ -375,6 +375,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
             return 1;
         }
+
         return 1;
     }
 
@@ -403,32 +404,6 @@ public class FOrdeersServiceImpl implements IFOrdeersService
         }
 
         return fOrderPartslist;
-    }
-
-    /**
-     * 手机端订单支付状态修改接口
-     * @param ordersPayMethod 订单状态接口数据
-     *
-     */
-    @Override
-    public int updateSettlement(ordersPayMethod ordersPayMethod)
-    {
-        if (ordersPayMethod == null || ordersPayMethod.getUsersPhone() == null || ordersPayMethod.getOrdersNumber() == null) {//判断前端传值不为null
-            return 0; // 提前返回，参数为空时直接返回失败
-        }
-
-        FUsers fUsers = fUsersMapper.selectUsersusersPhone(ordersPayMethod.getUsersPhone());//根据电话查询会员用户数据获取会员用户id
-        if (fUsers == null) { // 如果用户不存在，直接返回失败
-            return 0;
-        }
-
-        FOrdeers ordeers = fOrdeersMapper.selectOrder(fUsers.getUsersId(),ordersPayMethod.getOrdersNumber());//根据会员用户id和订单号查询订单数据
-        if (ordeers == null ) { // 如果订单不存在，直接返回失败
-            return 0;
-        }
-
-        int updateResult = fOrdeersMapper.updateOrdersStatus(ordersPayMethod.getOrdersNumber());
-        return updateResult > 0 ? 1:0; // 如果更新成功，则返回1，否则返回0
     }
 
     /**

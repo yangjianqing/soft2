@@ -565,7 +565,7 @@ public class ApiShoppingIController extends BaseController {
         try {
             int i = fOrdeersService.insertShopping(settlement);
             if (i == 0) {
-                return AjaxResult.success("付款失败，数据异常");
+                return AjaxResult.error("付款失败，数据异常");
             } else {
                 return AjaxResult.success("付款成功");
             }
@@ -587,34 +587,12 @@ public class ApiShoppingIController extends BaseController {
         try {
             int i = ifShoppingCartService.updateShopData(usersPhone);
             if (i == 0) {
-                return AjaxResult.success("修改失败");
+                return AjaxResult.error("修改失败");
             } else {
                 return AjaxResult.success("修改成功");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return AjaxResult.error("系统异常");
-        }
-    }
-
-    /**
-     * 手机端订单支付状态修改接口(修改支付状态为1：已付款)
-     * @param ordersPayMethod 订单状态接口数据
-     *
-     */
-    @ApiOperation("手机端订单支付状态修改接口")
-    @GetMapping(value = "/updateSettlement")
-    public AjaxResult updateSettlement(@RequestBody ordersPayMethod ordersPayMethod)
-    {
-        try {
-            int i = fOrdeersService.updateSettlement(ordersPayMethod);
-            if (i == 1) {
-                return AjaxResult.success("修改成功");
-            } else {
-                return AjaxResult.success("修改失败");
-            }
-        } catch (Exception ex){
-            ex.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }

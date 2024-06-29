@@ -20,6 +20,10 @@ public class Settlement {
     @Excel(name = "支付方式")
     private Long ordersPayMethod;
 
+    /** 支付状态 */
+    @Excel(name = "支付状态")
+    private Long ordersPayStatuds;
+
     /** 订单备注信息 */
     @Excel(name = "订单备注信息")
     private String ordersRemark;
@@ -54,6 +58,14 @@ public class Settlement {
 
     public void setOrdersPayMethod(Long ordersPayMethod) {
         this.ordersPayMethod = ordersPayMethod;
+    }
+
+    public Long getOrdersPayStatuds() {
+        return ordersPayStatuds;
+    }
+
+    public void setOrdersPayStatuds(Long ordersPayStatuds) {
+        this.ordersPayStatuds = ordersPayStatuds;
     }
 
     public String getOrdersRemark() {

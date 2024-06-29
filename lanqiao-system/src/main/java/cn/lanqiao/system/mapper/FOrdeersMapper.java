@@ -68,13 +68,6 @@ public interface FOrdeersMapper
     public List<FOrdeers> selectOrders(Long usersId);
 
     /**
-     * 手机端订单支付状态修改接口
-     *
-     * @param ordersNumber 订单编号
-     */
-    public int updateOrdersStatus(String ordersNumber);
-
-    /**
      * 手机端根据用户id及订单编号查询订单数据
      *
      * @param ordersUsersId 用户Id

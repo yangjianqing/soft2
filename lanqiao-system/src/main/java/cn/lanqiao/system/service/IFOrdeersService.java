@@ -85,13 +85,6 @@ public interface IFOrdeersService
     public List<FOrderPartslist> selectOrders(String usersPhone);
 
     /**
-     * 手机端订单支付状态修改接口
-     * @param ordersPayMethod 订单状态接口数据
-     *
-     */
-     public int updateSettlement(ordersPayMethod ordersPayMethod);
-
-    /**
      * 手机端订单订单状态修改接口
      * @param orderstatus 订单状态接口数据
      *

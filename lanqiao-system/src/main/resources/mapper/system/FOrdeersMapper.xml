@@ -91,10 +91,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where orders_users_id = #{usersId} AND orders_sysuser_id IS NOT NULL
     </select>
 
-    <update id="updateOrdersStatus" >
-        UPDATE f_ordeers SET orders_pay_statuds = 1,orders_status = 1 WHERE orders_number = #{ordersNumber}
-    </update>
-
     <select id="selectOrder" resultType="FOrdeers" resultMap="FOrdeersResult">
         select * from f_ordeers WHERE orders_users_id = #{ordersUsersId} AND orders_number = #{ordersNumber}
     </select>
