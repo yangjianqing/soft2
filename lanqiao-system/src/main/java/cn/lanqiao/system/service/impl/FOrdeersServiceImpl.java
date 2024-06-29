@@ -369,14 +369,12 @@ public class FOrdeersServiceImpl implements IFOrdeersService
             // 进行新增订单明细操作
             for (FGoods fGoods : fGoods1) {
                 fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods.getId(),//创建订单详情传值,调用新增订单详情
-                        settlement.getOrdersNumber(), fGoods.getQuantity(), 2L));
+                        OrderNumberGenerator.generateOrderNumber() , fGoods.getQuantity(), 2L));
                 fGoods.setNum(fGoods.getNum() - fGoods.getQuantity());//更新商品数量
                 fGoodsService.updateFGoods(fGoods);//更新商品数据
             }
-
             return 1;
         }
-
         return 1;
     }
 
