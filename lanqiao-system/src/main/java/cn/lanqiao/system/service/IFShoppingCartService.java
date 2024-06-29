@@ -1,6 +1,8 @@
 package cn.lanqiao.system.service;
 
 import cn.lanqiao.system.domain.FGoods;
+import cn.lanqiao.system.domain.FUsers;
+import cn.lanqiao.system.domain.argument.LoginVo;
 
 import java.util.List;
 import java.util.Set;
@@ -37,7 +39,7 @@ public interface IFShoppingCartService {
      * @param usersPhone 用户号码
      *
      */
-    public int updateShopData(String usersPhone,Long status);
+    public int updateShopData(String usersPhone,Long status,Long PayMethod);
 
     /**
      * 手机端减除购物车redis商品数量
@@ -64,6 +66,15 @@ public interface IFShoppingCartService {
     public List<FGoods> selectShopingData(String usersPhone);
 
     /**
+     * 手机端redis待付款商品数据 (回显)
+     *
+     * @param usersPhone 用户电话
+     * @param coding 商品编码
+     *
+     */
+    public FGoods selectSho(String usersPhone, String coding);
+
+    /**
      * 手机端redis根据商品编码获取待付款商品数据进行结账
      *
      * @param usersPhone 用户电话
@@ -71,4 +82,16 @@ public interface IFShoppingCartService {
      *
      */
     public List<FGoods> selectShopDataCoDings(String usersPhone, Set<String> coDings);
+
+    /**
+     * 验证码接口
+     *
+     */
+    public String sendCode();
+
+    /**
+     * 根据电话登录 + 注册手机app会员账号
+     *
+     */
+    public FUsers LoginUsers(LoginVo user);
 }

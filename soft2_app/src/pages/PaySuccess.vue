@@ -35,7 +35,6 @@ export default {
     }
   },
   created() {
-    updateShopData2(this.userInfo.usersPhone);
     //获取订单金额
     this.totalAmount = this.$route.query.total_amount;
     // 根据 out_trade_no 修改订单状态
@@ -43,7 +42,16 @@ export default {
     const userInfoString = localStorage.getItem("userInfo");
     // 将用户信息字符串解析回对象
     this.userInfo = JSON.parse(userInfoString);
-    insertSettlement({usersPhone:this.userInfo.usersPhone,ordersNumber:this.$route.query.out_trade_no,ordersPayMethod:0,ordersPayStatuds:1});
+
+    if(this.userInfo.usersPhone !== undefined || this.$route.query.out_trade_no !== undefined) {
+      updateShopData2(this.userInfo.usersPhone).catch(e =>{
+        console.log(e);
+      });
+      insertSettlement({usersPhone:this.userInfo.usersPhone,ordersNumber:this.$route.query.out_trade_no,ordersPayMethod:0,ordersPayStatuds:1}).catch(e =>{
+        console.log(e);
+      });
+    }
+
     this.sendMessage();
   },
   methods:{

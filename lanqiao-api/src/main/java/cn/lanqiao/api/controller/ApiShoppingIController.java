@@ -16,7 +16,6 @@ import cn.lanqiao.common.utils.uuid.IdUtils;
 import cn.lanqiao.framework.web.service.TokenService;
 import cn.lanqiao.system.domain.*;
 import cn.lanqiao.system.domain.argument.*;
-import cn.lanqiao.system.mapper.FAddressMapper;
 import cn.lanqiao.system.service.*;
 import cn.lanqiao.system.service.impl.IFShoppingCartServiceImpl;
 import io.swagger.annotations.Api;
@@ -27,38 +26,35 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 @Api
 @RestController
 @RequestMapping("/api/fresh")
 public class ApiShoppingIController extends BaseController {
     @Autowired
+    private TokenService tokenService;
+    @Autowired
     private IFGoodsService fGoodsService;
-    @Autowired
-    private IFOrdeersService fOrdeersService;
-    @Autowired
-    private IFOrderPartslistService fOrderPartslistService;
     @Autowired
     private IFUsersService ifUsersService;
     @Autowired
-    private ICategoryService ifCategoryService;
+    private IFAddressService fAddressService;
     @Autowired
-    private IFShoppingCartServiceImpl ifShoppingCartService;
+    private IFOrdeersService fOrdeersService;
+    @Autowired
+    private IFAddressService ifAddressService;
     @Autowired
     private IFAppraiseService fAppraiseService;
     @Autowired
-    private RedisCache redisCache;
+    private ICategoryService ifCategoryService;
     @Autowired
     private FadvertisementService fadvertisementService;
     @Autowired
-    private FAddressMapper fAddressMapper;
+    private IFOrderPartslistService fOrderPartslistService;
     @Autowired
-    private IFAddressService fAddressService;
-    @Autowired
-    private TokenService tokenService;
+    private IFShoppingCartServiceImpl ifShoppingCartService;
+
     /**
      * 查询商品列表
      */
@@ -256,7 +252,7 @@ public class ApiShoppingIController extends BaseController {
     {
         try {
             FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
-            List<FAddress> fAddresses = fAddressMapper.selectUsersIdByType(String.valueOf(fUsers.getUsersId()));
+            List<FAddress> fAddresses = ifAddressService.selectUsersIdByType(String.valueOf(fUsers.getUsersId()));
             return AjaxResult.success(fAddresses);
         } catch (Exception e) {
             e.printStackTrace();
@@ -274,12 +270,11 @@ public class ApiShoppingIController extends BaseController {
     public AjaxResult selectUsersAddress(@PathVariable("addressId") Long addressId)
     {
         try {
-            FAddress fAddress = fAddressMapper.selectFAddressByAddressId(addressId);
+            FAddress fAddress = ifAddressService.selectFAddressByAddressId(addressId);
             if (fAddress == null) {
                 return AjaxResult.error("查无此地址信息");
-            } else {
-                return AjaxResult.success(fAddress);
             }
+            return AjaxResult.success(fAddress);
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -373,18 +368,10 @@ public class ApiShoppingIController extends BaseController {
      */
     @ApiOperation("手机端发送验证码接口")
     @GetMapping("/sendCode")
-    public AjaxResult sendCode() throws Exception {
+    public AjaxResult sendCode() {
         try {
-            // 保存验证码信息
-            String uuid = IdUtils.simpleUUID();//生成uid
-            //String code = MyClass.generateCode();//生成随机4位数验证码
-            String code = "1234";
-            String verKey = CacheConstants.PHONE_CODE_KEY + uuid;
-            //将verKey添加到redis
-            redisCache.setCacheObject(verKey, code, Constants.CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
-            //SendSms.sendVerCode(code);//调用发送验证码
-            //将验证码唯一标识符放入AjaxResult对象中。
-            return AjaxResult.success("验证码发送成功").put("uuid", uuid);
+            String uuid = ifShoppingCartService.sendCode();
+            return AjaxResult.success("验证码发送成功").put("uuid",uuid);
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -392,42 +379,21 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
-     * 根据电话注册手机app会员账号
+     * 根据电话登录 + 注册手机app会员账号
+     *
      */
     @ApiOperation("根据电话注册手机端会员账号")
     @PostMapping("/LoginUsers")
     public AjaxResult LoginUsers(@RequestBody LoginVo user)
     {
         try {
-            // TODO: 在这里进行电话号码是否有效校验操作
-            if (user.getUsersPhone().matches("^(0\\d{2,3}-\\d{7,8}|1[34578]\\d{9})$")) {
-                FUsers fUsers = ifUsersService.selectUsersusersPhone(user.getUsersPhone());
-                String verKey = CacheConstants.PHONE_CODE_KEY + user.getUuid();
-                Object cacheObject = redisCache.getCacheObject(verKey);//获取redis缓存的验证码
-                String cacheString = cacheObject.toString();
-                // TODO: 在这里进行查询用户电话是否为空判断校验操作
-                if (fUsers != null) {
-                    // TODO: 在这里进行登录操作
-                    if (cacheString.equals(user.getCode())) {
-                        String token = tokenService.createApiToken(fUsers);
-                        fUsers.setToken(token);
-                        return AjaxResult.success("登录成功", fUsers);
-                    } else {
-                        return AjaxResult.error("登录失败,验证码错误");
-                    }
-                } else if (cacheString.equals(user.getCode())) {
-                    // TODO: 在这里进行注册操作
-                    FUsers fUser =  new FUsers(RandomUsernameGenerator.generateRandomUsername(), "2", user.getUsersPhone(), 0L,new BigDecimal(0));
-                    ifUsersService.insertFUsers(fUser);
-                    String token = tokenService.createApiToken(fUser);
-                    fUser.setToken(token);
-                    return AjaxResult.success("保存成功", fUser);
-                    } else {
-                        return AjaxResult.error("注册失败,验证码错误");
-                    }
-                } else {
-                return AjaxResult.error("电话号码无效");
+            FUsers fUsers = ifShoppingCartService.LoginUsers(user);
+            if (fUsers == null) {
+                return AjaxResult.error("验证码已过期");
             }
+            String token = tokenService.createApiToken(fUsers);
+            fUsers.setToken(token);
+            return AjaxResult.success("登录成功", fUsers);
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -446,12 +412,11 @@ public class ApiShoppingIController extends BaseController {
     public AjaxResult insertShopData(@PathVariable("usersPhone") String usersPhone, @PathVariable("coding") String coding)
     {
         try {
-            int i = ifShoppingCartService.insertShopData(usersPhone, coding);
+            int i = ifShoppingCartService.insertShopData(usersPhone,coding);
             if (i == 0) {
                 return AjaxResult.error("购物车数据异常");
-            } else {
-                return AjaxResult.success("加入购物车成功");
             }
+            return AjaxResult.success("加入购物车成功");
         } catch (Exception ex){
             ex.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -473,9 +438,8 @@ public class ApiShoppingIController extends BaseController {
             int i = ifShoppingCartService.deleteShopData(usersPhone, coding);
             if (i == 0) {
                 return AjaxResult.error("删除商品数量失败");
-            } else {
-                return AjaxResult.success("删除购物车指定数据成功");
             }
+            return AjaxResult.success("删除购物车指定数据成功");
         } catch (Exception ex){
             ex.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -497,9 +461,8 @@ public class ApiShoppingIController extends BaseController {
             int i = ifShoppingCartService.deductionShopData(usersPhone, coding);
             if (i == 0) {
                 return AjaxResult.success("减掉商品数量失败");
-            } else {
-                return AjaxResult.success("减掉商品数量成功");
             }
+            return AjaxResult.success("减掉商品数量成功");
         } catch (Exception ex){
             ex.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -520,9 +483,8 @@ public class ApiShoppingIController extends BaseController {
             List<FGoods> fGoods = ifShoppingCartService.selectShopData(usersPhone,2L);
             if (fGoods.isEmpty()) {
                 return AjaxResult.success("查无购物车数据");
-            } else {
-                return AjaxResult.success(fGoods);
             }
+            return AjaxResult.success(fGoods);
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -543,15 +505,36 @@ public class ApiShoppingIController extends BaseController {
             List<FGoods> fGoods = ifShoppingCartService.selectShopingData(usersPhone);
             if (fGoods == null) {
                 return AjaxResult.error("查无待付款商品数据");
-            } else {
-                return AjaxResult.success(fGoods);
             }
+            return AjaxResult.success(fGoods);
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("系统异常");
         }
     }
 
+    /**
+     * 手机端redis待付款商品数据 (回显)
+     *
+     * @param usersPhone 用户电话
+     * @param coding 商品编码
+     *
+     */
+    @ApiOperation("手机端redis待付款商品数据")
+    @GetMapping("/selectSho/{usersPhone}")
+    public AjaxResult selectSho(@PathVariable("usersPhone") String usersPhone,@PathVariable("coding")String coding)
+    {
+        try {
+            FGoods fGoods = ifShoppingCartService.selectSho(usersPhone,coding);
+            if (fGoods == null) {
+                return AjaxResult.error("查无待付款商品数据");
+            }
+            return AjaxResult.success(fGoods);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
+    }
 
     /**
      * 手机端结算
@@ -566,9 +549,8 @@ public class ApiShoppingIController extends BaseController {
             int i = fOrdeersService.insertShopping(settlement);
             if (i == 0) {
                 return AjaxResult.error("付款失败，数据异常");
-            } else {
-                return AjaxResult.success("付款成功");
             }
+            return AjaxResult.success("付款成功");
         } catch (Exception ex){
             ex.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -585,12 +567,11 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping(value = "/updateShopData/{usersPhone}")
     public AjaxResult updateShopData(@PathVariable("usersPhone") String usersPhone) {
         try {
-            int i = ifShoppingCartService.updateShopData(usersPhone,0L);
+            int i = ifShoppingCartService.updateShopData(usersPhone,0L,2L);
             if (i == 0) {
                 return AjaxResult.error("修改失败");
-            } else {
-                return AjaxResult.success("修改成功");
             }
+            return AjaxResult.success("修改成功");
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -607,12 +588,11 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping(value = "/updateShopData2/{usersPhone}")
     public AjaxResult updateShopData2(@PathVariable("usersPhone") String usersPhone) {
         try {
-            int i = ifShoppingCartService.updateShopData(usersPhone,1L);
+            int i = ifShoppingCartService.updateShopData(usersPhone,1L,0L);
             if (i == 0) {
                 return AjaxResult.error("修改失败");
-            } else {
-                return AjaxResult.success("修改成功");
             }
+            return AjaxResult.success("修改成功");
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -632,9 +612,8 @@ public class ApiShoppingIController extends BaseController {
             int i = fOrdeersService.updateOrdersStatus(orderstatus);
             if (i == 0 ) {
                 return AjaxResult.success("修改失败");
-            } else {
-                return AjaxResult.success("修改成功");
             }
+            return AjaxResult.success("修改成功");
         } catch (Exception ex){
             ex.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -653,10 +632,9 @@ public class ApiShoppingIController extends BaseController {
         try {
             List<FOrderPartslist> fOrderPartslists = fOrdeersService.selectOrders(usersPhone);
             if (fOrderPartslists.isEmpty()) {
-                return AjaxResult.success("此用户无订单"); // 或者其他适当的处理方式
-            } else {
-                return AjaxResult.success(fOrderPartslists);
+                return AjaxResult.success("此用户无订单");
             }
+            return AjaxResult.success(fOrderPartslists);
         } catch (Exception ex) {
             ex.printStackTrace();
             return AjaxResult.error("系统异常");

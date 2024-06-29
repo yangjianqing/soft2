@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="goodsId != null">#{goodsId},</if>
             <if test="orderId != null">#{orderId},</if>
             <if test="goodsNum != null">#{goodsNum},</if>
-            <if test="ordersStatus != null">#{orders_status}</if>
+            <if test="ordersStatus != null">#{ordersStatus}</if>
          </trim>
     </insert>
 

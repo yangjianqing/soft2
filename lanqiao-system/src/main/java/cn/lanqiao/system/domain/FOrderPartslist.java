@@ -206,6 +206,7 @@ public class FOrderPartslist extends BaseEntity
                 ", coding=" + coding +
                 ", image='" + image + '\'' +
                 ", ordersStatus=" + ordersStatus +
+                ", ordersPayStatuds=" + ordersPayStatuds +
                 '}';
     }
 }
