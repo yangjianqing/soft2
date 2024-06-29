@@ -517,7 +517,7 @@ public class ApiShoppingIController extends BaseController {
     public AjaxResult selectShopData(@PathVariable("usersPhone") String usersPhone)
     {
         try {
-            List<FGoods> fGoods = ifShoppingCartService.selectShopData(usersPhone);
+            List<FGoods> fGoods = ifShoppingCartService.selectShopData(usersPhone,2L);
             if (fGoods.isEmpty()) {
                 return AjaxResult.success("查无购物车数据");
             } else {
@@ -576,7 +576,7 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
-     * 手机端修改购物车redis数据支付状态为0 未支付
+     * 手机端修改购物车redis数据支付状态为 0 (待付款商品数据)
      *
      * @param usersPhone 用户电话
      *
@@ -585,7 +585,7 @@ public class ApiShoppingIController extends BaseController {
     @GetMapping(value = "/updateShopData/{usersPhone}")
     public AjaxResult updateShopData(@PathVariable("usersPhone") String usersPhone) {
         try {
-            int i = ifShoppingCartService.updateShopData(usersPhone);
+            int i = ifShoppingCartService.updateShopData(usersPhone,0L);
             if (i == 0) {
                 return AjaxResult.error("修改失败");
             } else {
@@ -598,7 +598,29 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
-     * 手机端订单+订单明细的订单状态修改接口(修改订单状态为3：已完成)
+     * 手机端修改购物车redis数据支付状态为 1 (购物车数据结账使用)
+     *
+     * @param usersPhone 用户电话
+     *
+     */
+    @ApiOperation("手机端购物车结算")
+    @GetMapping(value = "/updateShopData2/{usersPhone}")
+    public AjaxResult updateShopData2(@PathVariable("usersPhone") String usersPhone) {
+        try {
+            int i = ifShoppingCartService.updateShopData(usersPhone,1L);
+            if (i == 0) {
+                return AjaxResult.error("修改失败");
+            } else {
+                return AjaxResult.success("修改成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
+    }
+
+    /**
+     * 手机端订单 +订单明细的订单状态修改接口(修改订单状态为3：已完成)
      * @param orderstatus 订单状态接口数据
      *
      */

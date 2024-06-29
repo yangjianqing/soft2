@@ -106,7 +106,7 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService {
      *
      */
     @Override
-    public int updateShopData(String usersPhone) {
+    public int updateShopData(String usersPhone,Long status) {
         if (usersPhone == null) {
             return 0;
         }
@@ -124,7 +124,7 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService {
             for (Map.Entry<String, ShoppingCart> entry : shoppingCart.entrySet()) {
                 ShoppingCart value = entry.getValue();
                 if (value.getOrdersPayMethod() == 2L) {
-                    value.setOrdersPayMethod(0L);
+                    value.setOrdersPayMethod(status);
                 }
             }
 
@@ -184,7 +184,7 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService {
      * @param usersPhone 用户号码
      */
     @Override
-    public List<FGoods> selectShopData(String usersPhone) {
+    public List<FGoods> selectShopData(String usersPhone,Long status) {
         if (usersPhone == null) {
             return null;
         }
@@ -204,7 +204,7 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService {
             for (Map.Entry<String, ShoppingCart> entry : shoppingCart.entrySet()) {
                 String coding = entry.getKey();
                 ShoppingCart value = entry.getValue();
-                if (value.getOrdersPayMethod() == 2L) {
+                if (value.getOrdersPayMethod() == status) {
                     // 根据商品编码查询商品数据
                     FGoods fGoods = fGoodsMapper.selectGoodsList(coding);
                     if (fGoods != null) {

@@ -37,7 +37,7 @@ public interface IFShoppingCartService {
      * @param usersPhone 用户号码
      *
      */
-    public int updateShopData(String usersPhone);
+    public int updateShopData(String usersPhone,Long status);
 
     /**
      * 手机端减除购物车redis商品数量
@@ -53,7 +53,7 @@ public interface IFShoppingCartService {
      *
      * @param usersPhone 用户号码
      */
-    public List<FGoods> selectShopData(String usersPhone);
+    public List<FGoods> selectShopData(String usersPhone,Long status);
 
     /**
      * 手机端redis待付款商品数据

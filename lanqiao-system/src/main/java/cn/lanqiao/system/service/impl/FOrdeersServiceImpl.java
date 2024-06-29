@@ -249,8 +249,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     @Override
     public int settle(FormData formData)
     {
-        if (formData.getMemberPhone() == null || formData.getMemberJian() == null || formData.getTotalPrice() == null
-            || formData.getOrdersPayMethod() == null || formData.getProductsInCart().size() == 0) // 检查必要字段是否为空
+        if (formData.getOrdersPayMethod() == null || formData.getProductsInCart().size() == 0) // 检查必要字段是否为空
         {
             return 0;
         }
@@ -305,8 +304,7 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     @Override
     public int insertShopping(Settlement settlement)
     {
-        if (settlement == null || settlement.getOrdersPayMethod() == null || settlement.getUsersPhone() == null || settlement.getOrdersNumber() == null
-            || settlement.getOrdersRemark() == null)
+        if (settlement.getUsersPhone() == null || settlement.getOrdersPayStatuds() == null)
         {
             return 0;
         }
@@ -318,11 +316,6 @@ public class FOrdeersServiceImpl implements IFOrdeersService
 
         List<SysUser> sysUsers = sysUserMapper.selectSysUserAll();//查询全部配送员信息
         if (sysUsers.isEmpty()) {
-            return 0;
-        }
-
-        List<FGoods> GoodsList = ifShoppingCartService.selectShopData(settlement.getUsersPhone());
-        if (GoodsList != null || GoodsList.isEmpty()) {
             return 0;
         }
 
@@ -341,6 +334,11 @@ public class FOrdeersServiceImpl implements IFOrdeersService
             String verKey = CacheConstants.Query_Shopping_KEY + settlement.getUsersPhone();// 生成唯一标识 Key
             Set<String> coding = new HashSet<>();//创建存商品编码集合
 
+            List<FGoods> GoodsList = ifShoppingCartService.selectShopData(settlement.getUsersPhone(),1L);
+            if (GoodsList.isEmpty()) {
+                return 0;
+            }
+
             // 进行新增订单明细操作
             for (FGoods fGoods : GoodsList) {
                 fOrderPartslistService.insertFOrderPartslist(new FOrderPartslist(fGoods.getId(),//创建订单详情传值,调用新增订单详情
@@ -357,13 +355,16 @@ public class FOrdeersServiceImpl implements IFOrdeersService
         if (settlement.getOrdersPayStatuds() == 0L && !settlement.getCoDings().isEmpty()) {
             // TODO: 待支付页面 (结算一个或多个商品)
             // 进行新增订单操作 (创建订单对象传值,调用新增订单)
-            fOrdeersService.insertFOrdeers(new FOrdeers(settlement.getOrdersNumber(), fUsers.getUsersId(),
+            fOrdeersService.insertFOrdeers(new FOrdeers(OrderNumberGenerator.generateOrderNumber(), fUsers.getUsersId(),
                     sysUser.getUserId(), settlement.getOrdersPayMethod(), 1L, 2L,
                     settlement.getOrdersRemark()));
             deliveryIndex++; // 为下一次调用准备索引
 
             //根据商品编码去redis购物车获取数据
             List<FGoods> fGoods1 = ifShoppingCartService.selectShopDataCoDings(settlement.getUsersPhone(),settlement.getCoDings());
+            if (fGoods1.isEmpty()) {
+                return 0;
+            }
 
             // 进行新增订单明细操作
             for (FGoods fGoods : fGoods1) {
@@ -407,14 +408,14 @@ public class FOrdeersServiceImpl implements IFOrdeersService
     }
 
     /**
-     * 手机端订单订单状态修改接口
+     * 手机端订单 + 订单状态修改接口
      * @param orderstatus 订单状态接口数据
      *
      */
     @Override
     public int updateOrdersStatus(OrdersStatus orderstatus)
     {
-        if (orderstatus == null || orderstatus.getUsersPhone() == null || orderstatus.getPartListId() == null) {
+        if (orderstatus.getUsersPhone() == null) {
             return 0; // 提前返回，参数为空时直接返回失败
         }
 
