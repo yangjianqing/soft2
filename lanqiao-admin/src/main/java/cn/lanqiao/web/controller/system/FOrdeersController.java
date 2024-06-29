@@ -117,15 +117,11 @@ public class FOrdeersController extends BaseController
     public AjaxResult addGoodsList(@RequestBody FormData formData)
     {
         try {
-            if (formData.getProductsInCart() == null) {
-                return AjaxResult.error("购物车数据异常 请重新结账");
+            int settle = fOrdeersService.settle(formData);
+            if (settle == 0) {
+                return AjaxResult.error("购物车数据异常");
             } else {
-                int settle = fOrdeersService.settle(formData);
-                if (settle == 0) {
-                    return AjaxResult.error("购物车数据异常");
-                } else {
-                    return AjaxResult.success("结账成功");
-                }
+                return AjaxResult.success("结账成功");
             }
         } catch (Exception ex) {
             ex.printStackTrace();

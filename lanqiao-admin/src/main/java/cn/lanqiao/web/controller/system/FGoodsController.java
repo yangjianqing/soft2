@@ -135,7 +135,7 @@ public class FGoodsController extends BaseController
             } else if (coding.length() > 19) { //超过Long类型长度提示查无此商品
                 return AjaxResult.error("查无此商品");
             }  else {
-                FGoods fGoods = fGoodsService.selectGoodsList(Long.valueOf(coding));
+                FGoods fGoods = fGoodsService.selectGoodsList(coding);
                 if (fGoods == null) {
                     return  AjaxResult.error("查无此商品");
                 } else {

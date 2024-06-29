@@ -359,11 +359,9 @@ public class ApiShoppingIController extends BaseController {
     public void updatePassword(@RequestParam("usersPhone") String usersPhone,@RequestParam("usersPassword") String usersPassword)
     {
         try {
-            if (usersPhone != null && usersPassword != null) {
-                FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
-                fUsers.setUsersPassword(SecurityUtils.encryptPassword(usersPassword));
-                ifUsersService.updateFUsers(fUsers);
-            }
+            FUsers fUsers = ifUsersService.selectUsersusersPhone(usersPhone);
+            fUsers.setUsersPassword(SecurityUtils.encryptPassword(usersPassword));
+            ifUsersService.updateFUsers(fUsers);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -445,11 +443,15 @@ public class ApiShoppingIController extends BaseController {
      */
     @ApiOperation("手机端添加购物车数据到redis")
     @GetMapping(value = "/insertShopData/{usersPhone}/{coding}")
-    public AjaxResult insertShopData(@PathVariable("usersPhone") String usersPhone, @PathVariable("coding") Long coding)
+    public AjaxResult insertShopData(@PathVariable("usersPhone") String usersPhone, @PathVariable("coding") String coding)
     {
         try {
-            ifShoppingCartService.insertShopData(usersPhone,coding);
-            return AjaxResult.success("加入购物车成功");
+            int i = ifShoppingCartService.insertShopData(usersPhone, coding);
+            if (i == 0) {
+                return AjaxResult.error("购物车数据异常");
+            } else {
+                return AjaxResult.success("加入购物车成功");
+            }
         } catch (Exception ex){
             ex.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -465,11 +467,15 @@ public class ApiShoppingIController extends BaseController {
      */
     @ApiOperation("手机端删除购物车redis数据")
     @GetMapping(value = "/deleteShopData/{usersPhone}/{coding}")
-    public AjaxResult deleteShopData(@PathVariable("usersPhone") String usersPhone, @PathVariable("coding") Long coding)
+    public AjaxResult deleteShopData(@PathVariable("usersPhone") String usersPhone, @PathVariable("coding") String coding)
     {
         try {
-            ifShoppingCartService.deleteShopData(usersPhone,coding);
-            return AjaxResult.success("删除购物车指定数据成功");
+            int i = ifShoppingCartService.deleteShopData(usersPhone, coding);
+            if (i == 0) {
+                return AjaxResult.error("删除商品数量失败");
+            } else {
+                return AjaxResult.success("删除购物车指定数据成功");
+            }
         } catch (Exception ex){
             ex.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -485,11 +491,15 @@ public class ApiShoppingIController extends BaseController {
      */
     @ApiOperation("手机端减除购物车redis商品数量")
     @GetMapping(value = "/deductionShopData/{usersPhone}/{coding}")
-    public AjaxResult deductionShopData(@PathVariable("usersPhone") String usersPhone, @PathVariable("coding") Long coding)
+    public AjaxResult deductionShopData(@PathVariable("usersPhone") String usersPhone, @PathVariable("coding") String coding)
     {
         try {
-            ifShoppingCartService.deductionShopData(usersPhone,coding);
-            return AjaxResult.success("减掉商品数量成功");
+            int i = ifShoppingCartService.deductionShopData(usersPhone, coding);
+            if (i == 0) {
+                return AjaxResult.success("减掉商品数量失败");
+            } else {
+                return AjaxResult.success("减掉商品数量成功");
+            }
         } catch (Exception ex){
             ex.printStackTrace();
             return AjaxResult.error("系统异常");
@@ -500,6 +510,7 @@ public class ApiShoppingIController extends BaseController {
      * 手机端购物车页面数据
      *
      * @param usersPhone 用户号码
+     *
      */
     @ApiOperation("手机端购物车页面数据")
     @GetMapping("/selectShopData/{usersPhone}")
@@ -517,6 +528,30 @@ public class ApiShoppingIController extends BaseController {
             return AjaxResult.error("系统异常");
         }
     }
+
+    /**
+     * 手机端redis待付款商品数据
+     *
+     * @param usersPhone 用户电话
+     *
+     */
+    @ApiOperation("手机端redis待付款商品数据")
+    @GetMapping("/selectShopingData/{usersPhone}")
+    public AjaxResult selectShopingData(@PathVariable("usersPhone") String usersPhone)
+    {
+        try {
+            List<FGoods> fGoods = ifShoppingCartService.selectShopingData(usersPhone);
+            if (fGoods == null) {
+                return AjaxResult.error("查无待付款商品数据");
+            } else {
+                return AjaxResult.success(fGoods);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
+    }
+
 
     /**
      * 手机端结算
@@ -541,12 +576,34 @@ public class ApiShoppingIController extends BaseController {
     }
 
     /**
+     * 手机端修改购物车redis数据支付状态为0 未支付
+     *
+     * @param usersPhone 用户电话
+     *
+     */
+    @ApiOperation("手机端购物车结算")
+    @GetMapping(value = "/updateShopData/{usersPhone}")
+    public AjaxResult updateShopData(@PathVariable("usersPhone") String usersPhone) {
+        try {
+            int i = ifShoppingCartService.updateShopData(usersPhone);
+            if (i == 0) {
+                return AjaxResult.success("修改失败");
+            } else {
+                return AjaxResult.success("修改成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("系统异常");
+        }
+    }
+
+    /**
      * 手机端订单支付状态修改接口(修改支付状态为1：已付款)
      * @param ordersPayMethod 订单状态接口数据
      *
      */
     @ApiOperation("手机端订单支付状态修改接口")
-    @PostMapping(value = "/updateSettlement")
+    @GetMapping(value = "/updateSettlement")
     public AjaxResult updateSettlement(@RequestBody ordersPayMethod ordersPayMethod)
     {
         try {

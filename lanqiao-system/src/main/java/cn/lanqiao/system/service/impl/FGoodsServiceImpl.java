@@ -244,7 +244,7 @@ public class FGoodsServiceImpl implements IFGoodsService
      * @return
      */
     @Override
-    public FGoods selectGoodsList(Long coding) {
+    public FGoods selectGoodsList(String coding) {
         return fGoodsMapper.selectGoodsList(coding);
     }
 

@@ -137,7 +137,7 @@ public interface FGoodsMapper
      * @param coding
      * @return
      */
-    public   FGoods selectGoodsList(Long coding);
+    public   FGoods selectGoodsList(String coding);
 
     /**
     public  FGoods selectGoodsList(Long coding);

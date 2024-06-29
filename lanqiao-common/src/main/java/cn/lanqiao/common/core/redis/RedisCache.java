@@ -2,6 +2,8 @@ package cn.lanqiao.common.core.redis;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import cn.lanqiao.common.core.domain.ShoppingCart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
@@ -221,17 +223,19 @@ public class RedisCache
     }
 
     /**
-     * 将购物车数据存储到 Redis
+     * 将购物车数据存储到 Redis，包括商品编码、数量和支付状态
      *
-     * @param key
-     * @param dataMap
-     * @param expireTime
-     * @param timeUnit
+     * @param key Redis 中的键
+     * @param dataMap 包含商品编码、数量和支付状态的 Map
+     * @param expireTime 过期时间
+     * @param timeUnit 时间单位
      */
-    public void setShoppingCart(final String key, final Map<Long, Long> dataMap, long expireTime, TimeUnit timeUnit) {
+    public void setShoppingCart(final String key, final Map<String, ShoppingCart> dataMap, long expireTime, TimeUnit timeUnit) {
         Map<String, String> stringMap = new HashMap<>();
-        for (Map.Entry<Long, Long> entry : dataMap.entrySet()) {
-            stringMap.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
+        for (Map.Entry<String, ShoppingCart> entry : dataMap.entrySet()) {
+            ShoppingCart item = entry.getValue();
+            String value = item.getOrdersPayMethod() + ":" + item.getQuantity(); // 以支付状态:商品数量的形式存储
+            stringMap.put(String.valueOf(entry.getKey()), value);
         }
         redisTemplate.opsForHash().putAll(key, stringMap);
         redisTemplate.expire(key, expireTime, timeUnit);
@@ -239,18 +243,41 @@ public class RedisCache
 
 
     /**
-     * 获得缓存的Map
+     * 从 Redis 中删除指定 key 下的指定 mapKey 集合数据
      *
-     * @param key
-     * @return
+     * @param key     Redis 中的 key
+     * @param mapKeys 要删除的 mapKey 的集合
      */
-    public Map<Long, Long> getShoppingCart(final String key) {
+    public void deleteFromMap(final String key, Set<String> mapKeys) {
+        redisTemplate.opsForHash().delete(key, mapKeys.toArray());
+    }
+
+
+    /**
+     * 从Redis中获取购物车数据
+     *
+     * @param key Redis中的键
+     * @return 包含商品编码、数量和支付状态的购物车 Map
+     */
+    public Map<String, ShoppingCart> getShoppingCart(final String key) {
         Map<String, String> stringMap = redisTemplate.opsForHash().entries(key);
-        Map<Long, Long> resultMap = new HashMap<>();
+        Map<String, ShoppingCart> resultMap = new HashMap<>();
         for (Map.Entry<String, String> entry : stringMap.entrySet()) {
-            Long mapKey = Long.parseLong(entry.getKey());
-            Long mapValue = Long.parseLong(entry.getValue());
-            resultMap.put(mapKey, mapValue);
+            String mapKey = entry.getKey();
+            String value = entry.getValue();
+            String[] parts = value.split(":");
+            if (parts.length == 2) {
+                String ordersPayMethod = parts[0];
+                int quantity = Integer.parseInt(parts[1]);
+
+                // 构造 ShoppingCart 对象
+                ShoppingCart shoppingCart = new ShoppingCart();
+                shoppingCart.setOrdersPayMethod(Long.valueOf(ordersPayMethod));
+                shoppingCart.setQuantity((long)quantity);
+
+                // 将结果放入返回的 resultMap 中
+                resultMap.put(mapKey, shoppingCart);
+            }
         }
         return resultMap;
     }

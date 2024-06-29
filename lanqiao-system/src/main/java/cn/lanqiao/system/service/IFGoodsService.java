@@ -92,7 +92,7 @@ public interface IFGoodsService {
      * @param coding
      * @return
      */
-    public FGoods selectGoodsList(Long coding);
+    public FGoods selectGoodsList(String coding);
 
     /**
      * 根据商品名称查询

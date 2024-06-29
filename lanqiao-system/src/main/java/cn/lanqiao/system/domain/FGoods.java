@@ -43,14 +43,13 @@ public class FGoods extends BaseEntity
     private Long categoryId;
 
     @Excel(name = "编码")
-    private Long coding;
+    private String coding;
 
-
-    public Long getCoding() {
+    public String getCoding() {
         return coding;
     }
 
-    public void setCoding(Long coding) {
+    public void setCoding(String coding) {
         this.coding = coding;
     }
 

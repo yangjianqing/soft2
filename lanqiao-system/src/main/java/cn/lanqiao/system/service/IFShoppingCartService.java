@@ -3,6 +3,7 @@ package cn.lanqiao.system.service;
 import cn.lanqiao.system.domain.FGoods;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 购物车Service接口
@@ -19,7 +20,7 @@ public interface IFShoppingCartService {
      * @param coding 商品编码(根据商品编码查询商品数据)
      * 商品数量(每次添加数据到redis同一商品的数量)
      */
-    public void insertShopData(String usersPhone,Long coding);
+    public int insertShopData(String usersPhone,String coding);
 
     /**
      * 手机端删除购物车redis数据
@@ -28,7 +29,15 @@ public interface IFShoppingCartService {
      * @param coding 商品编码(根据商品编码查询商品数据)
      * 商品数量(每次添加数据到redis同一商品的数量)
      */
-    public void deleteShopData(String usersPhone,Long coding);
+    public int deleteShopData(String usersPhone,String coding);
+
+    /**
+     * 手机端修改购物车redis数据支付状态为未支付
+     *
+     * @param usersPhone 用户号码
+     *
+     */
+    public int updateShopData(String usersPhone);
 
     /**
      * 手机端减除购物车redis商品数量
@@ -37,7 +46,7 @@ public interface IFShoppingCartService {
      * @param coding 商品编码(根据商品编码查询商品数据)
      * 商品数量(每次添加数据到redis同一商品的数量)
      */
-    public void deductionShopData(String usersPhone,Long coding);
+    public int deductionShopData(String usersPhone,String coding);
 
     /**
      * 手机端购物车页面数据
@@ -46,5 +55,20 @@ public interface IFShoppingCartService {
      */
     public List<FGoods> selectShopData(String usersPhone);
 
+    /**
+     * 手机端redis待付款商品数据
+     *
+     * @param usersPhone 用户电话
+     *
+     */
+    public List<FGoods> selectShopingData(String usersPhone);
 
+    /**
+     * 手机端redis根据商品编码获取待付款商品数据进行结账
+     *
+     * @param usersPhone 用户电话
+     * @param coDings 商品编码集合
+     *
+     */
+    public List<FGoods> selectShopDataCoDings(String usersPhone, Set<String> coDings);
 }

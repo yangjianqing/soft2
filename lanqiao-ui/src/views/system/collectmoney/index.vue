@@ -512,9 +512,9 @@ export default {
         const OrderNumber = this.generateOrderNumber();//订单编号
         const totalAmount = this.calculateTotalPrice();//总金额
         this.ordersPayMethod = this.AlipayPayment;//支付方式
+        this.checkout();//购物车结算
         const path = "http://localhost:8088/api/system/alipay/pay?subject=" + subject + "&traceNo=" + OrderNumber + "&totalAmount=" + totalAmount;
         window.open(path ,'_self'); //发送请求给后端支付宝接口,生成支付宝收款页面
-        this.checkout();//购物车结算
       }
     },
     //新增会员用户功能
