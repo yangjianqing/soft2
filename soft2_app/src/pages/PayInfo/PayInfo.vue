@@ -50,7 +50,7 @@
 import OrderInfo from "@/components/OrderInfo.vue";
 import {showToast} from "vant";
 import OrderListInfo from "@/components/OrderlistInfo.vue";
-import {addressList, getCarList, updateShopData} from "@/api/merchant.js";
+import {addressList, getCarList, insertSettlement, updateShopData, updateShopData2} from "@/api/merchant.js";
 
 const PREFIX = '222';
 const LENGTH = 12;
@@ -86,13 +86,11 @@ export default {
       // 将字符串解析回对象
       this.userInfo = JSON.parse(userInfoString);
       let orderNum = this.generateOrderNumber();
-      console.log(this.userInfo.usersPhone)
-      updateShopData(this.userInfo.usersPhone).then(res=>{
-        console.log(res.data)
-        if (res.data.code===200){
+      updateShopData(this.userInfo.usersPhone).then(res => {
+        if (res.data.code === 200) {
           window.open(process.env.VUE_APP_BASE_API+"/api/alipay/pay?subject=绿源生鲜"+"&traceNo="+orderNum+"&totalAmount="+this.getTotal(),'_self')
-        }else{
-          showToast('订单添加失败');
+        } else {
+          showToast('订单状态修改失败');
         }
       });
     },

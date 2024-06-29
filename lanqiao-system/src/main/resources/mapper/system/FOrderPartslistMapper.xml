@@ -38,13 +38,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="goodsId != null">goods_id,</if>
             <if test="orderId != null">order_id,</if>
             <if test="goodsNum != null">goods_num,</if>
-            <if test="ordersStatus != null">orders_status,</if>
+            <if test="ordersStatus != null">orders_status</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="goodsId != null">#{goodsId},</if>
             <if test="orderId != null">#{orderId},</if>
             <if test="goodsNum != null">#{goodsNum},</if>
-            <if test="ordersStatus != null">orders_status,</if>
+            <if test="ordersStatus != null">#{orders_status}</if>
          </trim>
     </insert>
 
