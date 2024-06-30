@@ -104,8 +104,8 @@ export default {
     getTotal() {
       let count = 0;
       // 检查 this.goodsList 是否定义且是数组
-      if (this.goodsList && Array.isArray(this.goodsList)) {
-        this.goodsList.forEach(e => {
+      if (this.wrappedGoodsList && Array.isArray(this.wrappedGoodsList)) {
+        this.wrappedGoodsList.forEach(e => {
           count += e.price * e.quantity;
         });
       } else {
@@ -142,7 +142,6 @@ export default {
     // 现在可以访问对象中的属性了
     //获取结算订单信息
     selectSho(this.userInfo.usersPhone,this.$route.params.coding).then(res =>{
-      console.log(res.data)
       this.goodsList=res.data.data;
       this.wrapGoodsList(); // 调用方法将对象包装成数组
     });

@@ -1,4 +1,5 @@
 <template>
+  <van-swipe-cell>
     <div class="order">
         <div class="title">
           <span style="font-size:16px ;font-weight: bold">{{ goodsInfo.name }}</span>
@@ -18,13 +19,18 @@
             <p>单价：{{ goodsInfo.price }}￥</p>
             <p>数量：{{goodsInfo.quantity}}{{goodsInfo.unit}}</p>
           </div>
+          <p class="totals">金额:{{ (goodsInfo.price * goodsInfo.quantity).toFixed(2)}}元</p>
         </div>
-      <p class="totals">金额:{{ (goodsInfo.price * goodsInfo.quantity).toFixed(2)}}元</p>
     </div>
+  <template #right>
+    <van-button @click="clickBot(goodsInfo.coding)" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
+  </template>
+  </van-swipe-cell>
 </template>
 <script >
 
-import { showConfirmDialog } from 'vant';
+
+import {showConfirmDialog} from "vant";
 import {deleteCarList} from "@/api/merchant";
 
 export default {
@@ -37,6 +43,28 @@ export default {
     }
   },
   methods: {
+    clickBot(coding){
+      showConfirmDialog({
+        message:
+          '将此款商品删除',
+      })
+        .then(() => {
+          // on confirm
+          const userInfoString = localStorage.getItem("userInfo");
+          // 将字符串解析回对象
+          const userInfo = JSON.parse(userInfoString);
+          //购物车的数据
+          this.deleteShopping(userInfo.usersPhone,coding);
+        })
+        .catch(() => {
+          // on cancel
+        });
+    },
+    deleteShopping(userInfo,coding){
+      deleteCarList(userInfo,coding).then(res=>{
+        this.$router.go(0)
+      })
+    }
 
   },
   created() {
@@ -92,9 +120,8 @@ export default {
   border-radius: 3%;
 }
 .totals{
-  text-align: right;
-  margin-right: 12%;
-  margin-bottom: 1%;
+  margin-left: 14%;
+  margin-top: 24%;
 }
 .bottom_btn{
   text-align: right;
