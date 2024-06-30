@@ -1,8 +1,8 @@
 <template>
-  <van-swipe-cell>
     <div class="order">
         <div class="title">
           <span style="font-size:16px ;font-weight: bold">{{ goodsInfo.name }}</span>
+          {{}}
           <span style="color: #FFB366">未支付</span>
         </div>
         <div class="content">
@@ -21,11 +21,6 @@
         </div>
       <p class="totals">金额:{{ (goodsInfo.price * goodsInfo.quantity).toFixed(2)}}元</p>
     </div>
-    <template #right>
-      <van-button @click="clickBot(goodsInfo.coding)" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
-    </template>
-  </van-swipe-cell>
-
 </template>
 <script >
 
@@ -41,31 +36,11 @@ export default {
       imgUrl:""
     }
   },
-  methods:{
-    clickBot(coding){
-      showConfirmDialog({
-        message:
-          '将此款商品删除',
-      })
-        .then(() => {
-          // on confirm
-          const userInfoString = localStorage.getItem("userInfo");
-          // 将字符串解析回对象
-          const userInfo = JSON.parse(userInfoString);
-          //购物车的数据
-          this.deleteShopping(userInfo.usersPhone,coding);
-        })
-        .catch(() => {
-          // on cancel
-        });
-    },
-    deleteShopping(userInfo,coding){
-      deleteCarList(userInfo,coding).then(res=>{
-        this.$router.go(0)
-      })
-    }
+  methods: {
+
   },
   created() {
+    console.log(this.goodsInfo)
     this.baseUrl=process.env.VUE_APP_BASE_API;
     this.imgUrl = this.goodsInfo.image.split(",");
   },

@@ -62,7 +62,6 @@ import router from "@/router";
        this.userInfo = JSON.parse(userInfoString);
       // 现在可以访问对象中的属性了
       getCarList(this.userInfo.usersPhone).then(res =>{
-          console.log(res)
           this.goodsList=res.data.data;
       });
 

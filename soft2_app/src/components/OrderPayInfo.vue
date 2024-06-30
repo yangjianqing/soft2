@@ -72,6 +72,7 @@ export default {
       })
     }
   },
+
   created() {
     this.baseUrl=process.env.VUE_APP_BASE_API;
     this.imgUrl = this.goodsInfo.image.split(",");

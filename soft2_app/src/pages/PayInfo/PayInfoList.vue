@@ -23,8 +23,7 @@
         </van-cell>
       </router-link>
     </div>
-    <template  v-for="(goodsInfo,index) in goodsList" >
-      {{goodsList}}
+    <template  v-for="(goodsInfo,index) in wrappedGoodsList">
       <OrderInfo :goodsInfo="goodsInfo">
 
       </OrderInfo>
@@ -64,9 +63,15 @@ export default {
       onClickLeft,
       addressList:[],
       goodsList:[],
+      wrappedGoodsList:[],
     }
   },
   methods:{
+    // 将对象包装成数组的方法
+    wrapGoodsList() {
+      // 假设需要将 this.goodsList 转为数组，例如将对象作为一个元素
+      this.wrappedGoodsList = [this.goodsList];
+    },
     generateOrderNumber() {
       let orderNumber;
       do {
@@ -108,10 +113,12 @@ export default {
       }
       return count.toFixed(2);
     },
+
     formattedTotal() {
       // 在这里可以将字符串转换为数字
       return parseFloat(this.getTotal()); // 正确示例，转换为数字
     },
+
     //获取地址列表
     getAddressList() {
       const userInfoString = localStorage.getItem("userInfo");
@@ -135,7 +142,9 @@ export default {
     // 现在可以访问对象中的属性了
     //获取结算订单信息
     selectSho(this.userInfo.usersPhone,this.$route.params.coding).then(res =>{
+      console.log(res.data)
       this.goodsList=res.data.data;
+      this.wrapGoodsList(); // 调用方法将对象包装成数组
     });
     this.getAddressList();
 
