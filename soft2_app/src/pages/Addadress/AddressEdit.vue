@@ -77,6 +77,7 @@ export default {
       // 现在可以访问对象中的属性了
       this.usersPhone = userInfo.usersPhone;
       addressList(this.usersPhone).then(res => {
+        console.log(res.data)
         // 转换地址列表
         const transformedList = res.data.data.map((item, index) => ({
           id: item.addressId,

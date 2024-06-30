@@ -86,6 +86,7 @@ export default {
     // 将字符串解析回对象
     this.userInfo = JSON.parse(userInfoString);
     // 现在可以访问对象中的属性了
+    //查询
     selectOrders(this.userInfo.usersPhone).then(res =>{
       this.goodsList=res.data.data;
     }).catch(err =>{
@@ -93,6 +94,8 @@ export default {
     });
     selectShopingData(this.userInfo.usersPhone).then(res =>{
       this.goodsLists = res.data.data;
+    }).catch(err =>{
+      console.log(err)
     });
   }
 
