@@ -17,14 +17,18 @@
         <p style="margin-bottom: 3px">单价：{{ goodsInfo.price }}￥</p>
         <p style="margin-bottom: 3px">数量：{{goodsInfo.goodsNum}}{{goodsInfo.unit}}</p>
       </div>
-      <div style="width: 40% ;margin-top: 88px; margin-left: 15px">
-        <span class="totals">金额:{{ (goodsInfo.price * goodsInfo.goodsNum).toFixed(2)}}元</span>
+      <div style="margin-top: 56px">
+        <span style="margin-top: 10px;font-size: 14px;font-weight: bold ">￥{{ (goodsInfo.price * goodsInfo.goodsNum).toFixed(2)}}</span>
+        <van-button @click="clickPayGoods(goodsInfo.id)" type="primary" size="mini" >确认收货</van-button>
       </div>
     </div>
+
 
   </div>
 </template>
 <script>
+import {updateOrdersStatus} from "@/api/merchant";
+
 export default {
   name: "OrderConfirmInfo",
   props:["goodsInfo"],
@@ -53,6 +57,15 @@ export default {
   },
   methods:{
 
+      clickPayGoods(){
+      //获取用户登陆信息
+      const userInfoString = localStorage.getItem("userInfo");
+      // 将用户信息字符串解析回对象
+      this.userInfo = JSON.parse(userInfoString);
+      updateOrdersStatus({usersPhone:this.userInfo.usersPhone,id:this.goodsInfo.id}).then(res=>{
+        console.log(res.data)
+      })
+    }
 
   },
   created() {
@@ -65,7 +78,7 @@ export default {
 </script>
 <style scoped>
 .order{
-  height: 175px;
+  height: 160px;
   background-color: #ffffff;
   margin: 1%;
   border-radius: 3%;
@@ -89,7 +102,8 @@ export default {
 
 }
 .content_txt{
-  height: 100px;
+  height: 123px;
+  width: 200px;
   text-align: left;
   margin: 0 1%;
 }
@@ -107,10 +121,7 @@ export default {
   height: 100px;
   border-radius: 3%;
 }
-.totals{
-  text-align: right;
-  margin-left: 27%;
-}
+
 .bottom_btn{
   text-align: right;
   margin: 2% 5%;

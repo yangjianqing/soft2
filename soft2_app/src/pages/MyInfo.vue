@@ -91,13 +91,18 @@
 
 
    <template v-for="(goodsInfo,index) in goodsList">
-     {{goodsList.id}}
-     <router-link :to="'/cart/shoppinggement/' +goodsList.id ">
      <div class="total_box"  v-if="index%2===1" >
-       <MerchandiseInfo :goodsInfo="goodsList[index-1]" v-on:click="ReturnOrShopping"></MerchandiseInfo>
-       <MerchandiseInfo :goodsInfo="goodsList[index]" v-on:click="ReturnOrShopping"></MerchandiseInfo>
+       <router-link
+         :to="{ path: '/cart/shoppinggement/'+goodsList[index-1].id }"
+       >
+       <MerchandiseInfo :goodsInfo="goodsList[index-1]" ></MerchandiseInfo>
+       </router-link>
+       <router-link
+         :to="{ path: '/cart/shoppinggement/'+goodsList[index].id  }"
+       >
+       <MerchandiseInfo :goodsInfo="goodsList[index]" ></MerchandiseInfo>
+       </router-link>
      </div>
-     </router-link>
    </template>
 
 <!-- </div>-->
@@ -216,17 +221,9 @@
               // on cancel
             });
         },
-        //加载名字
-        ReturnPoMa(){
-          router.push({ path: '/mine/poma' });
-        },
         ReturnOrMa(){
           router.push({ path: '/mine/ordermanagement' });
         },
-        ReturnOrShopping(){
-          router.push({ path: '/cart/shoppinggement/' });
-        }
-        ,
         ReturnSetting(){
           router.push({ path: '/mine/setting' });
         },
@@ -319,7 +316,13 @@
   background-color:rgb(245,245,245) ;
   border-radius: 10px;
 }
-
+.total_box a{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color:rgb(245,245,245) ;
+  border-radius: 10px;
+}
 
 .phone-call-popup {
   display: flex;

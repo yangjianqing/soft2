@@ -521,7 +521,7 @@ public class ApiShoppingIController extends BaseController {
      *
      */
     @ApiOperation("手机端redis待付款商品数据")
-    @GetMapping("/selectSho/{usersPhone}")
+    @GetMapping("/selectSho/{usersPhone}/{coding}")
     public AjaxResult selectSho(@PathVariable("usersPhone") String usersPhone,@PathVariable("coding")String coding)
     {
         try {

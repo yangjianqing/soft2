@@ -17,9 +17,7 @@
         <p style="margin-bottom: 3px">单价：{{ goodsInfo.price }}￥</p>
         <p style="margin-bottom: 3px">数量：{{goodsInfo.goodsNum}}{{goodsInfo.unit}}</p>
       </div>
-      <div style="width: 40% ;margin-top: 88px; margin-left: 15px">
-        <span class="totals">金额:{{ (goodsInfo.price * goodsInfo.goodsNum).toFixed(2)}}元</span>
-      </div>
+      <span class="totals" style=" margin-left: -18px ;font-size:14px;font-weight: bold ">￥{{ (goodsInfo.price * goodsInfo.goodsNum).toFixed(2)}}</span>
     </div>
 
   </div>
@@ -65,7 +63,7 @@ export default {
 </script>
 <style scoped>
 .order{
-  height: 175px;
+  height: 160px;
   background-color: #ffffff;
   margin: 1%;
   border-radius: 3%;
@@ -89,7 +87,8 @@ export default {
 
 }
 .content_txt{
-  height: 100px;
+  height: 123px;
+  width: 200px;
   text-align: left;
   margin: 0 1%;
 }
@@ -108,8 +107,8 @@ export default {
   border-radius: 3%;
 }
 .totals{
-  text-align: right;
-  margin-left: 27%;
+  margin-left: -14%;
+  margin-top: 24%;
 }
 .bottom_btn{
   text-align: right;

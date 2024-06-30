@@ -1,8 +1,9 @@
 <template>
+  <van-swipe-cell>
   <div class="order">
     <div class="title">
       <span style="font-size:16px ;font-weight: bold">{{ goodsInfo.name }}</span>
-      <span style="color: #FFB366">{{ paymentStatus }}</span>
+      <span style="color: #FFB366">待支付</span>
     </div>
     <div class="content">
 
@@ -15,16 +16,25 @@
         </div>
         <p style="margin-bottom: 3px">规格：{{ goodsInfo.specification }}</p>
         <p style="margin-bottom: 3px">单价：{{ goodsInfo.price }}￥</p>
-        <p style="margin-bottom: 3px">数量：{{goodsInfo.goodsNum}}{{goodsInfo.unit}}</p>
-      </div>
-      <div style="width: 40% ;margin-top: 88px; margin-left: 15px">
-        <span class="totals">金额:{{ (goodsInfo.price * goodsInfo.goodsNum).toFixed(2)}}元</span>
-      </div>
-    </div>
+        <p style="margin-bottom: 3px">数量：{{goodsInfo.quantity }}{{goodsInfo.unit}}</p>
 
+      </div>
+       <div style="margin-top: 56px">
+         <span  style="margin-top: 10px;font-size: 14px;font-weight: bold">￥{{ (goodsInfo.price * goodsInfo.quantity).toFixed(2)}}</span>
+         <van-button @click="clickPayGoods" type="primary" size="mini" >继续支付</van-button>
+       </div>
+    </div>
   </div>
+  <template #right>
+    <van-button @click="clickBot(goodsInfo.coding)" style="width: 20px;height: 100%" icon="delete-o"  type="danger" class="delete-button" />
+  </template>
+  </van-swipe-cell>
 </template>
 <script>
+
+import router from "@/router";
+import {showConfirmDialog} from "vant";
+import {deleteCarList} from "@/api/merchant";
 export default {
   name: "OrderPayInfo",
   props:["goodsInfo"],
@@ -35,25 +45,32 @@ export default {
       paymentStatus:0,
     }
   },
-  computed: {
-    paymentStatus() {
-      if (this.goodsInfo.ordersPayStatuds === 0) {
-        return '待付款';
-      } else {
-        switch (this.goodsInfo.ordersStatus) {
-          case 1:
-            return '待发货';
-          case 2:
-            return '待收货';
-          case 3:
-            return '已完成';
-        }
-      }
-    },
-  },
   methods:{
-
-
+    clickPayGoods(){
+      router.push("/PayInfoList/"+this.goodsInfo.coding)
+    },
+    clickBot(coding){
+      showConfirmDialog({
+        message:
+          '将此款商品删除',
+      })
+        .then(() => {
+          // on confirm
+          const userInfoString = localStorage.getItem("userInfo");
+          // 将字符串解析回对象
+          const userInfo = JSON.parse(userInfoString);
+          //购物车的数据
+          this.deleteShopping(userInfo.usersPhone,coding);
+        })
+        .catch(() => {
+          // on cancel
+        });
+      },
+    deleteShopping(userInfo,coding){
+      deleteCarList(userInfo,coding).then(res=>{
+        this.$router.go(0)
+      })
+    }
   },
   created() {
     this.baseUrl=process.env.VUE_APP_BASE_API;
@@ -65,7 +82,7 @@ export default {
 </script>
 <style scoped>
 .order{
-  height: 175px;
+  height: 160px;
   background-color: #ffffff;
   margin: 1%;
   border-radius: 3%;
@@ -89,7 +106,8 @@ export default {
 
 }
 .content_txt{
-  height: 100px;
+  height: 123px;
+  width: 200px;
   text-align: left;
   margin: 0 1%;
 }
@@ -107,10 +125,7 @@ export default {
   height: 100px;
   border-radius: 3%;
 }
-.totals{
-  text-align: right;
-  margin-left: 27%;
-}
+
 .bottom_btn{
   text-align: right;
   margin: 2% 5%;

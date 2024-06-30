@@ -2,7 +2,7 @@
   <div style="  margin-top: 2%;">
     <van-nav-bar  left-text="返回" left-arrow @click-left="goBack">
       <template #right>
-        <van-icon name="cart-o" badge="9" size="18"/>
+        <van-icon name="cart-o"  size="18"/>
       </template>
     </van-nav-bar>
   </div>

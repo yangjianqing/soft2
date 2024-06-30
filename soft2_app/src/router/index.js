@@ -199,6 +199,14 @@ const routes = [
     }
   },
   {
+    path:"/PayInfoList/:coding",
+    component:import("@/pages/PayInfo/PayInfoList.vue"),
+    name:"PayInfoList",
+    meta: {
+      title: "订单信息",
+    }
+  },
+  {
     path:"/AddressInfo/:id",
     component:import("@/pages/Addadress/AddressInfo.vue"),
     name:"AddressInfo",

@@ -12,8 +12,7 @@
         </template>
       </van-tab>
       <van-tab title="待付款">
-        <template  v-for="(goodsInfo,index) in reversedPayFilterType(0)" >
-
+        <template  v-for="(goodsInfo,index) in reversedGoodsLists  " >
           <OrderPayInfo :goodsInfo="goodsInfo"> </OrderPayInfo>
         </template>
 
@@ -44,7 +43,7 @@
 
 // 导入 vue-router 中的 router 对象
 import router from "@/router";
-import {selectOrders} from "@/api/merchant";
+import {getCarList, selectOrders, selectShopingData} from "@/api/merchant";
 import OrderListInfo from "@/components/OrderlistInfo.vue";
 import OrderPayInfo from "@/components/OrderPayInfo.vue";
 import OrderConfirmInfo from "@/components/OrderConfirmInfo.vue";
@@ -55,6 +54,7 @@ export default {
     return{
       active:0,
       goodsList:[],
+      goodsLists:[],
       goodsPayList:[],
       goodsListInfo:""
     }
@@ -63,20 +63,11 @@ export default {
     reversedGoodsList() {
       return [...this.goodsList].reverse();
     },
+    reversedGoodsLists() {
+      return [...this.goodsLists].reverse();
+    },
   },
   methods: {
-    //跳转结算页面
-    RouterShopping(){
-      router.push("/PayInfoPage");
-    },
-    //计算总价
-    getTotal(){
-      let count=0;
-      this.reversedPayFilterType(0).forEach(e=>{
-        count+=e.price * e.goodsNum
-      })
-      return count.toFixed(2);
-    },
 
 
     //筛选订单状态
@@ -84,13 +75,6 @@ export default {
       return this.goodsList.filter(obj => obj.ordersStatus === status);
     },
     //筛选未支付
-    filterPayType(payStatus) {
-      return this.goodsList.filter(obj => obj.ordersPayStatuds === payStatus);
-    },
-    reversedPayFilterType(payStatus) {
-      const filteredGoods = this.filterPayType(payStatus);
-      return filteredGoods.reverse();
-    },
     reversedFilterType(status) {
       const filteredGood = this.filterType(status);
       return filteredGood.reverse();
@@ -106,7 +90,10 @@ export default {
       this.goodsList=res.data.data;
     }).catch(err =>{
       console.log(err)
-    })
+    });
+    selectShopingData(this.userInfo.usersPhone).then(res =>{
+      this.goodsLists = res.data.data;
+    });
   }
 
 }

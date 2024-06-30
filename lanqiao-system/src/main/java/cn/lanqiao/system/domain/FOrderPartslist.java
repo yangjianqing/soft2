@@ -20,6 +20,18 @@ public class FOrderPartslist extends BaseEntity
     /** 明细id */
     private Long id;
 
+    /** 描述信息 */
+    @Excel(name = "描述信息")
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     /** 商品id */
     @Excel(name = "商品id")
     private Long goodsId;
@@ -195,6 +207,7 @@ public class FOrderPartslist extends BaseEntity
     public String toString() {
         return "FOrderPartslist{" +
                 "id=" + id +
+                ", description='" + description + '\'' +
                 ", goodsId=" + goodsId +
                 ", orderId='" + orderId + '\'' +
                 ", goodsid=" + goodsid +

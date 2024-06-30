@@ -209,3 +209,29 @@ export function updateShopData2(usersPhone){
 
 
 
+//手机端修改购物车redis数据支付状态为
+export function selectShopingData(usersPhone){
+  return request({
+    url:"/api/fresh/selectShopingData/"+usersPhone,
+    method: 'get',
+  })
+}
+
+
+// 手机端redis待付款商品数据 (回显)
+export function selectSho(usersPhone,coding){
+  return request({
+    url:"/api/fresh/selectSho/"+usersPhone+'/'+coding,
+    method: 'get',
+  })
+}
+
+//手机端订单支付状态修改接口
+
+export function updateOrdersStatus(data){
+  return request({
+    url:"/api/fresh/updateOrdersStatus",
+    method: 'post',
+    data:data,
+  })
+}

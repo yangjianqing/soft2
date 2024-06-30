@@ -64,8 +64,6 @@ export default {
         this.$router.go(0)
       })
     }
-
-
   },
   created() {
     this.baseUrl=process.env.VUE_APP_BASE_API;
@@ -120,7 +118,7 @@ export default {
 }
 .totals{
   text-align: right;
-  margin-right: 6%;
+  margin-right: 12%;
   margin-bottom: 1%;
 }
 .bottom_btn{

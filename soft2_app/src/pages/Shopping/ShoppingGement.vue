@@ -127,16 +127,15 @@ export default {
     // 将字符串解析回对象
     this.userInfo = JSON.parse(userInfoString);
     getCarList(this.userInfo.usersPhone).then(res => {
-      if (res.data && res.data.data && Array.isArray(res.data.data)) {
+      if ( res.data.data.length > 0 ) {
         this.goodsList = res.data.data;
         this.dataCount = this.goodsList.length;
-        console.log(this.dataCount);
       } else {
         // 处理数据为空或者不是预期的数组情况
         console.error('购物车没有任何商品：', res.data);
       }
     }).catch(error => {
-      console.error('获取购物车列表发生错误：', error);
+      console.error('购物车没有任何商品：', error);
     });
   }
 }

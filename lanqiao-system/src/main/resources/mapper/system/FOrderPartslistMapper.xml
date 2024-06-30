@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <select id="selectFOrderPartslist" parameterType="FOrderPartslist" resultMap="FOrderPartslistResult">
-        select fp.id,fg.name as name,fp.goods_num ,fg.price,fp.order_id,fg.coding,fg.specification,fg.image,orders_pay_statuds,fp.orders_status  from f_goods fg
+        select fp.id,fg.name as name,fg.description,fp.goods_num,fg.price,fp.order_id,fg.coding,fg.specification,fg.image,orders_pay_statuds,fp.orders_status  from f_goods fg
         LEFT JOIN f_order_partslist fp  on fp.goods_id = fg.id
         LEFT JOIN f_ordeers fo  on fp.order_id = fo.orders_number where fp.order_id = #{orderId}
     </select>
