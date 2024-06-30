@@ -4,6 +4,7 @@ import cn.lanqiao.common.constant.CacheConstants;
 import cn.lanqiao.common.constant.Constants;
 import cn.lanqiao.common.core.domain.ShoppingCart;
 import cn.lanqiao.common.core.redis.RedisCache;
+import cn.lanqiao.common.utils.DateUtils;
 import cn.lanqiao.common.utils.MyClass;
 import cn.lanqiao.common.utils.RandomUsernameGenerator;
 import cn.lanqiao.common.utils.SendSms;
@@ -394,30 +395,36 @@ public class IFShoppingCartServiceImpl implements IFShoppingCartService  {
      *
      */
     @Override
-    public FUsers LoginUsers(LoginVo user) {
+    public FUsers LoginUsers(LoginVo user)
+    {
         // TODO: 在这里进行电话号码是否有效校验操作
         if (!user.getUsersPhone().matches("^(0\\d{2,3}-\\d{7,8}|1[34578]\\d{9})$")) {
             return null;
         }
 
-        FUsers fUsers = fUsersMapper.selectUsersusersPhone(user.getUsersPhone());
+        // 获取Redis缓存中的验证码
         String verKey = CacheConstants.PHONE_CODE_KEY + user.getUuid();
-        Object cacheObject = redisCache.getCacheObject(verKey);//获取redis缓存的验证码
-        String cacheString = cacheObject.toString();
+        Object cacheObject = redisCache.getCacheObject(verKey);
+        if (cacheObject == null || !cacheObject.toString().equals(user.getCode())) {
+            return null; // 验证码不匹配或已过期
+        }
 
-        // TODO: 在这里进行查询用户电话是否为空判断校验操作
-        if (fUsers != null && cacheString.equals(user.getCode())) {
-            // TODO: 在这里进行登录操作
+        // 查询用户是否已存在
+        FUsers fUsers = fUsersMapper.selectUsersusersPhone(user.getUsersPhone());
+        if (fUsers != null) {
+            // 已存在用户，直接返回用户信息，进行登录操作
             return fUsers;
+        } else {
+            // 不存在用户，进行注册操作
+            FUsers newUser = new FUsers();
+            newUser.setUsersName(RandomUsernameGenerator.generateRandomUsername()); // 生成随机用户名
+            newUser.setUsersSex("2");
+            newUser.setUsersPhone(user.getUsersPhone());
+            newUser.setMemberGrade(0L); // 设置默认状态
+            newUser.setMemberTotal(new BigDecimal(0)); // 设置默认余额
+            newUser.setCreateTime(DateUtils.getNowDate());// 设置创建时间
+            fUsersMapper.insertFUsers(newUser); // 插入新用户记录
+            return newUser;
         }
-
-        if (!cacheString.equals(user.getCode())) {
-            return null;
-        }
-
-        // TODO: 在这里进行注册操作
-        FUsers fUser =  new FUsers(RandomUsernameGenerator.generateRandomUsername(), "2", user.getUsersPhone(), 0L,new BigDecimal(0));
-        fUsersMapper.insertFUsers(fUser);
-        return fUser;
     }
 }
