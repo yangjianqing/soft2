@@ -53,6 +53,10 @@ public class FUsersServiceImpl implements IFUsersService
     @Override
     public int insertFUsers(FUsers fUsers)
     {
+        FUsers fUsers1 = fUsersMapper.selectUsersusersPhone(fUsers.getUsersPhone());
+        if (fUsers1 != null) {
+            return 0;
+        }
         fUsers.setCreateTime(DateUtils.getNowDate());
         return fUsersMapper.insertFUsers(fUsers);
     }
