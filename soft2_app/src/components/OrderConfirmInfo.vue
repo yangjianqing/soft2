@@ -62,9 +62,9 @@ export default {
       const userInfoString = localStorage.getItem("userInfo");
       // 将用户信息字符串解析回对象
       this.userInfo = JSON.parse(userInfoString);
-      updateOrdersStatus({usersPhone:this.userInfo.usersPhone,id:this.goodsInfo.id}).then(res=>{
+      updateOrdersStatus({usersPhone:this.userInfo.usersPhone,partsId:this.goodsInfo.id}).then(res=>{
         console.log(res.data)
-      })
+      });
     }
 
   },
