@@ -11,7 +11,7 @@
       <!-- 右侧购物车图标 -->
       <template #right>
         <router-link :to="{ path: '/cart' }">
-            <van-icon name="cart-o" size="18"  :badge="this.dataCount"/>
+            <van-icon name="cart-o" size="18"  :badge="dataCount !== 0 ? dataCount : ''"/>
         </router-link>
       </template>
 
@@ -56,22 +56,19 @@ export default {
     // 将字符串解析回对象
     this.userInfo = JSON.parse(userInfoString);
     // 现在可以访问对象中的属性了
-    getCarList(this.userInfo.usersPhone).then(res =>{
-      // 将数据赋值给 goodsList
-      this.goodsList = res.data.data;
-      // 获取数据的数量
-      // 获取数据的数量并保存到 dataCount
-      this.dataCount = this.goodsList.length;
-      // 打印数据数量到控制台
-      console.log( this.dataCount)
-
+    getCarList(this.userInfo.usersPhone).then(res => {
+      if ( res.data.data.length > 0 ) {
+        this.goodsList = res.data.data;
+        this.dataCount = this.goodsList.length;
+      } else {
+        // 处理数据为空或者不是预期的数组情况
+        console.error('购物车没有任何商品：', res.data);
+      }
+    }).catch(error => {
+      console.error('购物车没有任何商品：', error);
     });
   },
-  computed: {
-    displayCartCount() {
-      return this.cartCount > 99 ? '99+' : this.cartCount.toString();
-    }
-  },
+
   methods: {
     goBack() {
       // 返回上一菜单的逻辑，可以根据您的路由设置进行相应调整
@@ -82,10 +79,6 @@ export default {
         this.favorableList=res.data.rows;
       })
     },
-    goToCart() {
-      // 跳转到购物车的处理逻辑
-      console.log('跳转到购物车');
-    }
   }
 }
 
