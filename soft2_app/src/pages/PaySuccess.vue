@@ -52,25 +52,7 @@ export default {
       });
     }
 
-    this.sendMessage();
   },
-  methods:{
-    ViewOrder() {
-      this.total = this.$router.push('/mine/ordermanagement');
-    },
-    EnterIndex() {
-      this.$router.push('/index');
-    },
-    async sendMessage() {
-      try {
-        // 处理点击事件的逻辑
-        const apiUrl = `http://127.0.0.1:8089/api/sendMessage/1234`;
-        await axios.get(apiUrl);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  }
 
 
 }

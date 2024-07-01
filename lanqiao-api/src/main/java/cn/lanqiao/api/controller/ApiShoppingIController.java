@@ -13,6 +13,7 @@ import cn.lanqiao.common.utils.*;
 import cn.lanqiao.common.utils.uuid.IdUtils;
 
 //import cn.lanqiao.system.Category;
+import cn.lanqiao.framework.config.WebSocketServerUtil;
 import cn.lanqiao.framework.web.service.TokenService;
 import cn.lanqiao.system.domain.*;
 import cn.lanqiao.system.domain.argument.*;
@@ -550,6 +551,8 @@ public class ApiShoppingIController extends BaseController {
             if (i == 0) {
                 return AjaxResult.error("付款失败，数据异常");
             }
+            WebSocketServerUtil.sendInfo("测试",12345l);
+
             return AjaxResult.success("付款成功");
         } catch (Exception ex){
             ex.printStackTrace();

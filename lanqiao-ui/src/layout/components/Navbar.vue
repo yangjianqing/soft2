@@ -58,6 +58,13 @@ import lanqiaoGit from '@/components/lanqiao/Git'
 import lanqiaoDoc from '@/components/lanqiao/Doc'
 
 export default {
+
+  data() {
+    return {
+
+    };
+  },
+
   components: {
     Breadcrumb,
     TopNav,
@@ -91,6 +98,9 @@ export default {
       }
     }
   },
+  created() {
+    this.initWebSocket = this.initWebSocket();
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -105,10 +115,48 @@ export default {
           location.href = '/index';
         })
       }).catch(() => {});
+    },
+    initWebSocket() {
+      const websocket = new WebSocket(`ws://127.0.0.1:8089/api/webSocket/12345`);
+      websocket.onopen = (event) => {
+        console.log('建立连接');
+        websocket.send('Hello WebSockets!');
+      };
+      websocket.onclose = function (event) {
+        console.log('连接关闭');
+        // this.reconnect();
+        //尝试重连websocket
+      }.bind(this); // 将 this 绑定到回调函数中
+      //建立通信后，监听到后端的数据传递
+      websocket.onmessage = (event) => {
+        let data = event.data;
+        // 业务处理....
+        console.log(data)
+      // 创建一个新的Audio对象并指定音频文件的路径
+        var audio = new Audio(require('@/assets/music.mp3'));
+        audio.play();
+      };
+      websocket.onerror = function () {
+        console.warn('websocket通信发生错误！');
+        this.initWebSocket();
+      }.bind(this); // 将 this 绑定到回调函数中
+      window.onbeforeunload = () => {
+        websocket.close();
+      };
+      this.socket = websocket;
+    },
+    reconnect() {
+      console.log("正在重连");
+      // 进行重连
+      setTimeout(() => {
+        this.initWebSocket()
+      }, 1000);
     }
   }
 }
+
 </script>
+
 
 <style lang="scss" scoped>
 .navbar {
