@@ -551,7 +551,6 @@ public class ApiShoppingIController extends BaseController {
             if (i == 0) {
                 return AjaxResult.error("付款失败，数据异常");
             }
-            WebSocketServerUtil.sendInfo("测试",12345l);
 
             return AjaxResult.success("付款成功");
         } catch (Exception ex){
@@ -595,6 +594,8 @@ public class ApiShoppingIController extends BaseController {
             if (i == 0) {
                 return AjaxResult.error("修改失败");
             }
+            WebSocketServerUtil.sendInfo("测试",12345l);
+
             return AjaxResult.success("修改成功");
         } catch (Exception e) {
             e.printStackTrace();

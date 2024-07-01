@@ -135,6 +135,15 @@ export default {
       // 创建一个新的Audio对象并指定音频文件的路径
         var audio = new Audio(require('@/assets/music.mp3'));
         audio.play();
+        this.$alert('你有新的订单请及时处理', '订单提醒', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: `立刻处理`
+            });
+          }
+        });
       };
       websocket.onerror = function () {
         console.warn('websocket通信发生错误！');
